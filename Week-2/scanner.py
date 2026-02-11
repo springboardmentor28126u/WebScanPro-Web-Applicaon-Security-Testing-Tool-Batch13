@@ -67,4 +67,4 @@ with open("output.txt", "w") as tf:
     for f in results["forms"]:
         tf.write(str(f) + "\n")
 
-print("Scan completed. Results saved to output.txt and output.json")
+print("Scan completed. Results saved to output.txt")
