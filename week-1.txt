@@ -1,0 +1,105 @@
+.
+
+📘 Week 1 — Project Initialization & Setup
+1. Week Overview
+
+Objective:
+In Week 1, the main goal is to set up the working environment, install necessary tools and applications, and explore the structure of the target web application that will be tested in the coming weeks.
+
+This week lays the foundation for all further security testing activities.
+
+2. Goals for Week 1
+
+✔ Define project goals and expected outcomes
+✔ Set up the vulnerable web application (DVWA/ Juice Shop/ bWAPP)
+✔ Install required tools for testing environment
+✔ Explore and document the structure and components of the chosen application
+
+3. Tools and Software Requirements
+
+Before you start, download and install the following:
+
+🧰 Tools Used
+Tool	Purpose
+XAMPP / WAMP / LAMP	Setup a local web server
+Web Browser (Chrome/Firefox)	Access and interact with the application
+Security Tools (optional)	For future tests (e.g., OWASP ZAP, Burp Suite)
+Text Editor (Notepad++, VSCode)	To write notes and documentation
+4. Step-by-Step Tasks
+🔹 1. Define Project Goals
+
+Write a short paragraph about your project purpose. For example:
+
+“The purpose of this project is to understand and practice common web security testing techniques by finding vulnerabilities in a deliberately vulnerable web application.”
+
+Include:
+
+What you want to achieve
+
+What application will be tested
+
+What types of vulnerabilities you expect to explore
+
+🔹 2. Install the Vulnerable Web Application
+
+Choose one of these and install it locally:
+
+✔ DVWA (Damn Vulnerable Web App)
+✔ OWASP Juice Shop
+✔ bWAPP
+
+Installation Steps (Example: DVWA on XAMPP)
+
+Install XAMPP and launch Apache and MySQL.
+
+Download DVWA and extract to xampp/htdocs/ folder.
+
+Open browser and go to:
+http://localhost/DVWA/setup.php
+
+Click Create / Reset Database
+
+Login using default credentials (admin/password)
+
+Change security level to low (for learning)
+
+🍀 Note: If you choose Juice Shop or bWAPP, the installation procedures will be similar. Follow included instructions.
+
+🔹 3. Explore the Application Structure
+
+Once installed and running:
+
+🔍 Navigate through all pages
+🔍 Identify key modules like:
+
+Login page
+
+Input forms
+
+Search fields
+
+Feedback/comment boxes
+
+Record observations such as:
+
+Pages that accept user input
+
+Forms that submit data
+
+Session login/logout
+
+Take screenshots of important pages and include them in your documentation.
+
+🔹 4. Understand the Web Application Behavior
+
+Ask yourself:
+
+✔ What happens when I enter text in a field?
+✔ What URL changes occur?
+✔ Does the app load different pages?
+
+Write short notes like:
+
+“When login credentials are wrong, the page returns an error message.”
+
+This shows understanding of application flow.
