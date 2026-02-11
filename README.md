@@ -63,10 +63,25 @@ I explored the following modules:
 - **SQL Injection Module** – Shows database vulnerability  
 - **XSS Module** – Shows how scripts can run in browser  
 
-I only explored the structure and inputs.
+---
+
+## 🔹 Manual SQL Injection Testing 
+
+During exploration, I manually tested SQL Injection in the DVWA login form using the following payload:
+```
+
+' OR '1'='1
+
+```
+
+This test was done to check how the application handles unsafe user input.
+
+### 💉 Manual SQL Injection Test Screenshot
+![Manual SQL Injection Test](Week-1/screenshots/manual-sql-injection-test.png)
 
 ---
 
+---
 ## 🔸 Week 1 Result  
 
 ✔ DVWA installed successfully  
