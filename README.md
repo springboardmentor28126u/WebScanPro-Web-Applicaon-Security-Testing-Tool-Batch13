@@ -78,14 +78,19 @@ I only explored the structure and inputs.
 
 ## 📸 Week 1 Screenshots  
 
+### 🖥️ XAMPP Running
 ![XAMPP Running](Week-1/screenshots/xampp-running.png)
 
+### 🏠 DVWA Dashboard
 ![DVWA Dashboard](Week-1/screenshots/dvwa-dashboard.png)
 
+### 🔐 Brute Force Module
 ![Brute Force Page](Week-1/screenshots/dvwa-bruteforce-page.png)
 
+### 💉 SQL Injection Module
 ![SQL Injection Page](Week-1/screenshots/dvwa-sql-injection-page.png)
 
+### ⚡ XSS Reflected Module
 ![XSS Reflected Page](Week-1/screenshots/dvwa-xss-reflected-page.png)
   
 
@@ -157,6 +162,7 @@ Contains structured data:
 - Method  
 - Input names and types  
 
+### 📄 Output JSON Result
 ![Output JSON](Week-2/screenshots/output_json.png)
 
 ---
@@ -164,6 +170,7 @@ Contains structured data:
 ### 📄 output.txt  
 Readable scan results  
 
+### 📄 Output TXT Result
 ```
 === Discovered URLs ===
 
@@ -188,7 +195,9 @@ Only the login page was scanned because internal pages need authentication.
 
 ## 📸 Week 2 Screenshots  
 
+### ▶ Scanner Execution Output
 ![Scanner Run](Week-2/screenshots/scanner_run.png)  
+### 🐍 Python Version Verification
 ![Python Version](Week-2/screenshots/py_version.png)  
 
 ---
