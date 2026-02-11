@@ -78,11 +78,16 @@ I only explored the structure and inputs.
 
 ## 📸 Week 1 Screenshots  
 
-![XAMPP](Week1/xampp_control_panel.png)  
-![DVWA Dashboard](Week1/dvwa_dashboard.png)  
-![Brute Force](Week1/bruteforce.png)  
-![SQL Injection](Week1/sql_injection.png)  
-![XSS](Week1/xss_reflected.png)  
+![XAMPP Running](Week-1/screenshots/xampp-running.png)
+
+![DVWA Dashboard](Week-1/screenshots/dvwa-dashboard.png)
+
+![Brute Force Page](Week-1/screenshots/dvwa-bruteforce-page.png)
+
+![SQL Injection Page](Week-1/screenshots/dvwa-sql-injection-page.png)
+
+![XSS Reflected Page](Week-1/screenshots/dvwa-xss-reflected-page.png)
+  
 
 ---
 
@@ -152,14 +157,19 @@ Contains structured data:
 - Method  
 - Input names and types  
 
-![Output JSON](Week2/output_json.png)
+![Output JSON](Week-2/screenshots/output_json.png)
 
 ---
 
 ### 📄 output.txt  
 Readable scan results  
 
-![Output TXT](Week2/output_txt.png)
+```
+=== Discovered URLs ===
+
+=== Forms & Input Fields ===
+{'page': 'http://localhost/dvwa/', 'action': 'login.php', 'method': 'post', 'inputs': [{'name': 'username', 'type': 'text'}, {'name': 'password', 'type': 'password'}, {'name': 'Login', 'type': 'submit'}, {'name': 'user_token', 'type': 'hidden'}]}
+```
 
 ---
 
@@ -178,8 +188,8 @@ Only the login page was scanned because internal pages need authentication.
 
 ## 📸 Week 2 Screenshots  
 
-![Scanner Run](Week2/scanner_run.png)  
-![Python Version](Week2/py_version.png)  
+![Scanner Run](Week-2/screenshots/scanner_run.png)  
+![Python Version](Week-2/screenshots/py_version.png)  
 
 ---
 
