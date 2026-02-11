@@ -68,10 +68,9 @@ I explored the following modules:
 ## 🔹 Manual SQL Injection Testing 
 
 During exploration, I manually tested SQL Injection in the DVWA login form using the following payload:
+
 ```
-
 ' OR '1'='1
-
 ```
 
 This test was done to check how the application handles unsafe user input.
