@@ -46,6 +46,7 @@ Run the following command to download DVWA:
 ```
 docker pull vulnerables/web-dvwa
 ```
+<img width="1260" height="738" alt="image" src="https://github.com/user-attachments/assets/5747d43d-9993-4267-8d4a-0ff645dd3f5b" />
 
 This downloads DVWA and all required dependencies.
 
@@ -93,6 +94,7 @@ After login, explore the DVWA dashboard. It contains multiple vulnerability modu
 
 ---
 
+
 ### Step 2: Set Security Level
 
 Go to **DVWA Security** and set the level to:
@@ -100,6 +102,7 @@ Go to **DVWA Security** and set the level to:
 ```
 Low
 ```
+<img width="917" height="679" alt="image" src="https://github.com/user-attachments/assets/517e139b-710a-4d03-8e54-5a0143dd015c" />
 
 This makes vulnerabilities easier to understand for beginners.
 
@@ -114,6 +117,8 @@ DVWA includes modules such as:
 * Command Injection
 * File Upload
 * Brute Force Attacks
+* <img width="1030" height="609" alt="image" src="https://github.com/user-attachments/assets/9ab22d3a-caa7-418c-961b-3ace7223398c" />
+
 
 For each module:
 
