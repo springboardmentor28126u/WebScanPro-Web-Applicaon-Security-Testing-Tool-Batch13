@@ -79,6 +79,8 @@ Login credentials:
 
 * **Username:** admin
 * **Password:** password
+* <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/92c76df0-883d-4d99-899b-ecee58e4b133" />
+
 
 After login, click **Create/Reset Database**.
 
@@ -194,3 +196,138 @@ Future work includes:
 * Documentation and reporting
 
 ---
+
+You said:
+# Week 2: Target Scanning Module – Project Documentation
+
+## Objective
+
+The objective of Week 2 was to build a **Target Scanning Module** that automatically scans a web application and collects important information such as:
+
+* Web pages and links
+* Forms and input fields
+* Interactive elements for security testing
+
+This module helps prepare the target system for vulnerability analysis in later stages.
+
+---
+
+## Tools Used
+
+The following tools and libraries were used:
+
+* **Python** – Programming language used to build the crawler
+* **Requests Library** – To send HTTP requests and fetch webpage content
+* **BeautifulSoup** – To parse HTML and extract links and forms
+* **JSON** – To store structured scan results
+
+---
+
+## Implementation
+
+A Python-based crawler (crawler.py) was developed to scan the DVWA web application running on localhost.
+
+### Key Features of the Crawler
+
+The crawler performs the following tasks:
+
+1. Sends a request to the target URL
+2. Extracts all hyperlinks from the webpage
+3. Detects HTML forms and their input fields
+4. Structures the collected data
+5. Saves results in a JSON file
+
+---
+
+## Crawler Code
+
+python
+import requests
+from bs4 import BeautifulSoup
+import json
+
+TARGET_URL = "http://localhost:8080"
+
+def crawl_website(url):
+    print("Crawling:", url)
+
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    links = []
+    for link in soup.find_all("a"):
+        href = link.get("href")
+        if href:
+            full_link = requests.compat.urljoin(url, href)
+            links.append(full_link)
+
+    forms = []
+    for form in soup.find_all("form"):
+        form_data = {
+            "action": form.get("action"),
+            "method": form.get("method"),
+            "inputs": []
+        }
+
+        for input_tag in form.find_all("input"):
+            input_info = {
+                "name": input_tag.get("name"),
+                "type": input_tag.get("type")
+            }
+            form_data["inputs"].append(input_info)
+
+        forms.append(form_data)
+
+    results = {
+        "target_url": url,
+        "total_links_found": len(links),
+        "links": links,
+        "forms": forms
+    }
+
+    with open("scan_results.json", "w") as file:
+        json.dump(results, file, indent=4)
+
+    print("Crawling completed!")
+
+crawl_website(TARGET_URL)
+
+
+---
+
+## Output and Data Storage
+
+The crawler generates a file named:
+
+**scan_results.json**
+
+This file is stored in the crawler project folder and contains:
+
+* Total number of discovered links
+* List of URLs
+* Forms and input structures
+* Metadata required for future testing modules
+
+This structured data will be used in upcoming modules to automate vulnerability scanning.
+
+---
+
+## Results
+
+The crawler successfully scanned the DVWA web application and extracted:
+
+* Multiple internal navigation links
+* Login and input forms
+* Form input fields
+
+The data was saved in structured JSON format for easy reuse.
+
+---
+
+## Conclusion
+
+The Week 2 Target Scanning Module successfully implemented an automated crawler that:
+
+* Discovers webpages and interactive elements
+* Organizes target metadata
+* Prepares the system for vulnerability testing
