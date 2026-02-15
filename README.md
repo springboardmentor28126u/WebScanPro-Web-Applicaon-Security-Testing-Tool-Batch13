@@ -50,13 +50,7 @@ To build a secure and controlled lab environment, the following tools were insta
 
 DVWA was deployed using Docker to simulate a vulnerable web application.
 
-### Pull DVWA Image 
-
-
-```bash
-docker pull vulnerables/web-dvwa
-### Purpose of Docker```
-
+It is useful because:
 - Provides isolated environment
 - No manual configuration of Apache/PHP/MySQL
 - Easy start and stop management
