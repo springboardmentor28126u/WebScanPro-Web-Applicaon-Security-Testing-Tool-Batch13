@@ -53,7 +53,9 @@ DVWA was deployed using Docker to simulate a vulnerable web application.
 ### Pull DVWA Image 
 
 
-### Purpose of Docker
+```bash
+docker pull vulnerables/web-dvwa
+### Purpose of Docker```
 
 - Provides isolated environment
 - No manual configuration of Apache/PHP/MySQL
