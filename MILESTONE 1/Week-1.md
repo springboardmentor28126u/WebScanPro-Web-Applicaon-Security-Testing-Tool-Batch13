@@ -148,23 +148,29 @@ DVWA serves as a safe target environment.
 
 # 3. Project Folder Structure
 
-WebScanPro/
-│
-├── venv/
-├── scanner/
-│   ├── __init__.py
-│   ├── crawler.py
-│   ├── sqli_scanner.py
-│   └── xss_scanner.py
-│
-├── reports/
-├── main.py
-└── requirements.txt
-
 ## A. venv/
+This folder contains the virtual environment created for the project.
+Purpose
+The purpose of this folder is to:
+- Maintain isolated Python dependencies
 
-Contains isolated Python dependencies.
-Not uploaded to GitHub.
+- Avoid conflicts with system-wide Python packages
+
+- Ensure consistent execution across systems
+
+
+It contains installed libraries such as:
+- requests
+
+
+- beautifulsoup4
+
+
+- other required modules
+
+
+This folder is not part of the core application logic and is usually not uploaded to GitHub.
+
 
 ## B. scanner/
 
