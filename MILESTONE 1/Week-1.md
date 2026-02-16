@@ -82,9 +82,11 @@ venv\Scripts\activate
 --> Ensures reproducibility
 
 ## C. Installed Python Libraries
-pip install requests
-pip install beautifulsoup4
-pip install selenium
+- pip install requests
+
+- pip install beautifulsoup4
+
+- pip install selenium
 
 Library Purpose
 
