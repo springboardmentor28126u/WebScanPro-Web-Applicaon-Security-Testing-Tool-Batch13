@@ -1,3 +1,163 @@
 === Discovered URLs ===
+http://localhost/dvwa/#
+http://localhost/dvwa/
+http://localhost/dvwa/instructions.php
+http://localhost/dvwa/instructions.php#
+http://localhost/dvwa/setup.php
+http://localhost/dvwa/setup.php#
+http://localhost/dvwa/vulnerabilities/brute/
+http://localhost/dvwa/vulnerabilities/brute/#
+http://localhost/dvwa/vulnerabilities/exec/
+http://localhost/dvwa/vulnerabilities/exec/#
+http://localhost/dvwa/vulnerabilities/csrf/
+http://localhost/dvwa/vulnerabilities/csrf/#
+http://localhost/dvwa/vulnerabilities/fi/?page=include.php
+http://localhost/dvwa/vulnerabilities/fi/?page=include.php#
+http://localhost/dvwa/vulnerabilities/upload/
+http://localhost/dvwa/vulnerabilities/upload/#
+http://localhost/dvwa/vulnerabilities/captcha/
+http://localhost/dvwa/vulnerabilities/captcha/#
+http://localhost/dvwa/vulnerabilities/sqli/
+http://localhost/dvwa/vulnerabilities/sqli/#
+http://localhost/dvwa/vulnerabilities/sqli_blind/
+http://localhost/dvwa/vulnerabilities/sqli_blind/#
+http://localhost/dvwa/vulnerabilities/weak_id/
+http://localhost/dvwa/vulnerabilities/weak_id/#
+http://localhost/dvwa/vulnerabilities/xss_d/
+http://localhost/dvwa/vulnerabilities/xss_d/#
+http://localhost/dvwa/vulnerabilities/xss_r/
+http://localhost/dvwa/vulnerabilities/xss_r/#
+http://localhost/dvwa/vulnerabilities/xss_s/
+http://localhost/dvwa/vulnerabilities/xss_s/#
+http://localhost/dvwa/vulnerabilities/csp/
+http://localhost/dvwa/vulnerabilities/csp/#
+http://localhost/dvwa/vulnerabilities/javascript/
+http://localhost/dvwa/vulnerabilities/javascript/#
+http://localhost/dvwa/vulnerabilities/authbypass/
+http://localhost/dvwa/vulnerabilities/authbypass/#
+http://localhost/dvwa/vulnerabilities/open_redirect/
+http://localhost/dvwa/vulnerabilities/open_redirect/#
+http://localhost/dvwa/vulnerabilities/cryptography/
+http://localhost/dvwa/vulnerabilities/cryptography/#
+http://localhost/dvwa/vulnerabilities/api/
+http://localhost/dvwa/vulnerabilities/api/#
+http://localhost/dvwa/security.php
+http://localhost/dvwa/security.php#
+http://localhost/dvwa/phpinfo.php
+http://localhost/dvwa/phpinfo.php#module_apache2handler
+http://localhost/dvwa/phpinfo.php#module_bcmath
+http://localhost/dvwa/phpinfo.php#module_bz2
+http://localhost/dvwa/phpinfo.php#module_calendar
+http://localhost/dvwa/phpinfo.php#module_core
+http://localhost/dvwa/phpinfo.php#module_ctype
+http://localhost/dvwa/phpinfo.php#module_curl
+http://localhost/dvwa/phpinfo.php#module_date
+http://localhost/dvwa/phpinfo.php#module_dom
+http://localhost/dvwa/phpinfo.php#module_exif
+http://localhost/dvwa/phpinfo.php#module_fileinfo
+http://localhost/dvwa/phpinfo.php#module_filter
+http://localhost/dvwa/phpinfo.php#module_ftp
+http://localhost/dvwa/phpinfo.php#module_gettext
+http://localhost/dvwa/phpinfo.php#module_hash
+http://localhost/dvwa/phpinfo.php#module_iconv
+http://localhost/dvwa/phpinfo.php#module_json
+http://localhost/dvwa/phpinfo.php#module_libxml
+http://localhost/dvwa/phpinfo.php#module_mbstring
+http://localhost/dvwa/phpinfo.php#module_mysqli
+http://localhost/dvwa/phpinfo.php#module_mysqlnd
+http://localhost/dvwa/phpinfo.php#module_openssl
+http://localhost/dvwa/phpinfo.php#module_pcre
+http://localhost/dvwa/phpinfo.php#module_pdo
+http://localhost/dvwa/phpinfo.php#module_pdo_mysql
+http://localhost/dvwa/phpinfo.php#module_pdo_sqlite
+http://localhost/dvwa/phpinfo.php#module_phar
+http://localhost/dvwa/phpinfo.php#module_random
+http://localhost/dvwa/phpinfo.php#module_readline
+http://localhost/dvwa/phpinfo.php#module_reflection
+http://localhost/dvwa/phpinfo.php#module_session
+http://localhost/dvwa/phpinfo.php#module_simplexml
+http://localhost/dvwa/phpinfo.php#module_spl
+http://localhost/dvwa/phpinfo.php#module_standard
+http://localhost/dvwa/phpinfo.php#module_tokenizer
+http://localhost/dvwa/phpinfo.php#module_xml
+http://localhost/dvwa/phpinfo.php#module_xmlreader
+http://localhost/dvwa/phpinfo.php#module_xmlwriter
+http://localhost/dvwa/phpinfo.php#module_zlib
+http://localhost/dvwa/about.php
+http://localhost/dvwa/about.php#
+http://localhost/dvwa/logout.php
+http://localhost/dvwa/vulnerabilities/bac/log_viewer.php
+http://localhost/dvwa/vulnerabilities/open_redirect/source/impossible.php?redirect=1
+http://localhost/dvwa/vulnerabilities/open_redirect/source/impossible.php?redirect=2
+http://localhost/dvwa/vulnerabilities/fi/?page=file1.php
+http://localhost/dvwa/vulnerabilities/fi/?page=file2.php
+http://localhost/dvwa/vulnerabilities/fi/?page=file3.php
+http://localhost/dvwa/instructions.php?doc=readme
+http://localhost/dvwa/instructions.php?doc=readme#
+http://localhost/dvwa/instructions.php?doc=PDF
+http://localhost/dvwa/instructions.php?doc=PDF#
+http://localhost/dvwa/instructions.php?doc=changelog
+http://localhost/dvwa/instructions.php?doc=changelog#
+http://localhost/dvwa/instructions.php?doc=copying
+http://localhost/dvwa/instructions.php?doc=copying#
+http://localhost/dvwa/docs/DVWA_v1.3.pdf
+http://localhost/dvwa/README.ar.md
+http://localhost/dvwa/README.zh.md
+http://localhost/dvwa/README.fr.md
+http://localhost/dvwa/README.ko.md
+http://localhost/dvwa/README.fa.md
+http://localhost/dvwa/README.pl.md
+http://localhost/dvwa/README.pt.md
+http://localhost/dvwa/README.es.md
+http://localhost/dvwa/README.tr.md
+http://localhost/dvwa/README.id.md
+http://localhost/dvwa/README.vi.md
+http://localhost/dvwa/README.it.md
+http://localhost/dvwa/instructions.php?doc=readme#download
+http://localhost/dvwa/instructions.php?doc=readme#i-want-to-run-dvwa-on-a-different-port
+http://localhost/dvwa/config/config.inc.php.dist
+http://localhost/dvwa/compose.yml
+http://localhost/dvwa/instructions.php?doc=readme#php-configuration
+http://localhost/dvwa/instructions.php?doc=readme#database-setup
+http://localhost/dvwa/instructions.php#download
+http://localhost/dvwa/instructions.php#i-want-to-run-dvwa-on-a-different-port
+http://localhost/dvwa/instructions.php#php-configuration
+http://localhost/dvwa/instructions.php#database-setup
 
 === Forms & Input Fields ===
+{'page': 'http://localhost/dvwa/logout.php', 'action': 'http://localhost/dvwa/login.php', 'method': 'post', 'inputs': [{'name': 'username', 'type': 'text', 'value': ''}, {'name': 'password', 'type': 'password', 'value': ''}, {'name': 'Login', 'type': 'submit', 'value': 'Login'}, {'name': 'user_token', 'type': 'hidden', 'value': 'b2cff97f11506a90fe3382dc2d8ccde4'}]}
+{'page': 'http://localhost/dvwa/security.php#', 'action': 'http://localhost/dvwa/security.php#', 'method': 'post', 'inputs': [{'name': 'seclev_submit', 'type': 'submit', 'value': 'Submit'}, {'name': 'user_token', 'type': 'hidden', 'value': '9f3c986691c2216a8a62585b8212378a'}]}
+{'page': 'http://localhost/dvwa/security.php', 'action': 'http://localhost/dvwa/security.php#', 'method': 'post', 'inputs': [{'name': 'seclev_submit', 'type': 'submit', 'value': 'Submit'}, {'name': 'user_token', 'type': 'hidden', 'value': 'd90b848cd6d7f2a39ed5c2a4971be484'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/cryptography/#', 'action': 'http://localhost/dvwa/vulnerabilities/cryptography/#', 'method': 'get', 'inputs': [{'name': None, 'type': 'button', 'value': 'Submit'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/cryptography/', 'action': 'http://localhost/dvwa/vulnerabilities/cryptography/', 'method': 'get', 'inputs': [{'name': None, 'type': 'button', 'value': 'Submit'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/open_redirect/source/impossible.php?redirect=1', 'action': 'http://localhost/dvwa/vulnerabilities/open_redirect/source/login.php', 'method': 'post', 'inputs': [{'name': 'username', 'type': 'text', 'value': ''}, {'name': 'password', 'type': 'password', 'value': ''}, {'name': 'Login', 'type': 'submit', 'value': 'Login'}, {'name': 'user_token', 'type': 'hidden', 'value': '879700f693363e5129d9bea227e81ed7'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/open_redirect/source/impossible.php?redirect=2', 'action': 'http://localhost/dvwa/vulnerabilities/open_redirect/source/login.php', 'method': 'post', 'inputs': [{'name': 'username', 'type': 'text', 'value': ''}, {'name': 'password', 'type': 'password', 'value': ''}, {'name': 'Login', 'type': 'submit', 'value': 'Login'}, {'name': 'user_token', 'type': 'hidden', 'value': '08dc958a2032f474c3a88699c37d58c9'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/csp/#', 'action': 'http://localhost/dvwa/vulnerabilities/csp/#', 'method': 'post', 'inputs': [{'name': None, 'type': 'button', 'value': 'Solve the sum'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/csp/', 'action': 'http://localhost/dvwa/vulnerabilities/csp/', 'method': 'post', 'inputs': [{'name': None, 'type': 'button', 'value': 'Solve the sum'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/xss_s/#', 'action': 'http://localhost/dvwa/vulnerabilities/xss_s/#', 'method': 'post', 'inputs': [{'name': 'txtName', 'type': 'text', 'value': ''}, {'name': 'btnSign', 'type': 'submit', 'value': 'Sign Guestbook'}, {'name': 'btnClear', 'type': 'submit', 'value': 'Clear Guestbook'}, {'name': 'user_token', 'type': 'hidden', 'value': 'cacff003ad48f1b7c13502c7552d5ef6'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/xss_s/', 'action': 'http://localhost/dvwa/vulnerabilities/xss_s/', 'method': 'post', 'inputs': [{'name': 'txtName', 'type': 'text', 'value': ''}, {'name': 'btnSign', 'type': 'submit', 'value': 'Sign Guestbook'}, {'name': 'btnClear', 'type': 'submit', 'value': 'Clear Guestbook'}, {'name': 'user_token', 'type': 'hidden', 'value': 'c5bbe847854d40b6da8a3cc1bb1e3b67'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/xss_r/#', 'action': 'http://localhost/dvwa/vulnerabilities/xss_r/#', 'method': 'get', 'inputs': [{'name': 'name', 'type': 'text', 'value': ''}, {'name': None, 'type': 'submit', 'value': 'Submit'}, {'name': 'user_token', 'type': 'hidden', 'value': '6b990eacc37331dd211ea9db8326a8d7'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/xss_r/', 'action': 'http://localhost/dvwa/vulnerabilities/xss_r/#', 'method': 'get', 'inputs': [{'name': 'name', 'type': 'text', 'value': ''}, {'name': None, 'type': 'submit', 'value': 'Submit'}, {'name': 'user_token', 'type': 'hidden', 'value': '0e1a7c35377a63f90acd88d72504a747'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/xss_d/#', 'action': 'http://localhost/dvwa/vulnerabilities/xss_d/#', 'method': 'get', 'inputs': [{'name': None, 'type': 'submit', 'value': 'Select'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/xss_d/', 'action': 'http://localhost/dvwa/vulnerabilities/xss_d/', 'method': 'get', 'inputs': [{'name': None, 'type': 'submit', 'value': 'Select'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/weak_id/#', 'action': 'http://localhost/dvwa/vulnerabilities/weak_id/#', 'method': 'post', 'inputs': [{'name': None, 'type': 'submit', 'value': 'Generate'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/weak_id/', 'action': 'http://localhost/dvwa/vulnerabilities/weak_id/', 'method': 'post', 'inputs': [{'name': None, 'type': 'submit', 'value': 'Generate'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/sqli_blind/#', 'action': 'http://localhost/dvwa/vulnerabilities/sqli_blind/#', 'method': 'get', 'inputs': [{'name': 'id', 'type': 'text', 'value': ''}, {'name': 'Submit', 'type': 'submit', 'value': 'Submit'}, {'name': 'user_token', 'type': 'hidden', 'value': '91d7ff7c01f9248bc1ecbb7081b931cd'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/sqli_blind/', 'action': 'http://localhost/dvwa/vulnerabilities/sqli_blind/#', 'method': 'get', 'inputs': [{'name': 'id', 'type': 'text', 'value': ''}, {'name': 'Submit', 'type': 'submit', 'value': 'Submit'}, {'name': 'user_token', 'type': 'hidden', 'value': 'dc7e7d47e95afe9d1d939d05f8cba7e6'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/sqli/#', 'action': 'http://localhost/dvwa/vulnerabilities/sqli/#', 'method': 'get', 'inputs': [{'name': 'id', 'type': 'text', 'value': ''}, {'name': 'Submit', 'type': 'submit', 'value': 'Submit'}, {'name': 'user_token', 'type': 'hidden', 'value': 'f9346f781b3706ad509bcce57634f76b'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/sqli/', 'action': 'http://localhost/dvwa/vulnerabilities/sqli/#', 'method': 'get', 'inputs': [{'name': 'id', 'type': 'text', 'value': ''}, {'name': 'Submit', 'type': 'submit', 'value': 'Submit'}, {'name': 'user_token', 'type': 'hidden', 'value': 'b8fb7e66fdac0ba2e61e67b517b934c2'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/captcha/#', 'action': 'http://localhost/dvwa/vulnerabilities/captcha/#', 'method': 'post', 'inputs': [{'name': 'step', 'type': 'hidden', 'value': '1'}, {'name': 'password_current', 'type': 'password', 'value': ''}, {'name': 'password_new', 'type': 'password', 'value': ''}, {'name': 'password_conf', 'type': 'password', 'value': ''}, {'name': 'user_token', 'type': 'hidden', 'value': '210ce58d2fc6d1f0dfc1550f0a876b40'}, {'name': 'Change', 'type': 'submit', 'value': 'Change'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/captcha/', 'action': 'http://localhost/dvwa/vulnerabilities/captcha/#', 'method': 'post', 'inputs': [{'name': 'step', 'type': 'hidden', 'value': '1'}, {'name': 'password_current', 'type': 'password', 'value': ''}, {'name': 'password_new', 'type': 'password', 'value': ''}, {'name': 'password_conf', 'type': 'password', 'value': ''}, {'name': 'user_token', 'type': 'hidden', 'value': '1c27a4c430ac69802b5011e37e53cc24'}, {'name': 'Change', 'type': 'submit', 'value': 'Change'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/upload/#', 'action': 'http://localhost/dvwa/vulnerabilities/upload/#', 'method': 'post', 'inputs': [{'name': 'MAX_FILE_SIZE', 'type': 'hidden', 'value': '100000'}, {'name': 'uploaded', 'type': 'file', 'value': ''}, {'name': 'Upload', 'type': 'submit', 'value': 'Upload'}, {'name': 'user_token', 'type': 'hidden', 'value': '775f6f8387b9aeb49fff0eebd1b59bb8'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/upload/', 'action': 'http://localhost/dvwa/vulnerabilities/upload/#', 'method': 'post', 'inputs': [{'name': 'MAX_FILE_SIZE', 'type': 'hidden', 'value': '100000'}, {'name': 'uploaded', 'type': 'file', 'value': ''}, {'name': 'Upload', 'type': 'submit', 'value': 'Upload'}, {'name': 'user_token', 'type': 'hidden', 'value': '3874021fcf2bfee3b8a93cb2b1df604a'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/fi/?page=file1.php', 'action': 'http://localhost/dvwa/vulnerabilities/fi/login.php', 'method': 'post', 'inputs': [{'name': 'username', 'type': 'text', 'value': ''}, {'name': 'password', 'type': 'password', 'value': ''}, {'name': 'Login', 'type': 'submit', 'value': 'Login'}, {'name': 'user_token', 'type': 'hidden', 'value': '78f1f5b02f1f8a6c84bc41d5a62397e5'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/fi/?page=file2.php', 'action': 'http://localhost/dvwa/vulnerabilities/fi/login.php', 'method': 'post', 'inputs': [{'name': 'username', 'type': 'text', 'value': ''}, {'name': 'password', 'type': 'password', 'value': ''}, {'name': 'Login', 'type': 'submit', 'value': 'Login'}, {'name': 'user_token', 'type': 'hidden', 'value': 'ecba1b178a85dad10cbe9f3e2489466b'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/fi/?page=file3.php', 'action': 'http://localhost/dvwa/vulnerabilities/fi/login.php', 'method': 'post', 'inputs': [{'name': 'username', 'type': 'text', 'value': ''}, {'name': 'password', 'type': 'password', 'value': ''}, {'name': 'Login', 'type': 'submit', 'value': 'Login'}, {'name': 'user_token', 'type': 'hidden', 'value': '830551fd918670c8ddc2b3e56d4ffa14'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/csrf/#', 'action': 'http://localhost/dvwa/vulnerabilities/csrf/#', 'method': 'get', 'inputs': [{'name': 'password_current', 'type': 'password', 'value': ''}, {'name': 'password_new', 'type': 'password', 'value': ''}, {'name': 'password_conf', 'type': 'password', 'value': ''}, {'name': 'Change', 'type': 'submit', 'value': 'Change'}, {'name': 'user_token', 'type': 'hidden', 'value': '0a16c8fde21c7191c442885f09f0c36e'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/csrf/', 'action': 'http://localhost/dvwa/vulnerabilities/csrf/#', 'method': 'get', 'inputs': [{'name': 'password_current', 'type': 'password', 'value': ''}, {'name': 'password_new', 'type': 'password', 'value': ''}, {'name': 'password_conf', 'type': 'password', 'value': ''}, {'name': 'Change', 'type': 'submit', 'value': 'Change'}, {'name': 'user_token', 'type': 'hidden', 'value': '219309c02eff7d3359c596d09512757f'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/exec/#', 'action': 'http://localhost/dvwa/vulnerabilities/exec/#', 'method': 'post', 'inputs': [{'name': 'ip', 'type': 'text', 'value': ''}, {'name': 'Submit', 'type': 'submit', 'value': 'Submit'}, {'name': 'user_token', 'type': 'hidden', 'value': '45247e3249ac4c0ecdb62e961423e1a3'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/exec/', 'action': 'http://localhost/dvwa/vulnerabilities/exec/#', 'method': 'post', 'inputs': [{'name': 'ip', 'type': 'text', 'value': ''}, {'name': 'Submit', 'type': 'submit', 'value': 'Submit'}, {'name': 'user_token', 'type': 'hidden', 'value': '2efd983e16856586e854ea7266e1187c'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/brute/#', 'action': 'http://localhost/dvwa/vulnerabilities/brute/#', 'method': 'post', 'inputs': [{'name': 'username', 'type': 'text', 'value': ''}, {'name': 'password', 'type': 'password', 'value': ''}, {'name': 'Login', 'type': 'submit', 'value': 'Login'}, {'name': 'user_token', 'type': 'hidden', 'value': '78fdc5e2a6ccc07730b7b2f992100a4f'}]}
+{'page': 'http://localhost/dvwa/vulnerabilities/brute/', 'action': 'http://localhost/dvwa/vulnerabilities/brute/#', 'method': 'post', 'inputs': [{'name': 'username', 'type': 'text', 'value': ''}, {'name': 'password', 'type': 'password', 'value': ''}, {'name': 'Login', 'type': 'submit', 'value': 'Login'}, {'name': 'user_token', 'type': 'hidden', 'value': '8f0e602367fc5e9a42b21dcd26822dd3'}]}
+{'page': 'http://localhost/dvwa/setup.php#', 'action': 'http://localhost/dvwa/setup.php#', 'method': 'post', 'inputs': [{'name': 'create_db', 'type': 'submit', 'value': 'Create / Reset Database'}, {'name': 'user_token', 'type': 'hidden', 'value': '002acc4aa908969aac1fef3f56a4d505'}]}
+{'page': 'http://localhost/dvwa/setup.php', 'action': 'http://localhost/dvwa/setup.php#', 'method': 'post', 'inputs': [{'name': 'create_db', 'type': 'submit', 'value': 'Create / Reset Database'}, {'name': 'user_token', 'type': 'hidden', 'value': '00f2d1125932edb987eccace9c8619d2'}]}

@@ -4,6 +4,7 @@ from urllib.parse import urljoin
 import json
 
 # ---------------- CONFIG ---------------- #
+
 BASE_URL = "http://localhost/dvwa/"
 LOGIN_URL = urljoin(BASE_URL, "login.php")
 
