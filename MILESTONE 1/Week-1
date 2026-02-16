@@ -1,367 +1,51 @@
-WebScanPro – Automated Web Application Security Scanner
-Introduction
+# WebScanPro – Automated Web Application Security Scanner
+
+---
+
+## Introduction
 
 WebScanPro is an automated web application security testing tool developed as part of an internship project to understand the internal working of vulnerability scanners and modern security assessment methodologies.
-
 The primary objective of this project is to design and implement a modular scanning system capable of identifying common web application vulnerabilities based on the OWASP Top 10 standards.
-
 The tool scans a target web application — DVWA (Damn Vulnerable Web Application) — and performs both automated and controlled manual testing to detect vulnerabilities such as:
 
-SQL Injection
+- SQL Injection
+- Cross-Site Scripting (XSS)
+- Command Injection
 
-Cross-Site Scripting (XSS)
+### Project Focus
 
-Command Injection
+- Simulating real-world attack techniques  
+- Analyzing HTTP responses  
+- Generating structured vulnerability reports  
 
-The project focuses on:
+---
 
-Simulating real-world attack techniques
+# Week 1 – Project Initialization & Environment Setup
 
-Analyzing HTTP responses
-
-Generating structured vulnerability reports
-
-Week 1 – Project Initialization & Environment Setup
-Objective of Week 1
+## Objective of Week 1
 
 Week 1 focused on establishing the foundational infrastructure required for developing WebScanPro.
 
-Key Goals:
+### Key Goals
 
-Define project objectives
-
-Create controlled testing environment
-
-Install and configure required tools
-
-Deploy vulnerable target application
-
-Understand core vulnerabilities manually
+- Define project objectives  
+- Create controlled testing environment  
+- Install and configure required tools  
+- Deploy vulnerable target application  
+- Understand core vulnerabilities manually  
 
 This phase created a stable and secure lab environment for safe vulnerability testing and future automation.
 
-1. Software & Tools Installed
-A. Python
+---
+
+# 1. Software & Tools Installed
+
+## A. Python
 
 Python is used to build the automated scanner.
 
-Verification:
+### Verification
+
+```bash
 python --version
 pip --version
-
-Responsibilities:
-
-Sending HTTP requests
-
-Automating login
-
-Crawling web pages
-
-Performing vulnerability tests
-
-B. Virtual Environment (venv)
-
-Created to isolate project dependencies.
-
-Creation:
-python -m venv venv
-
-Activation (Windows):
-venv\Scripts\activate
-
-Purpose:
-
-Keeps project libraries separate
-
-Avoids dependency conflicts
-
-Ensures reproducibility
-
-C. Installed Python Libraries
-
-Installed using:
-
-pip install requests
-pip install beautifulsoup4
-pip install selenium
-
-Library Purpose:
-Library	Purpose
-requests	Sends HTTP GET & POST requests
-beautifulsoup4	Parses HTML to extract forms & links
-selenium	Browser automation
-
-A requirements.txt file was created to manage dependencies.
-
-2. Docker & DVWA Setup
-A. Docker Desktop
-
-Used to run DVWA in an isolated container.
-
-Verification:
-docker --version
-
-Purpose:
-
-Runs DVWA in isolation
-
-No manual Apache/PHP/MySQL setup
-
-Easy start/stop environment
-
-B. DVWA Deployment
-Pull Image:
-docker pull vulnerables/web-dvwa
-
-Run Container:
-docker run -d -p 8081:80 vulnerables/web-dvwa
-
-
--d → Run in background
-
--p 8081:80 → Map local port 8081 to container port 80
-
-Access DVWA at:
-
-http://localhost:8081
-
-What is DVWA?
-
-DVWA (Damn Vulnerable Web Application) is an intentionally insecure web application designed for:
-
-Security testing practice
-
-Learning vulnerabilities
-
-Developing scanners
-
-Contains Vulnerabilities:
-
-SQL Injection
-
-XSS
-
-Command Injection
-
-File Inclusion
-
-Brute Force
-
-CSRF
-
-DVWA serves as a safe target environment.
-
-3. Project Folder Structure
-WebScanPro/
-│
-├── venv/
-├── scanner/
-│   ├── __init__.py
-│   ├── crawler.py
-│   ├── sqli_scanner.py
-│   └── xss_scanner.py
-│
-├── reports/
-├── main.py
-└── requirements.txt
-
-A. venv/
-
-Contains isolated Python dependencies.
-
-Not uploaded to GitHub.
-
-B. scanner/
-
-Contains core vulnerability detection modules.
-
-1. init.py
-
-Makes scanner a Python package.
-
-Allows imports like:
-
-from scanner.crawler import crawl
-
-2. crawler.py
-
-Responsible for exploring target website.
-
-Functions:
-
-Discover links
-
-Extract forms
-
-Identify input fields
-
-Detect GET/POST parameters
-
-Process:
-
-Send HTTP request
-
-Parse HTML using BeautifulSoup
-
-Extract <a>, <form>, <input> tags
-
-Return structured data
-
-3. sqli_scanner.py
-
-Detects SQL Injection vulnerabilities.
-
-Method:
-
-Inject payload:
-
-' OR '1'='1
-
-
-Submit modified request
-
-Analyze response for:
-
-SQL errors
-
-Authentication bypass
-
-Abnormal behavior
-
-4. xss_scanner.py
-
-Detects Cross-Site Scripting vulnerabilities.
-
-Payload:
-<script>alert('XSS')</script>
-
-Detection:
-
-Inject payload
-
-Submit form
-
-Check if script reflects unescaped
-
-C. reports/
-
-Stores scan results.
-
-Future:
-
-JSON reports
-
-HTML reports
-
-D. main.py
-
-Entry point of application.
-
-Run using:
-
-python main.py
-
-Responsibilities:
-
-Connection check
-
-Login automation
-
-Calls crawler
-
-Initiates scanning
-
-E. requirements.txt
-
-Lists dependencies.
-
-Install using:
-
-pip install -r requirements.txt
-
-4. Manual Vulnerability Testing (DVWA)
-
-Security Level: Low
-
-A. SQL Injection
-Normal Input:
-1
-
-Malicious Input:
-1' OR '1'='1
-
-Result:
-
-Multiple user records displayed
-
-Confirms SQL Injection vulnerability
-
-Cause:
-
-No parameterized queries
-
-Direct input embedding
-
-B. Reflected XSS
-Payload:
-<script>alert('XSS')</script>
-
-Result:
-
-Alert box appeared
-
-Cause:
-
-No HTML escaping
-
-Input reflected directly
-
-C. Stored XSS
-Payload:
-<script>alert('Stored')</script>
-
-Result:
-
-Alert triggered on every page load
-
-Risk:
-
-Affects all users
-
-Persistent attack
-
-D. Command Injection
-Normal Input:
-127.0.0.1
-
-Malicious Input:
-127.0.0.1; ls
-
-Result:
-
-Directory listing displayed
-
-Arbitrary command execution
-
-Cause:
-
-Unsanitized input passed to system command
-
-5. Outcome of Week 1
-
-By the end of Week 1:
-
-✅ Python & libraries configured
-✅ Virtual environment created
-✅ Docker installed
-✅ DVWA deployed successfully
-✅ HTTP connectivity verified
-✅ Core vulnerabilities manually tested
-✅ Project structure finalized
-✅ Scanner architecture prepared
-
-Week 1 Status
-
-Environment Setup & Vulnerability Understanding Phase — Completed Successfully
-
-This establishes the technical groundwork required for implementing automated scanning modules in upcoming phases.
