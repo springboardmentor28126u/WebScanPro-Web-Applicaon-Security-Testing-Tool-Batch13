@@ -1,0 +1,390 @@
+{
+    "target": "http://localhost:8081",
+    "total_forms": 22,
+    "forms": [
+        {
+            "action": "http://localhost:8081/setup.php#",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": "create_db",
+                    "type": "submit"
+                },
+                {
+                    "name": "user_token",
+                    "type": "hidden"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/vulnerabilities/brute/#",
+            "method": "get",
+            "inputs": [
+                {
+                    "name": "username",
+                    "type": "text"
+                },
+                {
+                    "name": "password",
+                    "type": "password"
+                },
+                {
+                    "name": "Login",
+                    "type": "submit"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/vulnerabilities/exec/#",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": "ip",
+                    "type": "text"
+                },
+                {
+                    "name": "Submit",
+                    "type": "submit"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/vulnerabilities/csrf/#",
+            "method": "get",
+            "inputs": [
+                {
+                    "name": "password_new",
+                    "type": "password"
+                },
+                {
+                    "name": "password_conf",
+                    "type": "password"
+                },
+                {
+                    "name": "Change",
+                    "type": "submit"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/vulnerabilities/upload/#",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": "MAX_FILE_SIZE",
+                    "type": "hidden"
+                },
+                {
+                    "name": "uploaded",
+                    "type": "file"
+                },
+                {
+                    "name": "Upload",
+                    "type": "submit"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/vulnerabilities/captcha/#",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": "step",
+                    "type": "hidden"
+                },
+                {
+                    "name": "password_new",
+                    "type": "password"
+                },
+                {
+                    "name": "password_conf",
+                    "type": "password"
+                },
+                {
+                    "name": "Change",
+                    "type": "submit"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/vulnerabilities/sqli/#",
+            "method": "get",
+            "inputs": [
+                {
+                    "name": "id",
+                    "type": "text"
+                },
+                {
+                    "name": "Submit",
+                    "type": "submit"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/vulnerabilities/sqli_blind/#",
+            "method": "get",
+            "inputs": [
+                {
+                    "name": "id",
+                    "type": "text"
+                },
+                {
+                    "name": "Submit",
+                    "type": "submit"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/vulnerabilities/weak_id/",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": null,
+                    "type": "submit"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/vulnerabilities/xss_d/",
+            "method": "get",
+            "inputs": [
+                {
+                    "name": null,
+                    "type": "submit"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/vulnerabilities/xss_r/#",
+            "method": "get",
+            "inputs": [
+                {
+                    "name": "name",
+                    "type": "text"
+                },
+                {
+                    "name": null,
+                    "type": "submit"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/vulnerabilities/xss_s/",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": "txtName",
+                    "type": "text"
+                },
+                {
+                    "name": "btnSign",
+                    "type": "submit"
+                },
+                {
+                    "name": "btnClear",
+                    "type": "submit"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/vulnerabilities/csp/",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": "include",
+                    "type": "text"
+                },
+                {
+                    "name": null,
+                    "type": "submit"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/vulnerabilities/javascript/",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": "token",
+                    "type": "hidden"
+                },
+                {
+                    "name": "phrase",
+                    "type": "text"
+                },
+                {
+                    "name": "send",
+                    "type": "submit"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/security.php#",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": "seclev_submit",
+                    "type": "submit"
+                },
+                {
+                    "name": "user_token",
+                    "type": "hidden"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/login.php",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": "username",
+                    "type": "text"
+                },
+                {
+                    "name": "password",
+                    "type": "password"
+                },
+                {
+                    "name": "Login",
+                    "type": "submit"
+                },
+                {
+                    "name": "user_token",
+                    "type": "hidden"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/login.php",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": "username",
+                    "type": "text"
+                },
+                {
+                    "name": "password",
+                    "type": "password"
+                },
+                {
+                    "name": "Login",
+                    "type": "submit"
+                },
+                {
+                    "name": "user_token",
+                    "type": "hidden"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/login.php",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": "username",
+                    "type": "text"
+                },
+                {
+                    "name": "password",
+                    "type": "password"
+                },
+                {
+                    "name": "Login",
+                    "type": "submit"
+                },
+                {
+                    "name": "user_token",
+                    "type": "hidden"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/login.php",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": "username",
+                    "type": "text"
+                },
+                {
+                    "name": "password",
+                    "type": "password"
+                },
+                {
+                    "name": "Login",
+                    "type": "submit"
+                },
+                {
+                    "name": "user_token",
+                    "type": "hidden"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/vulnerabilities/fi/login.php",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": "username",
+                    "type": "text"
+                },
+                {
+                    "name": "password",
+                    "type": "password"
+                },
+                {
+                    "name": "Login",
+                    "type": "submit"
+                },
+                {
+                    "name": "user_token",
+                    "type": "hidden"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/vulnerabilities/fi/login.php",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": "username",
+                    "type": "text"
+                },
+                {
+                    "name": "password",
+                    "type": "password"
+                },
+                {
+                    "name": "Login",
+                    "type": "submit"
+                },
+                {
+                    "name": "user_token",
+                    "type": "hidden"
+                }
+            ]
+        },
+        {
+            "action": "http://localhost:8081/vulnerabilities/fi/login.php",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": "username",
+                    "type": "text"
+                },
+                {
+                    "name": "password",
+                    "type": "password"
+                },
+                {
+                    "name": "Login",
+                    "type": "submit"
+                },
+                {
+                    "name": "user_token",
+                    "type": "hidden"
+                }
+            ]
+        }
+    ]
+}
