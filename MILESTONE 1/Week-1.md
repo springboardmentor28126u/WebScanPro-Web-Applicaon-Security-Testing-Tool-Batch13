@@ -48,9 +48,11 @@ Python is responsible for:
 Created to isolate project dependencies.
 
 - Creation
+  
 python -m venv venv
 
 - Activation (Windows)
+  
 venv\Scripts\activate
 
 - Purpose
