@@ -324,8 +324,11 @@ The system was capable of:
 - Verifying successful connection to the target application (HTTP status validation)
 - Understanding and manually testing core vulnerabilities such as:
 SQL Injection
+
 Reflected XSS
+
 Stored XSS
+
 Command Injection
 
 - Designing the project folder structure
