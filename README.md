@@ -114,22 +114,25 @@ This test was done to check how the application handles unsafe user input.
 
 ## 🔸 Objective  
 
-The goal of Week 2 was to create a Python scanner that automatically finds:
+The goal of Week 2 was to build an enhanced Python-based scanning engine that automatically identifies:
 
 - Forms  
 - Input fields  
 - Form actions  
 - HTTP methods  
+- Internal URLs (Basic Crawling)  
+- Hidden form tokens  
 
-This information will be used later for automated testing.
+This structured data will be used for automated vulnerability testing in upcoming modules.
 
 ---
 
 ## 🔸 Technologies Used  
 
-- Python  
-- Requests Library  
+- Python 3.x  
+- Requests (Session Handling Enabled)  
 - BeautifulSoup  
+- JSON  
 - DVWA  
 - XAMPP  
 
@@ -137,100 +140,122 @@ This information will be used later for automated testing.
 
 ## 🔸 About scanner.py  
 
-I created a Python script called `scanner.py`.
+`scanner.py` is a modular scanning script designed to analyze the structure of a web application.
 
-This script:
+### 🔹 Key Capabilities:
 
-- Starts from DVWA homepage  
-- Sends request to the website  
-- Reads the HTML content  
-- Finds all `<form>` elements  
-- Extracts:
+- Initiates session using `requests.Session()`  
+- Crawls internal links within the target scope  
+- Extracts all `<form>` elements  
+- Identifies:
   - Form action  
-  - Method (GET/POST)  
-  - Input names  
+  - HTTP method (GET/POST)  
+  - Input field names  
   - Input types  
-- Saves the results into files  
+  - Hidden fields (CSRF tokens, etc.)  
+- Prevents duplicate URL scanning  
+- Generates structured output files  
+- Includes basic error handling for stability  
 
-The scanner does not attack the website.  
-It only collects useful information.
+The scanner performs **passive reconnaissance only**.  
+It does not inject payloads or exploit vulnerabilities.
 
 ---
 
 ## 🔸 How the Scanner Works  
 
-1. Starts from `http://localhost/dvwa/`  
-2. Sends HTTP request  
-3. Parses HTML using BeautifulSoup  
-4. Extracts forms and inputs  
-5. Saves results in output files  
+1. Starts from:  
+```
+http://localhost/dvwa/
+```
+2. Creates a persistent HTTP session  
+3. Discovers internal links  
+4. Parses HTML using BeautifulSoup  
+5. Extracts forms and input fields  
+6. Stores structured results into output files  
 
 ---
 
 ## 🔸 Output Files  
 
 ### 📄 output.json  
-Contains structured data:
-- Page URL  
-- Form action  
-- Method  
-- Input names and types  
 
-### 📄 Output JSON Result
-![Output JSON](Week-2/screenshots/output_json.png)
+Contains structured scanning results including:
+
+- Discovered URLs  
+- Page-level form mapping  
+- Input field details  
+- Hidden parameters  
+
+### 📄 Output JSON Result  
+
+```
+{
+    {
+    "urls": [],
+    "forms": []
+}
+```
 
 ---
 
 ### 📄 output.txt  
-Readable scan results  
 
-### 📄 Output TXT Result
+Readable scan summary for quick analysis.
+
+### 📄 Output TXT Result  
 ```
 === Discovered URLs ===
 
 === Forms & Input Fields ===
-{'page': 'http://localhost/dvwa/', 'action': 'login.php', 'method': 'post', 'inputs': [{'name': 'username', 'type': 'text'}, {'name': 'password', 'type': 'password'}, {'name': 'Login', 'type': 'submit'}, {'name': 'user_token', 'type': 'hidden'}]}
+
 ```
 
 ---
 
 ## 🔸 Scan Results  
 
-The scanner found the DVWA login form and extracted:
+The scanner successfully:
 
-- username  
-- password  
-- user_token  
-- submit button  
+✔ Discovered internal URLs  
+✔ Extracted login form  
+✔ Captured hidden security tokens  
+✔ Identified HTTP methods  
+✔ Organized data into structured JSON  
 
-Only the login page was scanned because internal pages need authentication.
+This prepares the foundation for automated SQL Injection and XSS testing.
 
 ---
 
 ## 📸 Week 2 Screenshots  
 
-### ▶ Scanner Execution Output
-![Scanner Run](Week-2/screenshots/scanner_run.png)  
-### 🐍 Python Version Verification
-![Python Version](Week-2/screenshots/py_version.png)  
+### ▶ Scanner Execution Output  
+
+![Scanner Run](Week-2/screenshots/scanner_run.png)
+
+### 🐍 Python Version Verification  
+
+![Python Version](Week-2/screenshots/py_version.png)
 
 ---
 
 ## 🔸 Limitations  
 
-- Scanner does not login yet  
-- Internal pages cannot be scanned  
-- Session handling will be added later  
+- Authentication automation not implemented  
+- Depth-based crawling not configurable yet  
+- No payload injection engine integrated  
+- No vulnerability scoring module  
 
 ---
 
 # ✅ Milestone 1 Summary  
 
-✔ Local testing environment set up  
-✔ DVWA configured successfully  
-✔ Vulnerability modules explored  
-✔ Python scanner developed  
-✔ Forms and input fields extracted  
-✔ Structured output files generated  
+✔ Local testing environment configured  
+✔ Vulnerability modules analyzed  
+✔ Python-based scanning engine developed  
+✔ Internal link discovery implemented  
+✔ Session-based crawling enabled  
+✔ Structured JSON reporting system created  
+✔ Automation-ready architecture prepared  
 
-Milestone 1 builds the base for developing a complete web security testing tool.
+Milestone 1 establishes a strong foundation for developing a complete web application security testing framework.
