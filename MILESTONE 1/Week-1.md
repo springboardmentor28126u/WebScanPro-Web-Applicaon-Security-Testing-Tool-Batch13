@@ -93,22 +93,29 @@ docker --version
 <img width="1569" height="884" alt="image" src="https://github.com/user-attachments/assets/a65ffc88-e64a-40af-9248-f14a4de2c139" />
 
 ## B. DVWA Deployment
-- Pull Image
+
+DVWA was deployed using Docker to create a safe and isolated testing environment.
+
+The DVWA image was downloaded using:
+
 docker pull vulnerables/web-dvwa
 
-- Run Container
+This command fetched the pre-configured DVWA application containing Apache, PHP, and MySQL.
+
+The container was started using:
 docker run -d -p 8081:80 vulnerables/web-dvwa
 
+Here:
+- -d runs the container in background
+- -p 8081:80 maps local port 8081 to port 80 inside the container
 
--d → Run in background
-
--p 8081:80 → Map local port 8081 to container port 80
-
-Access DVWA at:
-
+Since DVWA runs on port 80 inside the container, accessing:
 http://localhost:8081
+opens the DVWA application in the browser.
+Docker was used to ensure easy setup, isolation, and safe vulnerability testing.
 
-~ What is DVWA?
+
+# ~ What is DVWA?
 
 DVWA (Damn Vulnerable Web Application) is an intentionally insecure web application designed for:
 
@@ -125,7 +132,13 @@ DVWA (Damn Vulnerable Web Application) is an intentionally insecure web applicat
 
 DVWA serves as a safe target environment.
 
+<img width="650" height="337" alt="image" src="https://github.com/user-attachments/assets/b87ff458-5da0-44fe-bcec-cda558fa79ea" />
+
+
 # 3. Project Folder Structure
+
+<img width="524" height="442" alt="image" src="https://github.com/user-attachments/assets/0eb67b0b-e372-4978-9d88-c7d9913a60b4" />
+
 
 ## A. venv/
 This folder contains the virtual environment created for the project.
@@ -141,9 +154,7 @@ The purpose of this folder is to:
 It contains installed libraries such as:
 - requests
 
-
 - beautifulsoup4
-
 
 - other required modules
 
@@ -207,7 +218,6 @@ Responsible for exploring target website.
 - Future implementation:
 
 --> JSON reports
-
 --> HTML reports
 
 ## D. main.py
@@ -226,9 +236,13 @@ Execution starts from this file.
 
 ## E. requirements.txt
 
-Lists dependencies.
+Lists all required Python libraries
+Allows installation using:
 
 pip install -r requirements.txt
+
+Ensures environment can be recreated easily.
+
 
 ### 4. Manual Vulnerability Testing (DVWA)
 
@@ -242,15 +256,12 @@ SQL Injection is a vulnerability that occurs when user input is directly include
 The SQL Injection module was accessed from the DVWA interface. Initially, a normal input value of 1 was entered into the User ID field. The application returned a single user record corresponding to that ID.
 After verifying normal behavior, a malicious input was provided:
 1' OR '1'='1
-
-
-
-
-
 - Result
 The application displayed multiple user records instead of one. This confirmed that the input was not properly validated and that the system was vulnerable to SQL Injection.
 - Conclusion
 The vulnerability exists because user input is directly embedded into the SQL statement without using prepared statements or parameterized queries.
+
+<img width="844" height="357" alt="image" src="https://github.com/user-attachments/assets/79810ff4-33dd-46e7-aaba-fdf5c24bf5d5" />
 
 ## B. Reflected XSS
 - Introduction
@@ -264,6 +275,8 @@ The form was then submitte
 An alert box appeared in the browser. This confirmed that the script was executed successfully, indicating the presence of a reflected XSS vulnerability.
 - Conclusion
 The vulnerability exists because the application fails to sanitize or escape HTML special characters before rendering user input.
+<img width="691" height="319" alt="image" src="https://github.com/user-attachments/assets/3e75a925-7243-4876-b7a7-10b66f6089a2" />
+
 
 ## C. Stored XSS
 - Introduction
@@ -279,22 +292,26 @@ The alert box appeared each time the page was loaded. This confirmed that the ma
 - Conclusion
 Stored XSS is more dangerous than reflected XSS because it affects every user who accesses the page. The vulnerability exists due to lack of input validation before storing data.
 
+<img width="424" height="385" alt="image" src="https://github.com/user-attachments/assets/b5c739d6-33da-4620-9de2-0741ff450cfd" />
 
 ## D. Command Injection
 - Introduction
 Command Injection occurs when user input is directly passed to system-level commands without validation, allowing execution of arbitrary operating system commands.
 - Manual Testing Procedure
 The Command Injection module was opened. First, a normal IP address such as:
+
 127.0.0.1
 
 was entered, and the application displayed the ping result.
 Then, the following malicious input was provided:
+
 127.0.0.1; ls
 
 - Result
 The output displayed not only the ping result but also the list of files in the directory. This confirmed that arbitrary system commands could be executed.
 - Conclusion
 The vulnerability exists because the application does not validate or sanitize input before passing it to the system command.
+<img width="540" height="425" alt="image" src="https://github.com/user-attachments/assets/418428dd-69ba-458d-8847-858dbd41d83b" />
 
 ### 5. Outcome of Week 1
 
