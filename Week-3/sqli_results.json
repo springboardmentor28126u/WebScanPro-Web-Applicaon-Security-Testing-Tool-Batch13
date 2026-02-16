@@ -1,0 +1,11 @@
+{
+    "vulnerabilities": [
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' OR 1=1 --",
+            "type": "SQL Injection",
+            "severity": "High"
+        }
+    ]
+}
