@@ -1,0 +1,50 @@
+def scan_sql(url, session, results):
+    payloads = ["' OR '1'='1", "1'", "admin'--"]
+    error_keywords = ["sql", "mysql", "syntax", "warning", "error"]
+
+    for payload in payloads:
+        test_url = f"{url}?id={payload}"
+
+        try:
+            r = session.get(test_url)
+
+            for keyword in error_keywords:
+                if keyword in r.text.lower():
+                    print("[Possible SQL Injection]:", test_url)
+
+                    results["vulnerabilities"].append({
+                        "type": "SQL Injection",
+                        "url": test_url
+                    })
+                    break
+        except:
+            pass
+
+
+def scan_xss(url, session, results):
+    payloads = ["<script>alert(1)</script>"]
+
+    for payload in payloads:
+        test_url = f"{url}?name={payload}"
+
+        try:
+            r = session.get(test_url)
+
+            if payload in r.text:
+                print("[Possible XSS]:", test_url)
+
+                results["vulnerabilities"].append({
+                    "type": "XSS",
+                    "url": test_url
+                })
+        except:
+            pass
+
+
+def run_scanner(results, session):
+    print("\nStarting Scanner...\n")
+
+    for url in results["urls"]:
+        print("Scanning:", url)
+        scan_sql(url, session, results)
+        scan_xss(url, session, results)
