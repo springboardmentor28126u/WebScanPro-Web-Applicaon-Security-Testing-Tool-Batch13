@@ -54,24 +54,36 @@ python -m venv venv
 venv\Scripts\activate
 
 - Purpose
+  
 
 Keeps project libraries separate
 
+
 Avoids dependency conflicts
+
 
 Ensures reproducibility
 
+
 ## C. Installed Python Libraries
 
- pip install requests
- pip install beautifulsoup4
- pip install selenium
 
-- Library Purpose
+ pip install requests
+ 
+ pip install beautifulsoup4
+ 
+ pip install selenium
+ 
+
+- Library Purpose:
+  
 
  requests	Sends HTTP GET & POST requests
+ 
  beautifulsoup4	Parses HTML to extract forms & links
+ 
  selenium	Browser automation
+ 
 
 A requirements.txt file was created to manage dependencies.
 
@@ -87,7 +99,10 @@ docker --version
 - Purpose
 
  Runs DVWA in isolation
+ 
  No manual Apache/PHP/MySQL setup
+
+ 
  Easy start/stop environment
 
 <img width="1569" height="884" alt="image" src="https://github.com/user-attachments/assets/a65ffc88-e64a-40af-9248-f14a4de2c139" />
@@ -179,15 +194,25 @@ Responsible for exploring target website.
 - Functions
 
  Discover links
+ 
  Extract forms
+ 
  Identify input fields
+ 
  Detect GET/POST parameters
+ 
 
 - Process
 
  Send HTTP request
+
+ 
  Parse HTML using BeautifulSoup
+
+ 
  Extract <a>, <form>, <input> tags
+
+ 
  Return structured data
 
 ### B.3. sqli_scanner.py
@@ -217,7 +242,9 @@ Responsible for exploring target website.
 - Stores scan results.
 - Future implementation:
 
+
  JSON reports
+ 
  HTML reports
 
 ## D. main.py
@@ -225,9 +252,13 @@ Responsible for exploring target website.
 - Entry point of the application
 Controls execution flow
 - Performs:
+
  Connection check
+ 
  Login automation
+ 
  Calls crawler
+ 
 - When running:
 python main.py
 
@@ -323,6 +354,7 @@ The system was capable of:
 - Deploying and accessing DVWA** (Damn Vulnerable Web Application)** in a controlled environment
 - Verifying successful connection to the target application (HTTP status validation)
 - Understanding and manually testing core vulnerabilities such as:
+  
 SQL Injection
 
 Reflected XSS
