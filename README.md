@@ -1,7 +1,7 @@
 
 <div align="center">
 
-# 🚀 WEBSANPRO – WEB APPLICATION SECURITY TESTING TOOL - BATCH 13 🚀
+# 🚀 WEBCSANPRO – WEB APPLICATION SECURITY TESTING TOOL - BATCH 13 🚀
 
 </div>
 
@@ -402,10 +402,28 @@ This modular architecture ensures clear separation between:
 
 # 📸 Week 3 Screenshots  
 
+## 📷 1️⃣ SQL Login Automation 
+
 ![SQL Login Automation](Week-3/screenshots/dvwa-login-automation.png)
+---
+
+## 📷 2️⃣ SQL Injection Detection Output  
+
 ![SQL Injection Detection](Week-3/screenshots/sqli-detection-output.png)
+---
+
+## 📷 3️⃣ Browser SQL Error Proof  
+
 ![Manual SQL Injection Error Proof](Week-3/screenshots/manual-sqli-error-proof.png)
+---
+
+## 📷 4️⃣ JSON Result File  
+
 ![SQL JSON Result](Week-3/screenshots/sqli-json-result.png)
+---
+
+## 📷 5️⃣ Full Scan Execution 
+
 ![Full Scan Execution](Week-3/screenshots/full-scan-execution.png)
 
 ---
