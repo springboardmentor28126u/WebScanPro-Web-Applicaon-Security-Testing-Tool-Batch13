@@ -38,8 +38,34 @@ I developed `scanner.py`, a Python-based discovery engine that identifies "Entry
 ![Scanner Execution Screenshot](./scanner_result.jpeg)
 *Figure 2: Terminal output showing the scanner successfully identifying email and password fields.*
 ### Sample Output:
-```text
+``text
 [+] DISCOVERED INPUT FIELDS:
  -> [FOUND] Email Field (id: email)
  -> [FOUND] Password Field (id: password)
  -> [FOUND] Login Button
+
+## 🚀 Milestone 2: Vulnerability Detection Engine (Weeks 3-4)
+
+In this milestone, the tool was upgraded from a simple crawler to a functional **Vulnerability Scanner**. The core focus was on implementing detection logic for the two most common web attacks: **SQL Injection (SQLi)** and **Cross-Site Scripting (XSS)**.
+
+### 📸 Execution Screenshot
+![Milestone 2 Scan](vulnerable.jpeg)
+*Figure: WebScanPro detecting SQLi and XSS vulnerabilities on a local Docker environment.*
+
+---
+
+### 🔍 Technical Explanation
+
+1. **Modular Architecture**: 
+   - Created `payloads.py` to store a dictionary of attack vectors, making the tool easily expandable.
+   - Developed `vuln_scanner.py` to handle the core logic of sending requests and analyzing responses.
+
+2. **Detection Logic**:
+   - **SQL Injection**: The scanner injects classic payloads (e.g., `' OR 1=1 --`) and monitors the HTTP response for database error signatures like `"you have an error in your sql syntax"`.
+   - **XSS (Reflected)**: The scanner injects `<script>` tags and checks if the exact payload is "reflected" in the website's HTML source code without proper sanitization.
+
+3. **Session Management**:
+   - Integrated **Cookie Persistence** using the `PHPSESSID`. This allows the script to remain authenticated within the DVWA (Docker) environment while performing attacks on protected internal pages.
+
+4. **Security Context**:
+   - Tests were successfully validated on the **Low Security** setting of DVWA, confirming that the detection engine accurately identifies uncleaned inputs.
