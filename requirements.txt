@@ -1,0 +1,24 @@
+Since we used:
+
+requests
+
+BeautifulSoup
+
+You only need these dependencies.
+
+📄 requirements.txt (Final Version for our Project)
+
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+
+WebScanPro/
+│
+├── crawler.py
+├── requirements.txt
+└── README.md
+
+▶ How we Can Run our Project
+Inside project folder:
+
+pip install -r requirements.txt
+python crawler.py
