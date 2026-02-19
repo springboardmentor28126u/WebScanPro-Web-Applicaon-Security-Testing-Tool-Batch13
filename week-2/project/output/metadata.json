@@ -1,0 +1,33 @@
+[
+    {
+        "url": "http://localhost/DVWA/",
+        "forms": [
+            {
+                "action": "http://localhost/DVWA/login.php",
+                "method": "post",
+                "inputs": [
+                    {
+                        "type": "text",
+                        "name": "username",
+                        "value": ""
+                    },
+                    {
+                        "type": "password",
+                        "name": "password",
+                        "value": ""
+                    },
+                    {
+                        "type": "submit",
+                        "name": "Login",
+                        "value": "Login"
+                    },
+                    {
+                        "type": "hidden",
+                        "name": "user_token",
+                        "value": "c288ec15f8f4d32f32b49a079ff31a68"
+                    }
+                ]
+            }
+        ]
+    }
+]
