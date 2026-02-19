@@ -36,7 +36,8 @@ def login_dvwa():
     session.post(LOGIN_URL, data=login_data)
     print("[+] Login successful.")
 
-    # ---- Force Security Level LOW ----
+    # ---- Force Security Level LOW ---- #
+
     security_url = BASE_URL + "security.php"
 
     sec_page = session.get(security_url)
@@ -83,21 +84,21 @@ def test_sqli(forms):
 
         input_names = [inp.get("name") for inp in inputs if inp.get("name")]
 
-        # Only test forms that contain 'id'
+       
         if "id" not in input_names:
             continue
 
         print(f"[*] Testing {action}")
 
         try:
-            # ---- Get fresh CSRF token ----
+           
             page_response = session.get(action)
             soup = BeautifulSoup(page_response.text, "html.parser")
 
             token_input = soup.find("input", {"name": "user_token"})
             user_token = token_input["value"] if token_input else ""
 
-            # ---- Normal request ----
+            
             normal_response = session.get(
                 action,
                 params={
@@ -107,7 +108,7 @@ def test_sqli(forms):
                 }
             ).text
 
-            # ---- Injected request ----
+
             injected_response = session.get(
                 action,
                 params={
@@ -120,7 +121,7 @@ def test_sqli(forms):
             normal_text = normal_response.lower()
             injected_text = injected_response.lower()
 
-            # ---- Error-based detection ----
+
             sql_errors = [
                 "you have an error in your sql syntax",
                 "mysqli_sql_exception",
@@ -139,9 +140,9 @@ def test_sqli(forms):
                         "type": "SQL Injection",
                         "severity": "High"
                     })
-                    return vulnerable  # stop after detection
+                    return vulnerable  
 
-            # ---- Length-based detection (backup) ----
+           
             if len(injected_text) > len(normal_text) + 20:
                 print(f"[!] SQL Injection Detected (Length Change) at {action}")
 
