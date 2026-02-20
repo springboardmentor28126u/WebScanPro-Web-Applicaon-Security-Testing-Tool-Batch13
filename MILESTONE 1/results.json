@@ -1,9 +1,9 @@
 {
-    "target": "http://localhost:8081",
+    "target": "http://localhost:8080",
     "total_forms": 22,
     "forms": [
         {
-            "action": "http://localhost:8081/setup.php#",
+            "action": "http://localhost:8080/setup.php#",
             "method": "post",
             "inputs": [
                 {
@@ -17,7 +17,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/vulnerabilities/brute/#",
+            "action": "http://localhost:8080/vulnerabilities/brute/#",
             "method": "get",
             "inputs": [
                 {
@@ -35,7 +35,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/vulnerabilities/exec/#",
+            "action": "http://localhost:8080/vulnerabilities/exec/#",
             "method": "post",
             "inputs": [
                 {
@@ -49,7 +49,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/vulnerabilities/csrf/#",
+            "action": "http://localhost:8080/vulnerabilities/csrf/#",
             "method": "get",
             "inputs": [
                 {
@@ -67,7 +67,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/vulnerabilities/upload/#",
+            "action": "http://localhost:8080/vulnerabilities/upload/#",
             "method": "post",
             "inputs": [
                 {
@@ -85,7 +85,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/vulnerabilities/captcha/#",
+            "action": "http://localhost:8080/vulnerabilities/captcha/#",
             "method": "post",
             "inputs": [
                 {
@@ -107,7 +107,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/vulnerabilities/sqli/#",
+            "action": "http://localhost:8080/vulnerabilities/sqli/#",
             "method": "get",
             "inputs": [
                 {
@@ -121,7 +121,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/vulnerabilities/sqli_blind/#",
+            "action": "http://localhost:8080/vulnerabilities/sqli_blind/#",
             "method": "get",
             "inputs": [
                 {
@@ -135,7 +135,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/vulnerabilities/weak_id/",
+            "action": "http://localhost:8080/vulnerabilities/weak_id/",
             "method": "post",
             "inputs": [
                 {
@@ -145,7 +145,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/vulnerabilities/xss_d/",
+            "action": "http://localhost:8080/vulnerabilities/xss_d/",
             "method": "get",
             "inputs": [
                 {
@@ -155,7 +155,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/vulnerabilities/xss_r/#",
+            "action": "http://localhost:8080/vulnerabilities/xss_r/#",
             "method": "get",
             "inputs": [
                 {
@@ -169,7 +169,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/vulnerabilities/xss_s/",
+            "action": "http://localhost:8080/vulnerabilities/xss_s/",
             "method": "post",
             "inputs": [
                 {
@@ -187,7 +187,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/vulnerabilities/csp/",
+            "action": "http://localhost:8080/vulnerabilities/csp/",
             "method": "post",
             "inputs": [
                 {
@@ -201,7 +201,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/vulnerabilities/javascript/",
+            "action": "http://localhost:8080/vulnerabilities/javascript/",
             "method": "post",
             "inputs": [
                 {
@@ -219,7 +219,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/security.php#",
+            "action": "http://localhost:8080/security.php#",
             "method": "post",
             "inputs": [
                 {
@@ -233,7 +233,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/login.php",
+            "action": "http://localhost:8080/login.php",
             "method": "post",
             "inputs": [
                 {
@@ -255,7 +255,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/login.php",
+            "action": "http://localhost:8080/login.php",
             "method": "post",
             "inputs": [
                 {
@@ -277,7 +277,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/login.php",
+            "action": "http://localhost:8080/login.php",
             "method": "post",
             "inputs": [
                 {
@@ -299,7 +299,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/login.php",
+            "action": "http://localhost:8080/login.php",
             "method": "post",
             "inputs": [
                 {
@@ -321,7 +321,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/vulnerabilities/fi/login.php",
+            "action": "http://localhost:8080/vulnerabilities/fi/login.php",
             "method": "post",
             "inputs": [
                 {
@@ -343,7 +343,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/vulnerabilities/fi/login.php",
+            "action": "http://localhost:8080/vulnerabilities/fi/login.php",
             "method": "post",
             "inputs": [
                 {
@@ -365,7 +365,7 @@
             ]
         },
         {
-            "action": "http://localhost:8081/vulnerabilities/fi/login.php",
+            "action": "http://localhost:8080/vulnerabilities/fi/login.php",
             "method": "post",
             "inputs": [
                 {
