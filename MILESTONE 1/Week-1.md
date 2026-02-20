@@ -4,6 +4,21 @@
 
 ## Introduction
 
+WebScanPro is an automated web application security testing tool developed as part of an internship project to understand the internal working of vulnerability scanners and modern security assessment methodologies.
+
+The primary objective of this project is to design and implement a modular scanning system capable of identifying common web application vulnerabilities based on the OWASP Top 10 standards.
+
+The tool scans a target web application — DVWA (Damn Vulnerable Web Application) — and performs both automated and controlled manual testing to detect vulnerabilities such as:
+
+- SQL Injection
+- Cross-Site Scripting (XSS)
+- Command Injection
+
+### Project Focus
+
+- Simulating real-world attack techniques  
+- Analyzing HTTP responses  
+- Generating structured vulnerability reports  
 WebScanPro is an automated web application security testing tool developed to understand the internal working of vulnerability scanners and modern security assessment methodologies. The primary objective of this project is to design and implement a modular scanning system capable of identifying common web application vulnerabilities based on the OWASP Top 10 standards.
 The tool scans a target web application — DVWA (Damn Vulnerable Web Application) in our case — and performs both automated and controlled manual testing to detect vulnerabilities such as SQL Injection and Cross-Site Scripting (XSS). The project focuses on simulating real-world attack techniques, analyzing HTTP responses, and generating structured vulnerability reports.
 
@@ -43,11 +58,43 @@ Python is responsible for:
 - Crawling web pages
 - Performing vulnerability tests (later stages)
 
+Responsibilities
+
+- Sending HTTP requests
+- Automating login
+- Crawling web pages
+- Performing vulnerability tests
+
 ## B. Virtual Environment (venv)
 
 Created to isolate project dependencies.
 
 - Creation
+python -m venv venv
+
+- Activation (Windows)
+venv\Scripts\activate
+
+- Purpose
+
+--> Keeps project libraries separate
+
+--> Avoids dependency conflicts
+
+--> Ensures reproducibility
+
+## C. Installed Python Libraries
+- pip install requests
+
+- pip install beautifulsoup4
+
+- pip install selenium
+
+Library Purpose
+
+- requests	Sends HTTP GET & POST requests
+- beautifulsoup4	Parses HTML to extract forms & links
+- selenium	Browser automation
   
 python -m venv venv
 
@@ -100,6 +147,29 @@ docker --version
 
 - Purpose
 
+--> Runs DVWA in isolation
+
+--> No manual Apache/PHP/MySQL setup
+
+--> Easy start/stop environment
+
+## B. DVWA Deployment
+- Pull Image
+docker pull vulnerables/web-dvwa
+
+- Run Container
+docker run -d -p 8081:80 vulnerables/web-dvwa
+
+
+-d → Run in background
+
+-p 8081:80 → Map local port 8081 to container port 80
+
+Access DVWA at:
+
+http://localhost:8081
+
+~ What is DVWA?
  Runs DVWA in isolation
  
  No manual Apache/PHP/MySQL setup
@@ -149,6 +219,8 @@ DVWA (Damn Vulnerable Web Application) is an intentionally insecure web applicat
 
 DVWA serves as a safe target environment.
 
+# 3. Project Folder Structure
+
 <img width="650" height="337" alt="image" src="https://github.com/user-attachments/assets/b87ff458-5da0-44fe-bcec-cda558fa79ea" />
 
 
@@ -170,6 +242,10 @@ The purpose of this folder is to:
 
 It contains installed libraries such as:
 - requests
+
+
+- beautifulsoup4
+
 
 - beautifulsoup4
 
@@ -195,6 +271,17 @@ Responsible for exploring target website.
 
 - Functions
 
+--> Discover links
+--> Extract forms
+--> Identify input fields
+--> Detect GET/POST parameters
+
+- Process
+
+--> Send HTTP request
+--> Parse HTML using BeautifulSoup
+--> Extract <a>, <form>, <input> tags
+--> Return structured data
  Discover links
  
  Extract forms
@@ -244,6 +331,9 @@ Responsible for exploring target website.
 - Stores scan results.
 - Future implementation:
 
+--> JSON reports
+
+--> HTML reports
 
  JSON reports
  
@@ -254,6 +344,9 @@ Responsible for exploring target website.
 - Entry point of the application
 Controls execution flow
 - Performs:
+--> Connection check
+--> Login automation
+--> Calls crawler
 
  Connection check
  
@@ -268,6 +361,10 @@ Execution starts from this file.
 
 
 ## E. requirements.txt
+
+Lists dependencies.
+
+pip install -r requirements.txt
 
 Lists all required Python libraries
 Allows installation using:
@@ -289,6 +386,11 @@ SQL Injection is a vulnerability that occurs when user input is directly include
 The SQL Injection module was accessed from the DVWA interface. Initially, a normal input value of 1 was entered into the User ID field. The application returned a single user record corresponding to that ID.
 After verifying normal behavior, a malicious input was provided:
 1' OR '1'='1
+
+
+
+
+
 - Result
 The application displayed multiple user records instead of one. This confirmed that the input was not properly validated and that the system was vulnerable to SQL Injection.
 - Conclusion
@@ -356,6 +458,10 @@ The system was capable of:
 - Deploying and accessing DVWA** (Damn Vulnerable Web Application)** in a controlled environment
 - Verifying successful connection to the target application (HTTP status validation)
 - Understanding and manually testing core vulnerabilities such as:
+--> SQL Injection
+--> Reflected XSS
+--> Stored XSS
+--> Command Injection
   
 SQL Injection
 
