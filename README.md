@@ -331,3 +331,139 @@ The Week 2 Target Scanning Module successfully implemented an automated crawler 
 * Discovers webpages and interactive elements
 * Organizes target metadata
 * Prepares the system for vulnerability testing
+* # 📘 Week 3 – SQL Injection Testing and Verification Module
+
+---
+
+## 📌 Introduction
+
+In Week 3, SQL Injection testing was performed on **DVWA (Damn Vulnerable Web Application)** to analyze how vulnerable web applications behave under malicious input and how increasing security configurations prevents such attacks.
+
+This module focuses on **practical vulnerability identification and security verification**.
+
+---
+
+## 🎯 Objectives
+
+- Understand SQL Injection vulnerability
+- Test SQL Injection at **Low** security level
+- Verify vulnerability behavior
+- Test prevention at **High** security level
+- Compare vulnerable and secure configurations
+
+---
+
+## 🛠️ Tools Used
+
+| Tool | Purpose |
+|------|---------|
+| DVWA (Damn Vulnerable Web Application) | Target vulnerable web app |
+| Google Chrome Browser | Interface for testing |
+| Localhost Testing Environment | Isolated lab environment |
+
+---
+
+## 🧪 SQL Injection Payload Used
+```sql
+' OR '1'='1
+```
+
+This payload exploits weak input handling by injecting a condition that always evaluates to `TRUE`, bypassing the intended query logic.
+
+---
+
+## 🔬 Procedure
+
+### Phase 1: Low Security Testing
+
+1. Logged into DVWA
+2. Navigated to the **SQL Injection** module
+3. Set security level to **Low**
+4. Entered a valid input — observed normal behavior
+5. Entered malicious payload `' OR '1'='1` — observed results
+6. <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/857c9613-5fa7-4145-8c93-1707a23041ec" />
+
+
+### Phase 2: High Security Testing
+
+1. Changed security level to **High**
+2. Re-entered the same malicious payload
+3. Observed system behavior and compared results
+<img width="1299" height="728" alt="image" src="https://github.com/user-attachments/assets/fffbb06e-c326-4048-8d51-faac1add6be6" />
+
+---
+
+## 🔎 Observations
+
+### 🔴 Low Security — Vulnerable
+
+- The application returned **all user records**
+- Malicious input was directly appended to the SQL query
+- No input validation was applied
+- The condition `'1'='1'` evaluated to `TRUE`
+- The `WHERE` clause became logically TRUE for all rows
+- Authentication and data filtering were **bypassed**
+- Sensitive information was **exposed**
+
+### 🟢 High Security — Protected
+
+- The application did **NOT** return all records
+- The malicious payload was treated as **normal text**
+- Query logic was **not altered**
+- Authentication bypass did **not** occur
+- Input was properly handled and sanitized
+- Security mechanisms **successfully prevented** SQL Injection
+
+---
+
+## 📊 Results
+
+| Metric | Result |
+|--------|--------|
+| SQL Injection at Low Security | ✅ Successful (Attack worked) |
+| Application status at Low | ❌ Vulnerable |
+| SQL Injection at High Security | ❌ Failed (Attack blocked) |
+| Application status at High | ✅ Secure |
+
+---
+
+## 📈 Comparison: Low vs High Security
+
+| Feature | 🔴 Low Security | 🟢 High Security |
+|---------|----------------|-----------------|
+| Input Validation | Not Applied | Applied |
+| SQL Injection Success | ✅ Yes | ❌ No |
+| Authentication Bypass | Possible | Not Possible |
+| Data Exposure | All Records Exposed | No Exposure |
+| Application Status | **Vulnerable** | **Secure** |
+
+---
+
+## 📚 Learning Outcomes
+
+- Understood how SQL Injection manipulates database queries
+- Observed authentication bypass in vulnerable systems
+- Learned the importance of **input validation**
+- Understood the difference between insecure and secure implementations
+- Gained practical experience in vulnerability testing
+
+---
+
+## ✅ Conclusion
+
+The Week 3 SQL Injection Testing module successfully demonstrated how **insecure input handling** can lead to severe security vulnerabilities.
+
+At **Low security level**, the application was vulnerable — allowing authentication bypass and data exposure. The malicious SQL payload altered the query logic and returned all records.
+
+After increasing the security level to **High**, the same attack failed. The system handled the input securely and prevented query manipulation.
+
+> This experiment confirms that **proper input validation** and **secure query handling mechanisms** are essential to protect web applications from SQL Injection attacks.
+
+---
+
+## 📁 Module Info
+
+- **Module:** Week 3 — SQL Injection Testing
+- **Platform:** DVWA (Damn Vulnerable Web Application)
+- **Environment:** Localhost
+- **Security Levels Tested:** Low, High
