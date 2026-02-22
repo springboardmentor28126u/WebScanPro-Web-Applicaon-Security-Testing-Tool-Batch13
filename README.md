@@ -467,3 +467,217 @@ After increasing the security level to **High**, the same attack failed. The sys
 - **Platform:** DVWA (Damn Vulnerable Web Application)
 - **Environment:** Localhost
 - **Security Levels Tested:** Low, High
+- # 📘 Week 4 – XSS (Cross-Site Scripting) Testing Module
+
+---
+
+## 📌 Introduction
+
+In Week 4, Cross-Site Scripting (XSS) testing was performed on **DVWA (Damn Vulnerable Web Application)** to analyze how vulnerable web applications behave when malicious JavaScript payloads are injected into form fields and URLs.
+
+This module focuses on **two types of XSS attacks** — Reflected and Stored — and how increasing security configurations prevents such attacks.
+
+---
+
+## 🎯 Objectives
+
+- To understand XSS (Cross-Site Scripting) vulnerability
+- To inject JavaScript-based XSS payloads into form fields and URLs
+- To detect Reflected and Stored XSS via response analysis
+- To test prevention at High security level
+- To record vulnerable endpoints and provide XSS prevention tips
+- To compare vulnerable and secure configurations
+
+---
+
+## 🛠️ Tools Used
+
+| Tool | Purpose |
+|------|---------|
+| DVWA (Damn Vulnerable Web Application) | Target vulnerable web app |
+| Google Chrome Browser | Interface for testing |
+| Localhost Testing Environment | Isolated lab environment |
+
+---
+
+## 🧪 XSS Payloads Used
+
+### Reflected XSS Payload:
+```javascript
+<script>alert('XSS')</script>
+```
+<img width="913" height="678" alt="image" src="https://github.com/user-attachments/assets/286fb957-1249-400d-aeca-0c535b984c04" />
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/73caf790-c227-475f-bb80-5a2b6cea04f6" />
+
+
+### Stored XSS Payload:
+```javascript
+<script>alert('Stored XSS')</script>
+```
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/015faa2f-ce12-4e0d-96c7-f1d5f6392d27" />
+
+
+These payloads inject JavaScript into the application. If the app is vulnerable, an **alert popup** appears — confirming the attack was successful.
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/8bfd4060-d90a-461e-84c0-731ae736912e" />
+
+---
+
+## 🔬 Procedure
+
+### Phase 1: Low Security Testing
+
+#### 🔁 Reflected XSS Testing
+1. Logged into DVWA
+2. Navigated to **XSS (Reflected)** module
+3. Set security level to **Low**
+4. Entered valid input (name) — observed normal behavior
+5. Entered malicious payload `<script>alert('XSS')</script>` in the name field
+6. Clicked **Submit**
+7. Alert popup appeared → ✅ Attack successful
+8. Observed "Hello" message after popup — input was reflected back
+
+#### 💾 Stored XSS Testing
+1. Navigated to **XSS (Stored)** module
+2. Security level kept at **Low**
+3. Entered `Test` in the **Name** field
+4. Entered malicious payload `<script>alert('Stored XSS')</script>` in the **Message** field
+5. Clicked **Sign Guestbook**
+6. Alert popup appeared → ✅ Attack successful
+7. Refreshed the page — popup appeared again → ✅ Script stored in database
+
+### Phase 2: High Security Testing
+
+1. Changed security level to **High**
+2. Navigated to **XSS (Reflected)** — entered same payload
+3. No popup appeared → ✅ Attack blocked
+4. Navigated to **XSS (Stored)** — entered same payload
+5. No popup appeared → ✅ Attack blocked
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/f083a4a7-aeed-4e04-a031-63b6f311b831" />
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/5e86e036-6f22-4230-b339-258f7abe5911" />
+
+---
+
+## 🔎 Observations
+
+### 🔴 Low Security — Vulnerable
+
+- Application executed the injected JavaScript directly
+- Alert popup appeared confirming script execution
+- Input was **not validated or sanitized**
+- Reflected XSS — script ran immediately on submit
+- Stored XSS — script was **saved in database** and ran on every page load
+- Every user visiting the page would be affected by Stored XSS
+- Authentication and session data could be stolen
+- Sensitive information was **exposed**
+
+### 🟢 High Security — Protected
+
+- Application did **NOT** execute the injected JavaScript
+- Malicious payload was treated as **plain text**
+- Input was properly **validated and sanitized**
+- No popup appeared in either Reflected or Stored XSS
+- Security mechanisms **successfully prevented** XSS attacks
+
+---
+
+## 📊 Results
+
+| Test | Result |
+|------|--------|
+| Reflected XSS at Low Security | ✅ Successful (Attack worked) |
+| Stored XSS at Low Security | ✅ Successful (Attack worked) |
+| Reflected XSS at High Security | ❌ Failed (Attack blocked) |
+| Stored XSS at High Security | ❌ Failed (Attack blocked) |
+
+---
+
+## 🗺️ Vulnerable Endpoints
+
+| Endpoint | XSS Type | Payload Used | Vulnerable? |
+|----------|----------|-------------|-------------|
+| `/dvwa/vulnerabilities/xss_r/?name=` | Reflected | `<script>alert('XSS')</script>` | ✅ Yes (Low) |
+| `/dvwa/vulnerabilities/xss_s/` (Message field) | Stored | `<script>alert('Stored XSS')</script>` | ✅ Yes (Low) |
+
+---
+
+## 📈 Comparison: Low vs High Security
+
+| Feature | 🔴 Low Security | 🟢 High Security |
+|---------|----------------|-----------------|
+| Input Validation | Not Applied | Applied |
+| Reflected XSS Success | ✅ Yes | ❌ No |
+| Stored XSS Success | ✅ Yes | ❌ No |
+| Script Execution | Allowed | Blocked |
+| Data Exposure | Possible | Not Possible |
+| Application Status | **Vulnerable** | **Secure** |
+
+---
+
+## 📚 Difference: Reflected vs Stored XSS
+
+| Feature | 🔁 Reflected XSS | 💾 Stored XSS |
+|---------|-----------------|--------------|
+| Script saved in DB? | ❌ No | ✅ Yes |
+| Who is affected? | Only the attacker | Every user who visits |
+| How long does it last? | One request only | Until removed from DB |
+| Danger level | Medium | High |
+| Test location in DVWA | XSS (Reflected) | XSS (Stored) |
+
+---
+
+## 🛡️ XSS Prevention Tips
+
+**1. Input Validation**
+Never trust user input. Reject or strip dangerous characters like `<`, `>`, `"`, `'`.
+
+**2. Output Encoding**
+Convert special characters before displaying:
+- `<` → `&lt;`
+- `>` → `&gt;`
+- `"` → `&quot;`
+
+This prevents the browser from executing input as code.
+
+**3. Content Security Policy (CSP)**
+Add a browser-level rule that blocks unauthorized scripts from running on your site.
+
+**4. HTTPOnly Cookies**
+Mark session cookies as `HTTPOnly` so JavaScript cannot access or steal them.
+
+**5. Use Security Libraries**
+Use trusted libraries like **DOMPurify** or **OWASP AntiSamy** to automatically sanitize user inputs.
+
+---
+
+## 📚 Learning Outcomes
+
+- Understood how XSS attacks inject and execute malicious JavaScript
+- Learned the difference between Reflected and Stored XSS
+- Observed how Stored XSS persists and affects all users
+- Learned the importance of input validation and output encoding
+- Understood difference between insecure and secure implementations
+- Gained practical experience in XSS vulnerability testing
+
+---
+
+## ✅ Conclusion
+
+The Week 4 XSS Testing module successfully demonstrated how **insecure input handling** allows attackers to inject and execute malicious JavaScript in web applications.
+
+At **Low security level**, both Reflected and Stored XSS attacks were successful. The injected scripts executed in the browser, proving that the application was vulnerable to script injection.
+
+At **High security level**, the same attacks failed. The application properly handled and sanitized inputs, preventing any script execution.
+
+Stored XSS proved to be more dangerous than Reflected XSS as the malicious script was saved in the database and executed every time the page was loaded — affecting all users.
+
+> This experiment confirms that **proper input validation**, **output encoding**, and **secure query handling** are essential to protect web applications from XSS attacks.
+
+---
+
+## 📁 Module Info
+
+- **Module:** Week 4 — XSS Testing
+- **Platform:** DVWA (Damn Vulnerable Web Application)
+- **Environment:** Localhost
+- **XSS Types Tested:** Reflected XSS, Stored XSS
+- **Security Levels Tested:** Low, High
