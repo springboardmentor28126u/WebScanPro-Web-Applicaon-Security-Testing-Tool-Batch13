@@ -1,12 +1,14 @@
 import requests
 from bs4 import BeautifulSoup
 from scanner.crawler import crawl
+from scanner.sqli_scanner import scan_sql
+from scanner.xss_scanner import scan_xss
 import json
 import os
 
-
 DVWA_URL = "http://localhost:8080"
 LOGIN_URL = DVWA_URL + "/login.php"
+
 
 def check_connection():
     try:
@@ -14,20 +16,22 @@ def check_connection():
         if response.status_code == 200:
             print("[+] DVWA connected successfully")
             return True
-    except Exception:
-        print("[-] Failed to connect")
+    except:
+        print("[-] Failed to connect to DVWA")
     return False
+
 
 
 def dvwa_login():
     session = requests.Session()
+
     try:
         response = session.get(LOGIN_URL)
         soup = BeautifulSoup(response.text, "html.parser")
         token_input = soup.find("input", {"name": "user_token"})
 
         if token_input is None:
-            print("[-] Could not find user_token in login page")
+            print("[-] Could not find user_token")
             return None
 
         user_token = token_input.get("value")
@@ -53,38 +57,41 @@ def dvwa_login():
         return None
 
 
+
 if __name__ == "__main__":
+
     if check_connection():
+
         session = dvwa_login()
 
         if session:
+
             results = crawl(DVWA_URL, session)
 
             print("\n[+] Crawl finished")
             print(f"[+] Total Forms Found: {len(results)}")
 
-            # ---------- JSON SAVE PART ----------
             os.makedirs("reports", exist_ok=True)
 
-            output_data = {
+            with open("reports/results.json", "w") as file:
+                json.dump(results, file, indent=4)
+
+           
+            sqli_results = scan_sql(session, results)
+
+   
+            xss_results = scan_xss(session, results)
+
+            all_vulnerabilities = sqli_results + xss_results
+
+            final_report = {
                 "target": DVWA_URL,
-                "total_forms": len(results),
-                "forms": results
+                "total_vulnerabilities": len(all_vulnerabilities),
+                "vulnerabilities": all_vulnerabilities
             }
 
-            with open("reports/results.json", "w") as file:
-                json.dump(output_data, file, indent=4)
+            with open("reports/vulnerability_report.json", "w") as file:
+                json.dump(final_report, file, indent=4)
 
-            print("[+] Results saved to reports/results.json")
-
-            for index, form in enumerate(results, start=1):
-                print(f"\nForm #{index}")
-                print(f"Action : {form['action']}")
-                print(f"Method : {form['method']}")
-                print("Inputs :")
-                
-                for inp in form["inputs"]:
-                    print(f"   - Name: {inp['name']} | Type: {inp['type']}")
-                
-                print("-" * 50)
-
+            print("\n[+] Vulnerability report saved.")
+            print(f"[+] Total Vulnerabilities Found: {len(all_vulnerabilities)}")
