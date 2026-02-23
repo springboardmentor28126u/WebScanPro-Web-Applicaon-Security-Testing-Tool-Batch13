@@ -371,6 +371,7 @@ This module focuses on **practical vulnerability identification and security ver
 This payload exploits weak input handling by injecting a condition that always evaluates to `TRUE`, bypassing the intended query logic.
 
 ---
+<img width="660" height="106" alt="image" src="https://github.com/user-attachments/assets/4f7b504a-af3d-4e1c-b669-3e656c2cb269" />
 
 ## 🔬 Procedure
 
