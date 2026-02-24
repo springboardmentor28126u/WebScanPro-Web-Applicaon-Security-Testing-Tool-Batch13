@@ -92,21 +92,33 @@ This test was done to check how the application handles unsafe user input.
 
 ## 📸 Week 1 Screenshots  
 
-### 🖥️ XAMPP Running
-![XAMPP Running](Week-1/screenshots/xampp-running.png)
+### 🖥️ XAMPP Running  
+![XAMPP Running](Week-1/screenshots/xampp-running.png)  
+*Fig 1.1: XAMPP Control Panel showing Apache and MySQL services running successfully.*
 
-### 🏠 DVWA Dashboard
-![DVWA Dashboard](Week-1/screenshots/dvwa-dashboard.png)
+---
 
-### 🔐 Brute Force Module
-![Brute Force Page](Week-1/screenshots/dvwa-bruteforce-page.png)
+### 🏠 DVWA Dashboard  
+![DVWA Dashboard](Week-1/screenshots/dvwa-dashboard.png)  
+*Fig 1.2: DVWA dashboard confirming successful installation and configuration.*
 
-### 💉 SQL Injection Module
-![SQL Injection Page](Week-1/screenshots/dvwa-sql-injection-page.png)
+---
 
-### ⚡ XSS Reflected Module
-![XSS Reflected Page](Week-1/screenshots/dvwa-xss-reflected-page.png)
-  
+### 🔐 Brute Force Module  
+![Brute Force Page](Week-1/screenshots/dvwa-bruteforce-page.png)  
+*Fig 1.3: DVWA Brute Force vulnerability module interface.*
+
+---
+
+### 💉 SQL Injection Module  
+![SQL Injection Page](Week-1/screenshots/dvwa-sql-injection-page.png)  
+*Fig 1.4: DVWA SQL Injection vulnerability testing page.*
+
+---
+
+### ⚡ XSS Reflected Module  
+![XSS Reflected Page](Week-1/screenshots/dvwa-xss-reflected-page.png)  
+*Fig 1.5: DVWA Reflected XSS module page.*
 
 ---
 
@@ -230,12 +242,14 @@ This prepares the foundation for automated SQL Injection and XSS testing.
 ## 📸 Week 2 Screenshots  
 
 ### ▶ Scanner Execution Output  
+![Scanner Run](Week-2/screenshots/scanner_run.png)  
+*Fig 2.1: Execution of scanner.py showing discovered URLs and forms.*
 
-![Scanner Run](Week-2/screenshots/scanner_run.png)
+---
 
 ### 🐍 Python Version Verification  
-
-![Python Version](Week-2/screenshots/py_version.png)
+![Python Version](Week-2/screenshots/py_version.png)  
+*Fig 2.2: Python version verification for development environment.*
 
 ---
 
@@ -345,19 +359,33 @@ Compares normal vs injected response to detect abnormal behavior or unexpected o
 ## 📸 Week 3 Screenshots  
 
 ### 🔐 SQL Login Automation  
-![SQL Login Automation](Week-3/screenshots/dvwa-login-automation.png)
+![SQL Login Automation](Week-3/screenshots/dvwa-login-automation.png)  
+*Fig 3.1: Automated login process into DVWA using session handling.*
+
+---
 
 ### 🛑 SQL Injection Detection Output  
-![SQL Injection Detection](Week-3/screenshots/sqli-detection-output.png)
+![SQL Injection Detection](Week-3/screenshots/sqli-detection-output.png)  
+*Fig 3.2: SQL Injection vulnerability detected by automated testing module.*
+
+---
 
 ### 🌐 Manual SQL Error Proof  
-![Manual SQL Error Proof](Week-3/screenshots/manual-sqli-error-proof.png)
+![Manual SQL Error Proof](Week-3/screenshots/manual-sql-error-proof.png)  
+*Fig 3.3: Manual SQL Injection test confirming database vulnerability.*
+
+---
 
 ### 📄 SQL JSON Result  
-![SQL JSON Result](Week-3/screenshots/sqli-json-result.png)
+![SQL JSON Result](Week-3/screenshots/sqli-json-result.png)  
+*Fig 3.4: Generated JSON report containing detected SQL Injection vulnerability.*
+
+---
 
 ### 🚀 Full Scan Execution  
-![Full Scan Execution](Week-3/screenshots/full-scan-execution.png)
+![Full Scan Execution](Week-3/screenshots/full-scan-execution.png)  
+*Fig 3.5: Complete execution of scanner and SQL Injection module via main.py.*
+
 ---
 
 ## 🔸 Week 3 Result  
@@ -462,19 +490,33 @@ This hybrid approach improves detection reliability and reduces false negatives.
 ## 📸 Week 4 Screenshots  
 
 ### 🌐 DVWA XSS Page  
-![DVWA XSS Page](Week-4/screenshots/01_dvwa_xss_page.png)
+![DVWA XSS Page](Week-4/screenshots/01_dvwa_xss_page.png)  
+*Fig 4.1: DVWA Reflected XSS testing interface.*
+
+---
 
 ### 💉 Manual XSS Payload Execution  
-![Manual XSS Payload](Week-4/screenshots/02_xss_payload_execution.png)
+![Manual XSS Payload](Week-4/screenshots/02_xss_payload_execution.png)  
+*Fig 4.2: Manual execution of XSS payload in DVWA application.*
+
+---
 
 ### 🤖 AI XSS Detection in Terminal  
-![AI XSS Detection](Week-4/screenshots/03_ai_xss_detection_terminal.png)
+![AI XSS Detection](Week-4/screenshots/03_ai_xss_detection_terminal.png)  
+*Fig 4.3: Hybrid AI-based XSS detection output in terminal.*
+
+---
 
 ### 📄 XSS JSON Result  
-![XSS JSON Result](Week-4/screenshots/04_xss_results_json.png)
+![XSS JSON Result](Week-4/screenshots/04_xss_results_json.png)  
+*Fig 4.4: Structured JSON report generated after XSS detection.*
+
+---
 
 ### 🧠 Hybrid Detection Logic  
-![Hybrid Detection Logic](Week-4/screenshots/05_xss_hybrid_detection_logic.png)
+![Hybrid Detection Logic](Week-4/screenshots/05_xss_hybrid_detection_logic.png)  
+*Fig 4.5: Hybrid detection engine combining rule-based and AI-based analysis.*
+
 ---
 
 ## 🔸 Week 4 Result  
