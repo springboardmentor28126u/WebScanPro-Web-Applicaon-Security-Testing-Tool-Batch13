@@ -1,40 +1,56 @@
+# scanner/crawler.py
+import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
+from scanner.config import TARGET_URL
 
-visited_urls = set()
+# URLs to never visit during crawl
+BLACKLIST = ['logout', 'setup.php', 'phpinfo', 'ids_log']
 
+def crawl(base_url, session, max_pages=50):
+    visited = set()
+    to_visit = [base_url]
+    results = []
 
-def crawl(url, session):
-    if url in visited_urls:
-        return []
+    while to_visit and len(visited) < max_pages:
+        url = to_visit.pop(0)
+        if url in visited:
+            continue
 
-    print(f"[+] crawling: {url}")
-    visited_urls.add(url)
-    forms_found = []
+        # Skip blacklisted URLs
+        if any(bl in url for bl in BLACKLIST):
+            print(f"  Skipping: {url}")
+            continue
 
-    response = session.get(url)
-    soup = BeautifulSoup(response.text, "html.parser")
+        try:
+            resp = session.get(url, timeout=5)
+            visited.add(url)
 
-    for form in soup.find_all("form"):
-        form_details = {
-            "action": urljoin(url, form.get("action")),
-            "method": form.get("method", "get").lower(),
-            "inputs": []
-        }
+            # If redirected to login, session expired — stop
+            if 'login.php' in resp.url:
+                print(f"  [WARN] Session expired at {url}")
+                break
 
-        for input_tag in form.find_all("input"):
-            form_details["inputs"].append({
-                "name": input_tag.get("name"),
-                "type": input_tag.get("type", "text")
-            })
+            soup = BeautifulSoup(resp.text, 'html.parser')
 
-        forms_found.append(form_details)
+            for link in soup.find_all('a', href=True):
+                full = urljoin(base_url, link['href'])
+                if urlparse(full).netloc == urlparse(base_url).netloc:
+                    to_visit.append(full)
 
-    for link in soup.find_all("a"):
-        href = link.get("href")
-        if href:
-            full_url = urljoin(url, href)
-            if urlparse(full_url).netloc == urlparse(url).netloc:
-                forms_found.extend(crawl(full_url, session))
+            forms = []
+            for form in soup.find_all('form'):
+                inputs = [i.get('name') for i in form.find_all('input')]
+                forms.append({
+                    'action': urljoin(url, form.get('action', '')),
+                    'method': form.get('method', 'get').upper(),
+                    'inputs': inputs
+                })
 
-    return forms_found
+            results.append({'url': url, 'forms': forms})
+            print(f"  Crawled: {url}")
+
+        except Exception as e:
+            print(f"  Error: {url} -> {e}")
+
+    return results
