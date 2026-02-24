@@ -37,12 +37,13 @@ I developed `scanner.py`, a Python-based discovery engine that identifies "Entry
 #### **Week 2 Evidence:**
 ![Scanner Execution Screenshot](./scanner_result.jpeg)
 *Figure 2: Terminal output showing the scanner successfully identifying email and password fields.*
+
 ### Sample Output:
-``text
+
 [+] DISCOVERED INPUT FIELDS:
  -> [FOUND] Email Field (id: email)
  -> [FOUND] Password Field (id: password)
- -> [FOUND] Login Button
+ -> [FOUND] Login Button  
 
 ## 🚀 Milestone 2: Vulnerability Detection Engine (Weeks 3-4)
 
