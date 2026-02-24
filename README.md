@@ -351,7 +351,7 @@ Compares normal vs injected response to detect abnormal behavior or unexpected o
 ![SQL Injection Detection](Week-3/screenshots/sqli-detection-output.png)
 
 ### 🌐 Manual SQL Error Proof  
-![Manual SQL Error Proof](Week-3/screenshots/manual-sql-error-proof.png)
+![Manual SQL Error Proof](Week-3/screenshots/manual-sqli-error-proof.png)
 
 ### 📄 SQL JSON Result  
 ![SQL JSON Result](Week-3/screenshots/sqli-json-result.png)
