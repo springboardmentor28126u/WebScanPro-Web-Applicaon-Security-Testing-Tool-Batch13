@@ -1,27 +1,28 @@
 import requests
 import json
 import os
-import time
 from bs4 import BeautifulSoup
 
-from ai.feature_extractor import extract_features
-from ai.ai_engine import predict
+from ai.feature_extractor import extract_xss_features
+from ai.ai_xss_engine import predict
 
 # ---------------- PATH CONFIG ---------------- #
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SCANNER_OUTPUT = os.path.join(BASE_DIR, "..", "Week-2", "output.json")
-RESULT_FILE = os.path.join(BASE_DIR, "sqli_results.json")
+RESULT_FILE = os.path.join(BASE_DIR, "xss_results.json")
 
 BASE_URL = "http://localhost/dvwa/"
 LOGIN_URL = BASE_URL + "login.php"
 
 session = requests.Session()
 
+XSS_PAYLOAD = "<script>alert(1)</script>"
+
 # ---------------- LOGIN FUNCTION ---------------- #
 
 def login_dvwa():
-    print("[+] Logging into DVWA for SQL testing...")
+    print("[+] Logging into DVWA for XSS testing...")
 
     response = session.get(LOGIN_URL)
     soup = BeautifulSoup(response.text, "html.parser")
@@ -70,13 +71,13 @@ def load_forms():
     return data.get("forms", [])
 
 
-# ---------------- SQL INJECTION TEST ---------------- #
+# ---------------- XSS TESTING ---------------- #
 
-def test_sqli(forms):
+def test_xss(forms):
 
     vulnerable = []
 
-    print("\n[+] Starting Hybrid AI-Enhanced SQL Injection Testing...\n")
+    print("\n[+] Starting Hybrid AI-Enhanced XSS Testing...\n")
 
     for form in forms:
 
@@ -84,17 +85,17 @@ def test_sqli(forms):
         method = form["method"]
         inputs = form["inputs"]
 
-        if "sqli" not in action.lower():
+        # Only test XSS-related pages
+        if "xss" not in action.lower():
             continue
 
         input_names = [inp.get("name") for inp in inputs if inp.get("name")]
-        if "id" not in input_names:
+        if not input_names:
             continue
 
         print(f"[*] Testing {action}")
 
         try:
-
             # Get CSRF token
             page_response = session.get(action)
             soup = BeautifulSoup(page_response.text, "html.parser")
@@ -102,62 +103,69 @@ def test_sqli(forms):
             token_input = soup.find("input", {"name": "user_token"})
             user_token = token_input["value"] if token_input else ""
 
-            # Normal request
-            start_normal = time.time()
-            normal_response = session.get(
-                action,
-                params={
-                    "id": "1",
-                    "Submit": "Submit",
-                    "user_token": user_token
-                }
-            )
-            normal_time = time.time() - start_normal
+            # ---------------- HANDLE GET & POST ---------------- #
+
+            if method == "get":
+                normal_response = session.get(
+                    action,
+                    params={
+                        input_names[0]: "test",
+                        "Submit": "Submit",
+                        "user_token": user_token
+                    }
+                )
+            else:
+                normal_response = session.post(
+                    action,
+                    data={
+                        input_names[0]: "test",
+                        "Submit": "Submit",
+                        "user_token": user_token
+                    }
+                )
+
             normal_text = normal_response.text.lower()
 
-            # Injected request
-            payload = "' OR 1=1 --"
+            if method == "get":
+                injected_response = session.get(
+                    action,
+                    params={
+                        input_names[0]: XSS_PAYLOAD,
+                        "Submit": "Submit",
+                        "user_token": user_token
+                    }
+                )
+            else:
+                injected_response = session.post(
+                    action,
+                    data={
+                        input_names[0]: XSS_PAYLOAD,
+                        "Submit": "Submit",
+                        "user_token": user_token
+                    }
+                )
 
-            start_injected = time.time()
-            injected_response = session.get(
-                action,
-                params={
-                    "id": payload,
-                    "Submit": "Submit",
-                    "user_token": user_token
-                }
-            )
-            injected_time = time.time() - start_injected
             injected_text = injected_response.text.lower()
 
             # ---------------- RULE-BASED DETECTION ---------------- #
 
-            sql_error_patterns = [
-                "you have an error in your sql syntax",
-                "mysqli",
-                "mysql",
-                "warning",
-                "fatal error"
-            ]
-
             rule_based_detected = False
 
-            for error in sql_error_patterns:
-                if error in injected_text:
-                    rule_based_detected = True
-                    break
+            if "<script>alert(1)</script>" in injected_text:
+                rule_based_detected = True
 
-            if len(injected_text) > len(normal_text) + 100:
+            if "<script>" in injected_text and "alert(1)" in injected_text:
+                rule_based_detected = True
+
+            if "&lt;script&gt;" in injected_text:
                 rule_based_detected = True
 
             # ---------------- AI DETECTION ---------------- #
 
-            features = extract_features(
+            features = extract_xss_features(
                 normal_text,
                 injected_text,
-                injected_response.status_code,
-                normal_time,
-                injected_time
+                injected_response.status_code
             )
 
             prediction, probability = predict(features)
@@ -167,18 +175,18 @@ def test_sqli(forms):
             if rule_based_detected or prediction == 1:
 
                 if rule_based_detected:
-                  confidence = 95.0   # strong confidence from signature match
+                    confidence = 92.0
                 else:
-                  confidence = round(probability * 100, 2)
+                    confidence = round(probability * 100, 2)
 
-                print(f"[✔] SQL Injection Detected at {action}")
+                print(f"[✔] XSS Detected at {action}")
                 print(f"Confidence: {confidence}%\n")
 
                 vulnerable.append({
                     "url": action,
                     "method": method.upper(),
-                    "payload": payload,
-                    "type": "SQL Injection",
+                    "payload": XSS_PAYLOAD,
+                    "type": "XSS",
                     "severity": "High",
                     "confidence": confidence
                 })
@@ -200,10 +208,10 @@ if __name__ == "__main__":
     if forms is None:
         exit()
 
-    results = test_sqli(forms)
+    results = test_xss(forms)
 
     with open(RESULT_FILE, "w") as rf:
         json.dump({"vulnerabilities": results}, rf, indent=4)
 
-    print("\nHybrid AI SQLi Testing Completed ✅")
+    print("\nHybrid AI XSS Testing Completed ✅")
     print(f"Total Vulnerabilities Found: {len(results)}")

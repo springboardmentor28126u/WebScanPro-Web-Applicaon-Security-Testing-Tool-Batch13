@@ -8,6 +8,7 @@ import os
 
 BASE_URL = "http://localhost/dvwa/"
 LOGIN_URL = urljoin(BASE_URL, "login.php")
+MAX_DEPTH = 3   # Prevent infinite crawling
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_JSON = os.path.join(BASE_DIR, "output.json")
@@ -45,7 +46,11 @@ def login_dvwa():
 
 # ---------------- CRAWLER ---------------- #
 
-def crawl(url):
+def crawl(url, depth=0):
+
+    if depth > MAX_DEPTH:
+        return
+
     if url in visited:
         return
 
@@ -53,10 +58,22 @@ def crawl(url):
 
     try:
         response = session.get(url, timeout=5)
-    except:
+
+        if response.status_code != 200:
+            return
+
+    except requests.RequestException:
         return
 
     soup = BeautifulSoup(response.text, "html.parser")
+
+    # -------- Store URL Metadata --------
+    results["urls"].append({
+        "url": url,
+        "status_code": response.status_code,
+        "content_length": len(response.text),
+        "title": soup.title.string.strip() if soup.title else ""
+    })
 
     # -------- Extract Links --------
     for link in soup.find_all("a"):
@@ -65,13 +82,15 @@ def crawl(url):
             continue
 
         full_url = urljoin(url, href)
-
-        # Remove fragment (# part)
         full_url = full_url.split("#")[0]
 
-        if BASE_URL in full_url and full_url not in results["urls"]:
-            results["urls"].append(full_url)
-            crawl(full_url)
+        # Skip logout & external
+        if BASE_URL not in full_url:
+            continue
+        if "logout" in full_url.lower():
+            continue
+
+        crawl(full_url, depth + 1)
 
     # -------- Extract Forms --------
     for form in soup.find_all("form"):
@@ -83,7 +102,7 @@ def crawl(url):
         method = form.get("method", "get").lower()
 
         form_details = {
-            "page": url.split("#")[0],
+            "page": url,
             "action": action,
             "method": method,
             "inputs": []
@@ -100,9 +119,9 @@ def crawl(url):
                 "value": input_tag.get("value", "")
             })
 
-        if form_details["inputs"]:
+        # Avoid duplicate forms
+        if form_details["inputs"] and form_details not in results["forms"]:
             results["forms"].append(form_details)
-
 
 
 # ---------------- MAIN ---------------- #
@@ -121,7 +140,7 @@ if __name__ == "__main__":
     with open(OUTPUT_TXT, "w") as tf:
         tf.write("=== Discovered URLs ===\n")
         for u in results["urls"]:
-            tf.write(u + "\n")
+            tf.write(str(u) + "\n")
 
         tf.write("\n=== Forms & Input Fields ===\n")
         for f in results["forms"]:

@@ -5,7 +5,8 @@
             "method": "GET",
             "payload": "' OR 1=1 --",
             "type": "SQL Injection",
-            "severity": "High"
+            "severity": "High",
+            "confidence": 95.0
         }
     ]
 }

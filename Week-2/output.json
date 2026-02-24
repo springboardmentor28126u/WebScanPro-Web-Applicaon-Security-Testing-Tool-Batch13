@@ -1,60 +1,250 @@
 {
     "urls": [
-        "http://localhost/dvwa/",
-        "http://localhost/dvwa/instructions.php",
-        "http://localhost/dvwa/setup.php",
-        "http://localhost/dvwa/vulnerabilities/brute/",
-        "http://localhost/dvwa/vulnerabilities/exec/",
-        "http://localhost/dvwa/vulnerabilities/csrf/",
-        "http://localhost/dvwa/vulnerabilities/fi/?page=include.php",
-        "http://localhost/dvwa/vulnerabilities/upload/",
-        "http://localhost/dvwa/vulnerabilities/captcha/",
-        "http://localhost/dvwa/vulnerabilities/sqli/",
-        "http://localhost/dvwa/vulnerabilities/sqli_blind/",
-        "http://localhost/dvwa/vulnerabilities/weak_id/",
-        "http://localhost/dvwa/vulnerabilities/xss_d/",
-        "http://localhost/dvwa/vulnerabilities/xss_r/",
-        "http://localhost/dvwa/vulnerabilities/xss_s/",
-        "http://localhost/dvwa/vulnerabilities/csp/",
-        "http://localhost/dvwa/vulnerabilities/javascript/",
-        "http://localhost/dvwa/vulnerabilities/authbypass/",
-        "http://localhost/dvwa/vulnerabilities/open_redirect/",
-        "http://localhost/dvwa/vulnerabilities/cryptography/",
-        "http://localhost/dvwa/vulnerabilities/api/",
-        "http://localhost/dvwa/security.php",
-        "http://localhost/dvwa/phpinfo.php",
-        "http://localhost/dvwa/about.php",
-        "http://localhost/dvwa/logout.php",
-        "http://localhost/dvwa/vulnerabilities/bac/log_viewer.php",
-        "http://localhost/dvwa/vulnerabilities/open_redirect/source/impossible.php?redirect=1",
-        "http://localhost/dvwa/vulnerabilities/open_redirect/source/impossible.php?redirect=2",
-        "http://localhost/dvwa/vulnerabilities/fi/?page=file1.php",
-        "http://localhost/dvwa/vulnerabilities/fi/?page=file2.php",
-        "http://localhost/dvwa/vulnerabilities/fi/?page=file3.php",
-        "http://localhost/dvwa/instructions.php?doc=readme",
-        "http://localhost/dvwa/instructions.php?doc=PDF",
-        "http://localhost/dvwa/instructions.php?doc=changelog",
-        "http://localhost/dvwa/instructions.php?doc=copying",
-        "http://localhost/dvwa/docs/DVWA_v1.3.pdf",
-        "http://localhost/dvwa/README.ar.md",
-        "http://localhost/dvwa/README.zh.md",
-        "http://localhost/dvwa/README.fr.md",
-        "http://localhost/dvwa/README.ko.md",
-        "http://localhost/dvwa/README.fa.md",
-        "http://localhost/dvwa/README.pl.md",
-        "http://localhost/dvwa/README.pt.md",
-        "http://localhost/dvwa/README.es.md",
-        "http://localhost/dvwa/README.tr.md",
-        "http://localhost/dvwa/README.id.md",
-        "http://localhost/dvwa/README.vi.md",
-        "http://localhost/dvwa/README.it.md",
-        "http://localhost/dvwa/config/config.inc.php.dist",
-        "http://localhost/dvwa/compose.yml"
+        {
+            "url": "http://localhost/dvwa/",
+            "status_code": 200,
+            "content_length": 6443,
+            "title": "Welcome :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/instructions.php",
+            "status_code": 200,
+            "content_length": 42132,
+            "title": "Instructions :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/setup.php",
+            "status_code": 200,
+            "content_length": 6351,
+            "title": "Setup :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/brute/",
+            "status_code": 200,
+            "content_length": 4790,
+            "title": "Vulnerability: Brute Force :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/exec/",
+            "status_code": 200,
+            "content_length": 4727,
+            "title": "Vulnerability: Command Injection :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/csrf/",
+            "status_code": 200,
+            "content_length": 6100,
+            "title": "Vulnerability: Cross Site Request Forgery (CSRF) :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/fi/?page=include.php",
+            "status_code": 200,
+            "content_length": 5257,
+            "title": "Vulnerability: File Inclusion :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/upload/",
+            "status_code": 200,
+            "content_length": 4691,
+            "title": "Vulnerability: File Upload :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/captcha/",
+            "status_code": 200,
+            "content_length": 5448,
+            "title": "Vulnerability: Insecure CAPTCHA :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "status_code": 200,
+            "content_length": 4698,
+            "title": "Vulnerability: SQL Injection :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli_blind/",
+            "status_code": 200,
+            "content_length": 4767,
+            "title": "Vulnerability: SQL Injection (Blind) :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/weak_id/",
+            "status_code": 200,
+            "content_length": 3976,
+            "title": "Vulnerability: Weak Session IDs :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/xss_d/",
+            "status_code": 200,
+            "content_length": 5152,
+            "title": "Vulnerability: DOM Based Cross Site Scripting (XSS) :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/xss_r/",
+            "status_code": 200,
+            "content_length": 4854,
+            "title": "Vulnerability: Reflected Cross Site Scripting (XSS) :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/xss_s/",
+            "status_code": 200,
+            "content_length": 5506,
+            "title": "Vulnerability: Stored Cross Site Scripting (XSS) :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/csp/",
+            "status_code": 200,
+            "content_length": 4813,
+            "title": "Vulnerability: Content Security Policy (CSP) Bypass :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/javascript/",
+            "status_code": 200,
+            "content_length": 4518,
+            "title": "Vulnerability: JavaScript Attacks :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/authbypass/",
+            "status_code": 200,
+            "content_length": 4490,
+            "title": "Vulnerability: Authorisation Bypass :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/open_redirect/",
+            "status_code": 200,
+            "content_length": 4780,
+            "title": "Vulnerability: Open HTTP Redirect :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/cryptography/",
+            "status_code": 200,
+            "content_length": 7374,
+            "title": "Vulnerability: Cryptography Problems :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/api/",
+            "status_code": 200,
+            "content_length": 5652,
+            "title": "Vulnerability: API Security :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/security.php",
+            "status_code": 200,
+            "content_length": 5188,
+            "title": "DVWA Security :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/phpinfo.php",
+            "status_code": 200,
+            "content_length": 83211,
+            "title": "PHP 8.2.12 - phpinfo()"
+        },
+        {
+            "url": "http://localhost/dvwa/about.php",
+            "status_code": 200,
+            "content_length": 5709,
+            "title": "About :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/instructions.php?doc=readme",
+            "status_code": 200,
+            "content_length": 42132,
+            "title": "Instructions :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/instructions.php?doc=PDF",
+            "status_code": 200,
+            "content_length": 3680,
+            "title": "Instructions :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/instructions.php?doc=changelog",
+            "status_code": 200,
+            "content_length": 11674,
+            "title": "Instructions :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/instructions.php?doc=copying",
+            "status_code": 200,
+            "content_length": 36645,
+            "title": "Instructions :: Damn Vulnerable Web Application (DVWA)"
+        },
+        {
+            "url": "http://localhost/dvwa/README.ar.md",
+            "status_code": 200,
+            "content_length": 17308,
+            "title": ""
+        },
+        {
+            "url": "http://localhost/dvwa/README.zh.md",
+            "status_code": 200,
+            "content_length": 10972,
+            "title": ""
+        },
+        {
+            "url": "http://localhost/dvwa/README.fr.md",
+            "status_code": 200,
+            "content_length": 21329,
+            "title": ""
+        },
+        {
+            "url": "http://localhost/dvwa/README.ko.md",
+            "status_code": 200,
+            "content_length": 19555,
+            "title": ""
+        },
+        {
+            "url": "http://localhost/dvwa/README.fa.md",
+            "status_code": 200,
+            "content_length": 19686,
+            "title": ""
+        },
+        {
+            "url": "http://localhost/dvwa/README.pt.md",
+            "status_code": 200,
+            "content_length": 20728,
+            "title": ""
+        },
+        {
+            "url": "http://localhost/dvwa/README.es.md",
+            "status_code": 200,
+            "content_length": 21471,
+            "title": ""
+        },
+        {
+            "url": "http://localhost/dvwa/README.tr.md",
+            "status_code": 200,
+            "content_length": 19838,
+            "title": ""
+        },
+        {
+            "url": "http://localhost/dvwa/README.id.md",
+            "status_code": 200,
+            "content_length": 26155,
+            "title": ""
+        },
+        {
+            "url": "http://localhost/dvwa/README.vi.md",
+            "status_code": 200,
+            "content_length": 29047,
+            "title": ""
+        },
+        {
+            "url": "http://localhost/dvwa/README.it.md",
+            "status_code": 200,
+            "content_length": 34848,
+            "title": ""
+        },
+        {
+            "url": "http://localhost/dvwa/compose.yml",
+            "status_code": 200,
+            "content_length": 726,
+            "title": ""
+        }
     ],
     "forms": [
         {
-            "page": "http://localhost/dvwa/logout.php",
-            "action": "http://localhost/dvwa/login.php",
+            "page": "http://localhost/dvwa/vulnerabilities/brute/",
+            "action": "http://localhost/dvwa/vulnerabilities/brute/",
             "method": "post",
             "inputs": [
                 {
@@ -75,132 +265,17 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "5c605b32ea887c30b284a98661f5adf8"
+                    "value": "0937b248577097d4a7355af6fd9e4aaa"
                 }
             ]
         },
         {
-            "page": "http://localhost/dvwa/security.php",
-            "action": "http://localhost/dvwa/security.php",
+            "page": "http://localhost/dvwa/vulnerabilities/exec/",
+            "action": "http://localhost/dvwa/vulnerabilities/exec/",
             "method": "post",
             "inputs": [
                 {
-                    "name": "seclev_submit",
-                    "type": "submit",
-                    "value": "Submit"
-                },
-                {
-                    "name": "user_token",
-                    "type": "hidden",
-                    "value": "72e001751dbb61d67092b3bea63a49da"
-                }
-            ]
-        },
-        {
-            "page": "http://localhost/dvwa/vulnerabilities/open_redirect/source/impossible.php?redirect=1",
-            "action": "http://localhost/dvwa/vulnerabilities/open_redirect/source/login.php",
-            "method": "post",
-            "inputs": [
-                {
-                    "name": "username",
-                    "type": "text",
-                    "value": ""
-                },
-                {
-                    "name": "password",
-                    "type": "password",
-                    "value": ""
-                },
-                {
-                    "name": "Login",
-                    "type": "submit",
-                    "value": "Login"
-                },
-                {
-                    "name": "user_token",
-                    "type": "hidden",
-                    "value": "5d708603142cc89c4514f420066d88f1"
-                }
-            ]
-        },
-        {
-            "page": "http://localhost/dvwa/vulnerabilities/open_redirect/source/impossible.php?redirect=2",
-            "action": "http://localhost/dvwa/vulnerabilities/open_redirect/source/login.php",
-            "method": "post",
-            "inputs": [
-                {
-                    "name": "username",
-                    "type": "text",
-                    "value": ""
-                },
-                {
-                    "name": "password",
-                    "type": "password",
-                    "value": ""
-                },
-                {
-                    "name": "Login",
-                    "type": "submit",
-                    "value": "Login"
-                },
-                {
-                    "name": "user_token",
-                    "type": "hidden",
-                    "value": "12c183bfbf7738b0dc8821f1244228a3"
-                }
-            ]
-        },
-        {
-            "page": "http://localhost/dvwa/vulnerabilities/xss_s/",
-            "action": "http://localhost/dvwa/vulnerabilities/xss_s/",
-            "method": "post",
-            "inputs": [
-                {
-                    "name": "txtName",
-                    "type": "text",
-                    "value": ""
-                },
-                {
-                    "name": "btnSign",
-                    "type": "submit",
-                    "value": "Sign Guestbook"
-                },
-                {
-                    "name": "btnClear",
-                    "type": "submit",
-                    "value": "Clear Guestbook"
-                },
-                {
-                    "name": "user_token",
-                    "type": "hidden",
-                    "value": "dda6c2119d7fef74857fb0b63f6a7354"
-                }
-            ]
-        },
-        {
-            "page": "http://localhost/dvwa/vulnerabilities/xss_r/",
-            "action": "http://localhost/dvwa/vulnerabilities/xss_r/",
-            "method": "get",
-            "inputs": [
-                {
-                    "name": "name",
-                    "type": "text",
-                    "value": ""
-                },
-                {
-                    "name": "user_token",
-                    "type": "hidden",
-                    "value": "2a6c2315bc5e32fccc96d44d6ec27654"
-                }
-            ]
-        },
-        {
-            "page": "http://localhost/dvwa/vulnerabilities/sqli_blind/",
-            "action": "http://localhost/dvwa/vulnerabilities/sqli_blind/",
-            "method": "get",
-            "inputs": [
-                {
-                    "name": "id",
+                    "name": "ip",
                     "type": "text",
                     "value": ""
                 },
@@ -212,174 +287,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "d32ae731b9892e8b54ea129f007c8cdb"
-                }
-            ]
-        },
-        {
-            "page": "http://localhost/dvwa/vulnerabilities/sqli/",
-            "action": "http://localhost/dvwa/vulnerabilities/sqli/",
-            "method": "get",
-            "inputs": [
-                {
-                    "name": "id",
-                    "type": "text",
-                    "value": ""
-                },
-                {
-                    "name": "Submit",
-                    "type": "submit",
-                    "value": "Submit"
-                },
-                {
-                    "name": "user_token",
-                    "type": "hidden",
-                    "value": "52d396038152aa9c5105c738fdf57b2c"
-                }
-            ]
-        },
-        {
-            "page": "http://localhost/dvwa/vulnerabilities/captcha/",
-            "action": "http://localhost/dvwa/vulnerabilities/captcha/",
-            "method": "post",
-            "inputs": [
-                {
-                    "name": "step",
-                    "type": "hidden",
-                    "value": "1"
-                },
-                {
-                    "name": "password_current",
-                    "type": "password",
-                    "value": ""
-                },
-                {
-                    "name": "password_new",
-                    "type": "password",
-                    "value": ""
-                },
-                {
-                    "name": "password_conf",
-                    "type": "password",
-                    "value": ""
-                },
-                {
-                    "name": "user_token",
-                    "type": "hidden",
-                    "value": "0e6284148a0d803faf59930a7f4dea5f"
-                },
-                {
-                    "name": "Change",
-                    "type": "submit",
-                    "value": "Change"
-                }
-            ]
-        },
-        {
-            "page": "http://localhost/dvwa/vulnerabilities/upload/",
-            "action": "http://localhost/dvwa/vulnerabilities/upload/",
-            "method": "post",
-            "inputs": [
-                {
-                    "name": "MAX_FILE_SIZE",
-                    "type": "hidden",
-                    "value": "100000"
-                },
-                {
-                    "name": "uploaded",
-                    "type": "file",
-                    "value": ""
-                },
-                {
-                    "name": "Upload",
-                    "type": "submit",
-                    "value": "Upload"
-                },
-                {
-                    "name": "user_token",
-                    "type": "hidden",
-                    "value": "b9aa1fd015872896626e94884cd6a38c"
-                }
-            ]
-        },
-        {
-            "page": "http://localhost/dvwa/vulnerabilities/fi/?page=file1.php",
-            "action": "http://localhost/dvwa/vulnerabilities/fi/login.php",
-            "method": "post",
-            "inputs": [
-                {
-                    "name": "username",
-                    "type": "text",
-                    "value": ""
-                },
-                {
-                    "name": "password",
-                    "type": "password",
-                    "value": ""
-                },
-                {
-                    "name": "Login",
-                    "type": "submit",
-                    "value": "Login"
-                },
-                {
-                    "name": "user_token",
-                    "type": "hidden",
-                    "value": "1196ff32b448a72b25efeb607fae356e"
-                }
-            ]
-        },
-        {
-            "page": "http://localhost/dvwa/vulnerabilities/fi/?page=file2.php",
-            "action": "http://localhost/dvwa/vulnerabilities/fi/login.php",
-            "method": "post",
-            "inputs": [
-                {
-                    "name": "username",
-                    "type": "text",
-                    "value": ""
-                },
-                {
-                    "name": "password",
-                    "type": "password",
-                    "value": ""
-                },
-                {
-                    "name": "Login",
-                    "type": "submit",
-                    "value": "Login"
-                },
-                {
-                    "name": "user_token",
-                    "type": "hidden",
-                    "value": "83aa31a113bb2c861304f900365a08e3"
-                }
-            ]
-        },
-        {
-            "page": "http://localhost/dvwa/vulnerabilities/fi/?page=file3.php",
-            "action": "http://localhost/dvwa/vulnerabilities/fi/login.php",
-            "method": "post",
-            "inputs": [
-                {
-                    "name": "username",
-                    "type": "text",
-                    "value": ""
-                },
-                {
-                    "name": "password",
-                    "type": "password",
-                    "value": ""
-                },
-                {
-                    "name": "Login",
-                    "type": "submit",
-                    "value": "Login"
-                },
-                {
-                    "name": "user_token",
-                    "type": "hidden",
-                    "value": "5da288d16b795ff319e256ffa5899a38"
+                    "value": "91bccafb7790a1ad3b56aca20066e3be"
                 }
             ]
         },
@@ -411,17 +319,81 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "0586ee5bc091ef1f70e7476f0a5e3c72"
+                    "value": "cf68e67e0a4bd0a633627d8c2db512a0"
                 }
             ]
         },
         {
-            "page": "http://localhost/dvwa/vulnerabilities/exec/",
-            "action": "http://localhost/dvwa/vulnerabilities/exec/",
+            "page": "http://localhost/dvwa/vulnerabilities/upload/",
+            "action": "http://localhost/dvwa/vulnerabilities/upload/",
             "method": "post",
             "inputs": [
                 {
-                    "name": "ip",
+                    "name": "MAX_FILE_SIZE",
+                    "type": "hidden",
+                    "value": "100000"
+                },
+                {
+                    "name": "uploaded",
+                    "type": "file",
+                    "value": ""
+                },
+                {
+                    "name": "Upload",
+                    "type": "submit",
+                    "value": "Upload"
+                },
+                {
+                    "name": "user_token",
+                    "type": "hidden",
+                    "value": "7d03580a065e7eceb226be63c4e09efb"
+                }
+            ]
+        },
+        {
+            "page": "http://localhost/dvwa/vulnerabilities/captcha/",
+            "action": "http://localhost/dvwa/vulnerabilities/captcha/",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": "step",
+                    "type": "hidden",
+                    "value": "1"
+                },
+                {
+                    "name": "password_current",
+                    "type": "password",
+                    "value": ""
+                },
+                {
+                    "name": "password_new",
+                    "type": "password",
+                    "value": ""
+                },
+                {
+                    "name": "password_conf",
+                    "type": "password",
+                    "value": ""
+                },
+                {
+                    "name": "user_token",
+                    "type": "hidden",
+                    "value": "6139dd465da46ce383eb9251e4dfb84a"
+                },
+                {
+                    "name": "Change",
+                    "type": "submit",
+                    "value": "Change"
+                }
+            ]
+        },
+        {
+            "page": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "action": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "get",
+            "inputs": [
+                {
+                    "name": "id",
                     "type": "text",
                     "value": ""
                 },
@@ -433,34 +405,90 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "6581dac714a32806b70112fe1d1cb8e3"
+                    "value": "6e195c3268e3ecf5048978e445bb3967"
                 }
             ]
         },
         {
-            "page": "http://localhost/dvwa/vulnerabilities/brute/",
-            "action": "http://localhost/dvwa/vulnerabilities/brute/",
-            "method": "post",
+            "page": "http://localhost/dvwa/vulnerabilities/sqli_blind/",
+            "action": "http://localhost/dvwa/vulnerabilities/sqli_blind/",
+            "method": "get",
             "inputs": [
                 {
-                    "name": "username",
+                    "name": "id",
                     "type": "text",
                     "value": ""
                 },
                 {
-                    "name": "password",
-                    "type": "password",
-                    "value": ""
-                },
-                {
-                    "name": "Login",
+                    "name": "Submit",
                     "type": "submit",
-                    "value": "Login"
+                    "value": "Submit"
                 },
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "3c718cae02583627dfbd98617281581c"
+                    "value": "0c95cd77e5157b7c138f730f18dc2985"
+                }
+            ]
+        },
+        {
+            "page": "http://localhost/dvwa/vulnerabilities/xss_r/",
+            "action": "http://localhost/dvwa/vulnerabilities/xss_r/",
+            "method": "get",
+            "inputs": [
+                {
+                    "name": "name",
+                    "type": "text",
+                    "value": ""
+                },
+                {
+                    "name": "user_token",
+                    "type": "hidden",
+                    "value": "c574eec7c6fb1f51ef2de76863d8dbf2"
+                }
+            ]
+        },
+        {
+            "page": "http://localhost/dvwa/vulnerabilities/xss_s/",
+            "action": "http://localhost/dvwa/vulnerabilities/xss_s/",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": "txtName",
+                    "type": "text",
+                    "value": ""
+                },
+                {
+                    "name": "btnSign",
+                    "type": "submit",
+                    "value": "Sign Guestbook"
+                },
+                {
+                    "name": "btnClear",
+                    "type": "submit",
+                    "value": "Clear Guestbook"
+                },
+                {
+                    "name": "user_token",
+                    "type": "hidden",
+                    "value": "46d9e17119306321a00f127f21804eea"
+                }
+            ]
+        },
+        {
+            "page": "http://localhost/dvwa/security.php",
+            "action": "http://localhost/dvwa/security.php",
+            "method": "post",
+            "inputs": [
+                {
+                    "name": "seclev_submit",
+                    "type": "submit",
+                    "value": "Submit"
+                },
+                {
+                    "name": "user_token",
+                    "type": "hidden",
+                    "value": "2b8585c799cb486093c2b8c048a47a1f"
                 }
             ]
         },
@@ -477,7 +505,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "e454291402f8c2117e747f739f3bf548"
+                    "value": "c7c71182fd2cbd0802878bff6fdc3f02"
                 }
             ]
         }
