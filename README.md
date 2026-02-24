@@ -371,7 +371,7 @@ Compares normal vs injected response to detect abnormal behavior or unexpected o
 ---
 
 ### 🌐 Manual SQL Error Proof  
-![Manual SQL Error Proof](Week-3/screenshots/manual-sql-error-proof.png)  
+![Manual SQL Error Proof](Week-3/screenshots/manual-sqli-error-proof.png)  
 *Fig 3.3: Manual SQL Injection test confirming database vulnerability.*
 
 ---
