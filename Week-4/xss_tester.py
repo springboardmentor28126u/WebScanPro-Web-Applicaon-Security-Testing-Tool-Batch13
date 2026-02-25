@@ -70,6 +70,7 @@ def load_forms():
 
     return data.get("forms", [])
 
+import time
 
 # ---------------- XSS TESTING ---------------- #
 
@@ -85,7 +86,7 @@ def test_xss(forms):
         method = form["method"]
         inputs = form["inputs"]
 
-        # Only test XSS-related pages
+        # Only test XSS pages
         if "xss" not in action.lower():
             continue
 
@@ -93,7 +94,8 @@ def test_xss(forms):
         if not input_names:
             continue
 
-        print(f"[*] Testing {action}")
+        print("=" * 60)
+        print(f"[*] Testing: {action}")
 
         try:
             # Get CSRF token
@@ -103,7 +105,9 @@ def test_xss(forms):
             token_input = soup.find("input", {"name": "user_token"})
             user_token = token_input["value"] if token_input else ""
 
-            # ---------------- HANDLE GET & POST ---------------- #
+            # -------- Normal Request -------- #
+
+            start_normal = time.time()
 
             if method == "get":
                 normal_response = session.get(
@@ -124,7 +128,12 @@ def test_xss(forms):
                     }
                 )
 
+            normal_time = time.time() - start_normal
             normal_text = normal_response.text.lower()
+
+            # -------- Injected Request -------- #
+
+            start_injected = time.time()
 
             if method == "get":
                 injected_response = session.get(
@@ -145,13 +154,26 @@ def test_xss(forms):
                     }
                 )
 
+            injected_time = time.time() - start_injected
             injected_text = injected_response.text.lower()
+
+            # -------- CLI OUTPUT -------- #
+
+            length_diff = len(injected_text) - len(normal_text)
+            payload_reflected = XSS_PAYLOAD.lower() in injected_text
+
+            print(f"Normal Status Code   : {normal_response.status_code}")
+            print(f"Injected Status Code : {injected_response.status_code}")
+            print(f"Normal Response Time : {round(normal_time, 4)} sec")
+            print(f"Injected Resp Time   : {round(injected_time, 4)} sec")
+            print(f"Response Length Diff : {length_diff}")
+            print(f"Payload Reflected    : {payload_reflected}")
 
             # ---------------- RULE-BASED DETECTION ---------------- #
 
             rule_based_detected = False
 
-            if "<script>alert(1)</script>" in injected_text:
+            if payload_reflected:
                 rule_based_detected = True
 
             if "<script>" in injected_text and "alert(1)" in injected_text:
@@ -179,8 +201,8 @@ def test_xss(forms):
                 else:
                     confidence = round(probability * 100, 2)
 
-                print(f"[✔] XSS Detected at {action}")
-                print(f"Confidence: {confidence}%\n")
+                print("\n[✔] XSS Detected!")
+                print(f"Confidence Score     : {confidence}%")
 
                 vulnerable.append({
                     "url": action,
@@ -191,10 +213,14 @@ def test_xss(forms):
                     "confidence": confidence
                 })
 
+            else:
+                print("[–] No XSS Detected.")
+
         except Exception as e:
             print(f"[!] Error testing {action}: {e}")
             continue
 
+    print("=" * 60)
     return vulnerable
 
 

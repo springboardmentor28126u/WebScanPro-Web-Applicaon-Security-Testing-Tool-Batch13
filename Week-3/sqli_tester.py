@@ -95,14 +95,14 @@ def test_sqli(forms):
 
         try:
 
-            # Get CSRF token
+             # -------- Get CSRF token -------- #
             page_response = session.get(action)
             soup = BeautifulSoup(page_response.text, "html.parser")
 
             token_input = soup.find("input", {"name": "user_token"})
             user_token = token_input["value"] if token_input else ""
 
-            # Normal request
+             # -------- Normal Request -------- #
             start_normal = time.time()
             normal_response = session.get(
                 action,
@@ -115,7 +115,7 @@ def test_sqli(forms):
             normal_time = time.time() - start_normal
             normal_text = normal_response.text.lower()
 
-            # Injected request
+            # -------- Injected Request -------- #
             payload = "' OR 1=1 --"
 
             start_injected = time.time()
@@ -129,6 +129,16 @@ def test_sqli(forms):
             )
             injected_time = time.time() - start_injected
             injected_text = injected_response.text.lower()
+            # -------- CLI OUTPUT -------- #
+
+            length_diff = len(injected_text) - len(normal_text)
+
+            print(f"Normal Status Code   : {normal_response.status_code}")
+            print(f"Injected Status Code : {injected_response.status_code}")
+            print(f"Normal Response Time : {round(normal_time, 4)} sec")
+            print(f"Injected Resp Time   : {round(injected_time, 4)} sec")
+            print(f"Response Length Diff : {length_diff}")
+
 
             # ---------------- RULE-BASED DETECTION ---------------- #
 
