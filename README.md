@@ -19,6 +19,10 @@ In this phase, the following tasks were completed:
 - Storing scan results in JSON format
 
 <img width="836" height="608" alt="web xampp start" src="https://github.com/user-attachments/assets/73d2b38d-0c5c-4ddf-9e81-85f8e9bdb2a5" />
+<img width="1855" height="844" alt="Screenshot 2026-02-15 114009" src="https://github.com/user-attachments/assets/6bddeaf2-3a5e-4a05-bae1-502d78cff41b" />
+<img width="505" height="457" alt="Screenshot 2026-02-15 114320" src="https://github.com/user-attachments/assets/4edc41f1-4ae7-4228-98b9-ae66407f2385" />
+<img width="1671" height="960" alt="Screenshot 2026-02-15 113712" src="https://github.com/user-attachments/assets/0769a322-e792-4538-998b-86aaf2d081d4" />
+<img width="1121" height="842" alt="low security" src="https://github.com/user-attachments/assets/9b6de5c3-96f2-40b4-9df7-d1e1cf608c79" />
 
 Modules Used:
 - crawler.py
