@@ -9,7 +9,7 @@ The tool was tested using DVWA (Damn Vulnerable Web Application) running on a lo
 
 ---
 
-## 🎯 Milestone-1: Setup & Target Scanning
+## 🎯 Milestone-1: Setup ,Initiallization & Target Scanning
 
 In this phase, the following tasks were completed:
 
@@ -44,21 +44,24 @@ Output:
 - scan_results.json (this file shows the scanned vulnarable URLs)
 
 Outcomes for Milestone-1:
--
+Successful deployment of DVWA
+Manual validation of vulnerabilities
+Implementation of automated crawler
+
 ---
 
-## 🎯 Milestone-2: Vulnerability Detection
+## 🎯 Milestone-2: Vulnerability Detection (SQL & XSS testing)
 
 In this phase, automated vulnerability testing modules were implemented:
+Week -3 : ## 🔴 SQL Injection Detection
 
-### 🔴 SQL Injection Detection
 - Injected multiple SQL payloads
 - Analyzed server responses
 - Detected possible SQL injection vulnerabilities
 - Assigned severity level
 - Generated sqli_report.json
 
-### 🟠 Cross-Site Scripting (XSS) Detection
+ week-4 : ## 🟠 Cross-Site Scripting (XSS) Detection
 - Injected script payload
 - Checked for reflected script execution
 - Detected XSS vulnerability
@@ -75,7 +78,7 @@ All scan results are combined into a single structured report:
 
 ## 🛠 Technologies Used
 
-- Python 3
+- Visual Studio Code
 - Requests library
 - BeautifulSoup (bs4)
 - JSON
