@@ -6,7 +6,7 @@ MODEL_PATH = os.path.join(os.path.dirname(__file__), "model.pkl")
 
 
 def train_model():
-    # Updated dataset (4 features now)
+    
     X = [
         [10, 0, 200, 0.01],
         [200, 2, 500, 0.05],
@@ -14,7 +14,7 @@ def train_model():
         [5, 0, 200, 0.01]
     ]
 
-    y = [0, 1, 1, 0]  # 0 = safe, 1 = vulnerable
+    y = [0, 1, 1, 0]  
 
     model = LogisticRegression()
     model.fit(X, y)
@@ -26,7 +26,7 @@ def train_model():
 
 
 def load_model():
-    # If file missing OR empty → retrain
+   
     if not os.path.exists(MODEL_PATH) or os.path.getsize(MODEL_PATH) == 0:
         return train_model()
 
@@ -34,7 +34,7 @@ def load_model():
         with open(MODEL_PATH, "rb") as f:
             model = pickle.load(f)
 
-        # Ensure correct feature size (4)
+       
         if model.coef_.shape[1] != 4:
             return train_model()
 

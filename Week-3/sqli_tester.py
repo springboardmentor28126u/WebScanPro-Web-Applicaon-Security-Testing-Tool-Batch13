@@ -39,7 +39,7 @@ def login_dvwa():
     session.post(LOGIN_URL, data=login_data)
     print("[+] Login successful.")
 
-    # Set security LOW
+    
     security_url = BASE_URL + "security.php"
     sec_page = session.get(security_url)
     soup = BeautifulSoup(sec_page.text, "html.parser")
@@ -177,7 +177,7 @@ def test_sqli(forms):
             if rule_based_detected or prediction == 1:
 
                 if rule_based_detected:
-                  confidence = 95.0   # strong confidence from signature match
+                  confidence = 95.0   
                 else:
                   confidence = round(probability * 100, 2)
 

@@ -6,7 +6,7 @@ MODEL_PATH = os.path.join(os.path.dirname(__file__), "model.pkl")
 
 
 def train_model():
-    # Training dataset (basic demo dataset)
+ 
     X = [
         [0, 0, 5, 0, 200],
         [1, 1, 120, 3, 200],
@@ -14,7 +14,7 @@ def train_model():
         [0, 0, 10, 0, 200]
     ]
 
-    y = [0, 1, 1, 0]  # 0 = Safe, 1 = Vulnerable
+    y = [0, 1, 1, 0] 
 
     model = RandomForestClassifier()
     model.fit(X, y)
@@ -26,7 +26,7 @@ def train_model():
 
 
 def predict(features):
-    # If file doesn't exist OR is empty → retrain
+   
     if not os.path.exists(MODEL_PATH) or os.path.getsize(MODEL_PATH) == 0:
         model = train_model()
     else:

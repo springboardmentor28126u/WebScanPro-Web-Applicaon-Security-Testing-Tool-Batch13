@@ -40,7 +40,7 @@ def login_dvwa():
     session.post(LOGIN_URL, data=login_data)
     print("[+] Login successful.")
 
-    # Set security LOW
+ 
     security_url = BASE_URL + "security.php"
     sec_page = session.get(security_url)
     soup = BeautifulSoup(sec_page.text, "html.parser")
@@ -86,7 +86,7 @@ def test_xss(forms):
         method = form["method"]
         inputs = form["inputs"]
 
-        # Only test XSS pages
+        
         if "xss" not in action.lower():
             continue
 
@@ -98,7 +98,7 @@ def test_xss(forms):
         print(f"[*] Testing: {action}")
 
         try:
-            # Get CSRF token
+           
             page_response = session.get(action)
             soup = BeautifulSoup(page_response.text, "html.parser")
 
