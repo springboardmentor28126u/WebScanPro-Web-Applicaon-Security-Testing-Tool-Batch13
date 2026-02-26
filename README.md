@@ -9,7 +9,7 @@ The tool was tested using DVWA (Damn Vulnerable Web Application) running on a lo
 
 ---
 
-## 🎯 Milestone-1: Target Scanning
+## 🎯 Milestone-1: Setup & Target Scanning
 
 In this phase, the following tasks were completed:
 
@@ -19,16 +19,22 @@ In this phase, the following tasks were completed:
 - Storing scan results in JSON format
 
 <img width="836" height="608" alt="web xampp start" src="https://github.com/user-attachments/assets/73d2b38d-0c5c-4ddf-9e81-85f8e9bdb2a5" />
+
 -Start XAMPP with Apache and MySQL Servers
 <img width="1855" height="844" alt="Screenshot 2026-02-15 114009" src="https://github.com/user-attachments/assets/6bddeaf2-3a5e-4a05-bae1-502d78cff41b" />
 -create a dvwa database in phpmyadmin
+
 <img width="505" height="457" alt="Screenshot 2026-02-15 114320" src="https://github.com/user-attachments/assets/4edc41f1-4ae7-4228-98b9-ae66407f2385" />
+
 -search localhost (dvwa)damn vulnerable web application for login page 
+
 <img width="1671" height="960" alt="Screenshot 2026-02-15 113712" src="https://github.com/user-attachments/assets/0769a322-e792-4538-998b-86aaf2d081d4" />
+
 -this is the home page of DVWAA ,first i did reset/setup the database
+
 <img width="1121" height="842" alt="low security" src="https://github.com/user-attachments/assets/9b6de5c3-96f2-40b4-9df7-d1e1cf608c79" />
 -later i set the security level to low succussfully
- <img width="1173" height="830" alt="Screenshot 2026-02-15 113429" src="https://github.com/user-attachments/assets/7a3bb63d-30f3-49ee-8d51-dfef48ef03f8" />
+
 
 
 Modules Used:
@@ -38,6 +44,7 @@ Output:
 - scan_results.json (this file shows the scanned vulnarable URLs)
 
 Outcomes for Milestone-1:
+-
 ---
 
 ## 🎯 Milestone-2: Vulnerability Detection
