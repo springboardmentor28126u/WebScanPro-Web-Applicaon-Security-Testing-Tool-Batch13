@@ -146,4 +146,4 @@ if __name__ == "__main__":
         for f in results["forms"]:
             tf.write(str(f) + "\n")
 
-    print("Scan completed. Results saved in Week-2.")
+    print("Scan completed. Results saved in Week-2/output.txt and Week-2/output.json.")
