@@ -129,6 +129,7 @@ def test_sqli(forms):
             )
             injected_time = time.time() - start_injected
             injected_text = injected_response.text.lower()
+            
             # -------- CLI OUTPUT -------- #
 
             length_diff = len(injected_text) - len(normal_text)
@@ -136,8 +137,8 @@ def test_sqli(forms):
             print(f"Normal Status Code   : {normal_response.status_code}")
             print(f"Injected Status Code : {injected_response.status_code}")
             print(f"Normal Response Time : {round(normal_time, 4)} sec")
-            print(f"Injected Resp Time   : {round(injected_time, 4)} sec")
-            print(f"Response Length Diff : {length_diff}")
+            print(f"Injectth Died Resp Time   : {round(injected_time, 4)} sec")
+            print(f"Response Lengff : {length_diff}")
 
 
             # ---------------- RULE-BASED DETECTION ---------------- #

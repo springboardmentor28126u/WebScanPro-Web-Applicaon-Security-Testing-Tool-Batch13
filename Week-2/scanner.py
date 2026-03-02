@@ -8,7 +8,7 @@ import os
 
 BASE_URL = "http://localhost/dvwa/"
 LOGIN_URL = urljoin(BASE_URL, "login.php")
-MAX_DEPTH = 3   # Prevent infinite crawling
+MAX_DEPTH = 3
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_JSON = os.path.join(BASE_DIR, "output.json")
