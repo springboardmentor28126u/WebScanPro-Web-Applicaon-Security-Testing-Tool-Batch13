@@ -1,40 +1,63 @@
-
+import requests
+from bs4 import BeautifulSoup
 from scanner.config import XSS_PAYLOADS_FILE
 
-def clean_url(url):
-    return url.split('#')[0]   
+def load_payloads(filepath=XSS_PAYLOADS_FILE):
+    """Loads XSS payloads from the specified text file."""
+    try:
+        with open(filepath, 'r') as f:
+            return [line.strip() for line in f if line.strip()]
+    except FileNotFoundError:
+        print(f"  [ERROR] Payload file not found: {filepath}")
+        return ["<script>alert('XSS')</script>", "<u>XSS_TEST</u>"]
 
 def test_xss(session, url, params, method='GET'):
-    payloads = open(XSS_PAYLOADS_FILE).read().splitlines()  
+    """
+    Tests a specific URL and its parameters for Reflected XSS.
+    Matches the signature used in main.py.
+    """
+    payloads = load_payloads()
     findings = []
-    url = clean_url(url)
-
     
-    params = [p for p in params if p is not None]
-    if not params: return findings
+    # Standardize method to uppercase
+    method = method.upper()
+
+    if not params:
+        return findings
 
     for param in params:
-        if param.lower() in ['submit', 'login', 'user_token']: continue
+        # Skip common non-injectable or sensitive tokens
+        if param.lower() in ['submit', 'login', 'user_token']:
+            continue
 
         for payload in payloads:
-            data = {p: "test" for p in params} 
-            data[param] = payload                    
-            try:
-               
-                if method == 'POST':
-                    resp = session.post(url, data=data, timeout=5)
-                else:
-                    resp = session.get(url, params=data, timeout=5)
+            # Prepare test parameters: use '1' for others, payload for the target
+            test_params = {p: "Submit" if p.lower() == "submit" else "1" for p in params}
+            test_params[param] = payload
 
-              
-                if payload.lower() in resp.text.lower():
-                    findings.append({
-                        'url': url, 'parameter': param,
-                        'payload': payload, 'type': 'Reflected XSS',
-                        'severity': 'HIGH'
-                    })
-                    print(f"  [VULN] XSS @ {param} -> payload reflected!")
-                    break   
+            try:
+                if method == 'POST':
+                    resp = session.post(url, data=test_params, timeout=5)
+                else:
+                    resp = session.get(url, params=test_params, timeout=5)
+
+                # Check if the exact payload is reflected in the HTML response
+                if payload in resp.text:
+                    finding = {
+                        'url': url,
+                        'parameter': param,
+                        'payload': payload,
+                        'type': 'Cross-Site Scripting (XSS)',
+                        'severity': 'HIGH',
+                        'method': method,
+                        'mitigation': 'Implement context-aware output encoding and use Content Security Policy (CSP).'
+                    }
+                    findings.append(finding)
+                    print(f"  [VULN] XSS detected @ {param} using {method} on {url}")
+                    # Move to next parameter once a vulnerability is confirmed to save time
+                    break 
+
             except Exception as e:
-                print(f"  Error: {e}")
+                print(f"  [ERROR] Testing XSS on {url}: {e}")
+
     return findings

@@ -1,257 +1,145 @@
 [
-  {
-    "url": "http://localhost",
-    "forms": []
-  },
-  {
-    "url": "http://localhost/",
-    "forms": []
-  },
-  {
-    "url": "http://localhost/instructions.php",
-    "forms": []
-  },
-  {
-    "url": "http://localhost/vulnerabilities/brute/",
-    "forms": [
-      {
-        "action": "http://localhost/vulnerabilities/brute/#",
+    {
+        "url": "http://localhost/vulnerabilities/brute/",
+        "parameter": "username",
+        "payload": "'",
+        "type": "SQL Injection",
+        "severity": "HIGH"
+    },
+    {
+        "url": "http://localhost/vulnerabilities/brute/",
+        "parameter": "username",
+        "payload": "' OR '1'='1' --",
+        "type": "SQL Injection",
+        "severity": "HIGH"
+    },
+    {
+        "url": "http://localhost/vulnerabilities/brute/",
+        "parameter": "username",
+        "payload": "1' ORDER BY 1--",
+        "type": "SQL Injection",
+        "severity": "HIGH"
+    },
+    {
+        "url": "http://localhost/vulnerabilities/brute/",
+        "parameter": "username",
+        "payload": "1' ORDER BY 2--",
+        "type": "SQL Injection",
+        "severity": "HIGH"
+    },
+    {
+        "url": "http://localhost/vulnerabilities/brute/",
+        "parameter": "username",
+        "payload": "1' UNION SELECT NULL--",
+        "type": "SQL Injection",
+        "severity": "HIGH"
+    },
+    {
+        "url": "http://localhost/vulnerabilities/brute/",
+        "parameter": "username",
+        "payload": "1' UNION SELECT NULL, NULL--",
+        "type": "SQL Injection",
+        "severity": "HIGH"
+    },
+    {
+        "url": "http://localhost/vulnerabilities/brute/",
+        "parameter": "username",
+        "payload": "admin'--",
+        "type": "SQL Injection",
+        "severity": "HIGH"
+    },
+    {
+        "url": "http://localhost/vulnerabilities/brute/#",
+        "parameter": "username",
+        "payload": "'\"><script>alert(1)</script>",
+        "type": "Cross-Site Scripting (XSS)",
+        "severity": "HIGH",
         "method": "GET",
-        "inputs": [
-          "username",
-          "password",
-          "Login"
-        ]
-      }
-    ]
-  },
-  {
-    "url": "http://localhost/vulnerabilities/exec/",
-    "forms": [
-      {
-        "action": "http://localhost/vulnerabilities/exec/#",
-        "method": "POST",
-        "inputs": [
-          "ip",
-          "Submit"
-        ]
-      }
-    ]
-  },
-  {
-    "url": "http://localhost/vulnerabilities/csrf/",
-    "forms": [
-      {
-        "action": "http://localhost/vulnerabilities/csrf/#",
+        "mitigation": "Implement context-aware output encoding and use Content Security Policy (CSP)."
+    },
+    {
+        "url": "http://localhost/vulnerabilities/sqli/",
+        "parameter": "id",
+        "payload": "'",
+        "type": "SQL Injection",
+        "severity": "HIGH"
+    },
+    {
+        "url": "http://localhost/vulnerabilities/sqli/",
+        "parameter": "id",
+        "payload": "' OR '1'='1' --",
+        "type": "SQL Injection",
+        "severity": "HIGH"
+    },
+    {
+        "url": "http://localhost/vulnerabilities/sqli/",
+        "parameter": "id",
+        "payload": "1' ORDER BY 1--",
+        "type": "SQL Injection",
+        "severity": "HIGH"
+    },
+    {
+        "url": "http://localhost/vulnerabilities/sqli/",
+        "parameter": "id",
+        "payload": "1' ORDER BY 2--",
+        "type": "SQL Injection",
+        "severity": "HIGH"
+    },
+    {
+        "url": "http://localhost/vulnerabilities/sqli/",
+        "parameter": "id",
+        "payload": "1' UNION SELECT NULL--",
+        "type": "SQL Injection",
+        "severity": "HIGH"
+    },
+    {
+        "url": "http://localhost/vulnerabilities/sqli/",
+        "parameter": "id",
+        "payload": "1' UNION SELECT NULL, NULL--",
+        "type": "SQL Injection",
+        "severity": "HIGH"
+    },
+    {
+        "url": "http://localhost/vulnerabilities/sqli/",
+        "parameter": "id",
+        "payload": "admin'--",
+        "type": "SQL Injection",
+        "severity": "HIGH"
+    },
+    {
+        "url": "http://localhost/vulnerabilities/sqli/#",
+        "parameter": "id",
+        "payload": "'\"><script>alert(1)</script>",
+        "type": "Cross-Site Scripting (XSS)",
+        "severity": "HIGH",
         "method": "GET",
-        "inputs": [
-          "password_new",
-          "password_conf",
-          "Change"
-        ]
-      }
-    ]
-  },
-  {
-    "url": "http://localhost/vulnerabilities/fi/?page=include.php",
-    "forms": []
-  },
-  {
-    "url": "http://localhost/vulnerabilities/upload/",
-    "forms": [
-      {
-        "action": "http://localhost/vulnerabilities/upload/#",
-        "method": "POST",
-        "inputs": [
-          "MAX_FILE_SIZE",
-          "uploaded",
-          "Upload"
-        ]
-      }
-    ]
-  },
-  {
-    "url": "http://localhost/vulnerabilities/captcha/",
-    "forms": [
-      {
-        "action": "http://localhost/vulnerabilities/captcha/#",
-        "method": "POST",
-        "inputs": [
-          "step",
-          "password_new",
-          "password_conf",
-          "Change"
-        ]
-      }
-    ]
-  },
-  {
-    "url": "http://localhost/vulnerabilities/sqli/",
-    "forms": [
-      {
-        "action": "http://localhost/vulnerabilities/sqli/#",
+        "mitigation": "Implement context-aware output encoding and use Content Security Policy (CSP)."
+    },
+    {
+        "url": "http://localhost/vulnerabilities/xss_r/#",
+        "parameter": "name",
+        "payload": "<script>alert('XSS')</script>",
+        "type": "Cross-Site Scripting (XSS)",
+        "severity": "HIGH",
         "method": "GET",
-        "inputs": [
-          "id",
-          "Submit"
-        ]
-      }
-    ]
-  },
-  {
-    "url": "http://localhost/vulnerabilities/sqli_blind/",
-    "forms": [
-      {
-        "action": "http://localhost/vulnerabilities/sqli_blind/#",
-        "method": "GET",
-        "inputs": [
-          "id",
-          "Submit"
-        ]
-      }
-    ]
-  },
-  {
-    "url": "http://localhost/vulnerabilities/weak_id/",
-    "forms": [
-      {
-        "action": "http://localhost/vulnerabilities/weak_id/",
+        "mitigation": "Implement context-aware output encoding and use Content Security Policy (CSP)."
+    },
+    {
+        "url": "http://localhost/vulnerabilities/xss_s/",
+        "parameter": "txtName",
+        "payload": "<script>alert('XSS')</script>",
+        "type": "Cross-Site Scripting (XSS)",
+        "severity": "HIGH",
         "method": "POST",
-        "inputs": [
-          null
-        ]
-      }
-    ]
-  },
-  {
-    "url": "http://localhost/vulnerabilities/xss_d/",
-    "forms": [
-      {
-        "action": "http://localhost/vulnerabilities/xss_d/",
-        "method": "GET",
-        "inputs": [
-          null
-        ]
-      }
-    ]
-  },
-  {
-    "url": "http://localhost/vulnerabilities/xss_r/",
-    "forms": [
-      {
-        "action": "http://localhost/vulnerabilities/xss_r/#",
-        "method": "GET",
-        "inputs": [
-          "name",
-          null
-        ]
-      }
-    ]
-  },
-  {
-    "url": "http://localhost/vulnerabilities/xss_s/",
-    "forms": [
-      {
-        "action": "http://localhost/vulnerabilities/xss_s/",
+        "mitigation": "Implement context-aware output encoding and use Content Security Policy (CSP)."
+    },
+    {
+        "url": "http://localhost/vulnerabilities/csp/",
+        "parameter": "include",
+        "payload": "<script>alert('XSS')</script>",
+        "type": "Cross-Site Scripting (XSS)",
+        "severity": "HIGH",
         "method": "POST",
-        "inputs": [
-          "txtName",
-          "btnSign",
-          "btnClear"
-        ]
-      }
-    ]
-  },
-  {
-    "url": "http://localhost/vulnerabilities/csp/",
-    "forms": [
-      {
-        "action": "http://localhost/vulnerabilities/csp/",
-        "method": "POST",
-        "inputs": [
-          "include",
-          null
-        ]
-      }
-    ]
-  },
-  {
-    "url": "http://localhost/vulnerabilities/javascript/",
-    "forms": [
-      {
-        "action": "http://localhost/vulnerabilities/javascript/",
-        "method": "POST",
-        "inputs": [
-          "token",
-          "phrase",
-          "send"
-        ]
-      }
-    ]
-  },
-  {
-    "url": "http://localhost/security.php",
-    "forms": [
-      {
-        "action": "http://localhost/security.php#",
-        "method": "POST",
-        "inputs": [
-          "seclev_submit",
-          "user_token"
-        ]
-      }
-    ]
-  },
-  {
-    "url": "http://localhost/about.php",
-    "forms": []
-  },
-  {
-    "url": "http://localhost?doc=readme",
-    "forms": []
-  },
-  {
-    "url": "http://localhost?doc=PDF",
-    "forms": []
-  },
-  {
-    "url": "http://localhost?doc=changelog",
-    "forms": []
-  },
-  {
-    "url": "http://localhost?doc=copying",
-    "forms": []
-  },
-  {
-    "url": "http://localhost?doc=PHPIDS-license",
-    "forms": []
-  },
-  {
-    "url": "http://localhost?page=file1.php",
-    "forms": []
-  },
-  {
-    "url": "http://localhost?page=file2.php",
-    "forms": []
-  },
-  {
-    "url": "http://localhost?page=file3.php",
-    "forms": []
-  },
-  {
-    "url": "http://localhost?phpids=on",
-    "forms": []
-  },
-  {
-    "url": "http://localhost?test=%22><script>eval(window.name)</script>",
-    "forms": []
-  },
-  {
-    "url": "http://localhost/docs/DVWA_v1.3.pdf",
-    "forms": []
-  },
-  {
-    "url": "http://localhost/instructions.php?doc=PHPIDS-license",
-    "forms": []
-  }
+        "mitigation": "Implement context-aware output encoding and use Content Security Policy (CSP)."
+    }
 ]
