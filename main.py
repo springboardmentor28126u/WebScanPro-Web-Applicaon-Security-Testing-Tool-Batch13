@@ -30,3 +30,15 @@ for page in data:
 print(f"\nTotal SQL Injection vulnerabilities found: {len(all_findings)}")
 for f in all_findings:
     print(f"  → [{f['severity']}] {f['url']} | param: {f['parameter']} | payload: {f['payload']}")
+
+from scanner.xss_scanner import test_xss
+
+print("[*] Testing XSS...")
+for page in data:
+    for form in page['forms']:
+        clean_inputs = [i for i in form['inputs'] if i is not None]
+        if clean_inputs:
+            all_findings += test_xss(
+                session, form['action'], clean_inputs, form['method']
+                                     # ↑ pass method so scanner uses GET or POST correctly
+            )

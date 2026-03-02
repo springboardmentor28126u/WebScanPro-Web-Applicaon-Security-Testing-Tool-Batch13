@@ -1,4 +1,3 @@
-# scanner/sqli_scanner.py
 import requests
 from scanner.config import SQL_PAYLOADS_FILE
 
@@ -46,7 +45,7 @@ def test_sql_injection(session, url, params):
                 resp = session.get(url, params=test_params, timeout=5)
                 body = resp.text.lower()
 
-                # Debug: print body length so we know we're getting responses
+                # Debug print body length so we know we're getting responses
                 if len(resp.text) < 10:
                     print(f"  [WARN] Empty response for {url} param={param}")
                     continue
