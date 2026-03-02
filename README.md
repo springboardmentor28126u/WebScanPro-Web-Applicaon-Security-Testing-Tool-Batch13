@@ -135,4 +135,109 @@ This created the technical foundation required for implementing automated vulner
 - Structured attack surface mapping
 
 Milestone 1 successfully established the core infrastructure and discovery engine required for WebScanPro.
-    
+
+
+# 📌 Milestone 2 – Vulnerability Detection Engine (SQLi & XSS)
+
+Milestone 2 focused on transforming the passive discovery engine into an active security testing tool. This phase involved developing automated modules to detect high-risk vulnerabilities—SQL Injection and Cross-Site Scripting (XSS)—by simulating real-world attack vectors against the attack surface identified during Milestone 1.
+
+---
+
+# 📅 Week 3 – SQL Injection Testing Module
+
+## 🎯 SQL Injection Testing Objectives
+
+The goal was to identify database-level flaws where malicious SQL queries could be executed via user input.
+
+### Key Goals:
+
+* Inject crafted SQL payloads into form fields and URL parameters.
+
+
+* Analyze server responses for database-specific error patterns.
+
+
+* Identify vulnerable injection points and suggest mitigation strategies.
+
+
+
+---
+
+## 🛠 SQLi Scanner Implementation (`sqli_scanner.py`)
+
+The scanner utilizes an **error-based detection** strategy to identify vulnerabilities:
+
+### Detection Mechanism:
+
+* **Payload Injection**: Loads malicious strings (e.g., `' OR '1'='1`) from a dedicated `sqli_payload.txt` file.
+* **Signature Analysis**: Scans HTML response bodies for known database error strings such as "mysql_fetch", "syntax error", or "unclosed quotation mark".
+* **Intelligent Filtering**: Automatically skips non-injectable parameters like `user_token` (CSRF tokens) and `submit` buttons to improve scan efficiency.
+
+---
+
+# 📅 Week 4 – Cross-Site Scripting (XSS) Testing Module
+
+## 🎯 XSS Testing Objectives
+
+Week 4 focused on identifying client-side vulnerabilities where unvalidated user input is reflected and executed as JavaScript in the victim's browser.
+
+### Key Goals:
+
+* Inject JavaScript-based payloads into discovered form fields and URLs.
+
+
+* Detect reflected scripts through response analysis.
+
+
+* Record vulnerable endpoints and provide XSS prevention tips.
+
+
+
+---
+
+## 🕷 XSS Scanner Design (`xss_scanner.py`)
+
+The XSS module was designed to be robust and method-aware:
+
+### Module Features:
+
+* **Method Support**: The scanner tests both **GET** and **POST** requests based on the form data captured by the crawler.
+* **Reflection Logic**: It validates a vulnerability if the injected payload (e.g., `<script>alert('XSS')</script>`) is found verbatim within the returned HTML.
+* **Payload Diversity**: Uses various triggers, including script tags and event handlers (e.g., `onerror`), to bypass basic filters.
+
+---
+
+## 📊 Result Consolidation and Reporting
+
+To prepare for the **Week 7 Security Report**, all findings are aggregated into a unified reporting format.
+
+### Data Structure (`results.json`)
+
+Each identified vulnerability is saved with critical metadata:
+
+* **Vulnerability Type**: Categorized as SQL Injection or Cross-Site Scripting.
+* **Affected Endpoint**: The specific URL where the flaw was found.
+* **Parameter & Payload**: The exact input field and string that triggered the flaw.
+* **Severity Level**: Assigned a **HIGH** severity rating due to potential impact.
+
+---
+
+## 🔁 Workflow Established by End of Week 4
+
+By the end of Milestone 2, the system could:
+
+* **Authenticate**: Maintain a valid session and security level on DVWA.
+* **Probe**: Programmatically test hundreds of injection points across discovered pages.
+* **Verify**: Confirm vulnerabilities through active response analysis rather than simple blind guessing.
+* **Log**: Generate a structured JSON database containing all confirmed security flaws.
+
+---
+
+# ✅ Milestone 2 Outcome
+
+* Automated SQL Injection detection using signature matching.
+* Reflected XSS detection through reflection analysis.
+* Successful identification of flaws across different HTTP methods (GET/POST).
+* Establishment of a structured vulnerability findings database in `reports/results.json`.
+
+Milestone 2 successfully turned the passive discovery engine into an active security testing tool capable of identifying high-risk vulnerabilities.
