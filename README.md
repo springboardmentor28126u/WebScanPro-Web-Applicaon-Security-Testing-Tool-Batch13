@@ -201,7 +201,7 @@ Contains structured scanning results including:
 
 ### 📄 Output JSON Result  
 
-```
+```Synatx Output.json
 {
     {
     "urls": [],
@@ -215,8 +215,9 @@ Contains structured scanning results including:
 
 Readable scan summary for quick analysis.
 
-### 📄 Output TXT Result  
-```
+### 📄 Output TXT Result 
+
+```Synatx Output.txt
 === Discovered URLs ===
 
 === Forms & Input Fields ===
@@ -565,7 +566,61 @@ This hybrid approach strengthens XSS detection reliability.
 ---
 
 ### 🧠 Hybrid Detection Logic  
-![Hybrid Logic](Week-4/screenshots/05_xss_hybrid_detection_logic.png)  
+```
+ # ---------------- RULE-BASED DETECTION ---------------- #
+
+            rule_based_detected = False
+
+            if payload_reflected:
+                rule_based_detected = True
+
+            if "<script>" in injected_text and "alert(1)" in injected_text:
+                rule_based_detected = True
+
+            if "&lt;script&gt;" in injected_text:
+                rule_based_detected = True
+
+            # ---------------- AI DETECTION ---------------- #
+
+            features = extract_xss_features(
+                normal_text,
+                injected_text,
+                injected_response.status_code
+            )
+
+            prediction, probability = predict(features)
+
+            # ---------------- FINAL DECISION ---------------- #
+
+            if rule_based_detected or prediction == 1:
+
+                if rule_based_detected:
+                    confidence = 92.0
+                else:
+                    confidence = round(probability * 100, 2)
+
+                print("\n[✔] XSS Detected!")
+                print(f"Confidence Score     : {confidence}%")
+
+                vulnerable.append({
+                    "url": action,
+                    "method": method.upper(),
+                    "payload": XSS_PAYLOAD,
+                    "type": "XSS",
+                    "severity": "High",
+                    "confidence": confidence
+                })
+
+            else:
+                print("[–] No XSS Detected.")
+
+        except Exception as e:
+            print(f"[!] Error testing {action}: {e}")
+            continue
+
+    print("=" * 60)
+    return vulnerable
+```
 *Fig 4.4: Hybrid rule-based and AI detection architecture implemented in the module.*
 
 ---
