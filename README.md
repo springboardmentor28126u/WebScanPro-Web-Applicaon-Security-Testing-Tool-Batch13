@@ -201,7 +201,7 @@ Contains structured scanning results including:
 
 ### 📄 Output JSON Result  
 
-```Synatx Output.json
+```python
 {
     {
     "urls": [],
@@ -217,7 +217,7 @@ Readable scan summary for quick analysis.
 
 ### 📄 Output TXT Result 
 
-```Synatx Output.txt
+```python
 === Discovered URLs ===
 
 === Forms & Input Fields ===
@@ -566,7 +566,7 @@ This hybrid approach strengthens XSS detection reliability.
 ---
 
 ### 🧠 Hybrid Detection Logic  
-```
+```python
  # ---------------- RULE-BASED DETECTION ---------------- #
 
             rule_based_detected = False
