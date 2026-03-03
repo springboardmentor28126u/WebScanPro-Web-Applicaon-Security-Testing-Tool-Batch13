@@ -217,12 +217,8 @@ Readable scan summary for quick analysis.
 
 ### 📄 Output TXT Result 
 
-<<<<<<< HEAD
-```bash
-
-=======
 ```python
->>>>>>> bf2781d605a0f5eca85c7dcaf1abc44cd7563c9b
+
 === Discovered URLs ===
 
 === Forms & Input Fields ===
