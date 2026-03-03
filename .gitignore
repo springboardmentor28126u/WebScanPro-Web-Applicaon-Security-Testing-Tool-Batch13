@@ -13,6 +13,3 @@ Week-2/output.txt
 Week-3/sqli_results.json
 Week-4/xss_results.json
 
-# Environment
-.env
-venv/
