@@ -69,7 +69,7 @@ I explored the following modules:
 
 During exploration, I manually tested SQL Injection in the DVWA login form using the following payload:
 
-```
+```bash
 ' OR '1'='1
 ```
 
@@ -201,7 +201,7 @@ Contains structured scanning results including:
 
 ### 📄 Output JSON Result  
 
-```Synatx Output.json
+```python
 {
     {
     "urls": [],
@@ -217,7 +217,8 @@ Readable scan summary for quick analysis.
 
 ### 📄 Output TXT Result 
 
-```Synatx Output.txt
+```bash
+
 === Discovered URLs ===
 
 === Forms & Input Fields ===
@@ -337,8 +338,7 @@ The SQL Injection module performs:
 ---
 
 ## 🔸 SQL Payload Used  
-
-```
+```sql
 ' OR 1=1 --
 ```
 
@@ -482,7 +482,7 @@ The XSS module performs:
 
 ## 🔸 XSS Payload Used  
 
-```
+```html
 <script>alert(1)</script>
 ```
 
@@ -510,7 +510,7 @@ Behavioral Features:
 
 Model Execution:
 
-```
+```python
 prediction, probability = predict(features)
 ```
 
@@ -518,7 +518,7 @@ prediction, probability = predict(features)
 
 ### 🔹 Final Decision Logic  
 
-```
+```python
 if rule_based_detected or prediction == 1:
 ```
 
@@ -566,7 +566,7 @@ This hybrid approach strengthens XSS detection reliability.
 ---
 
 ### 🧠 Hybrid Detection Logic  
-```
+```python
  # ---------------- RULE-BASED DETECTION ---------------- #
 
             rule_based_detected = False
