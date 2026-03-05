@@ -869,77 +869,119 @@ This milestone strengthens the system by expanding its coverage from **input-bas
 
 ## 🧠 WebScanPro System Architecture
 
+
 ```
-             +----------------------+
-             |      User (CLI)      |
-             |       main.py        |
-             +----------+-----------+
-                        |
-                        v
-             +----------------------+
-             |   Target Application |
-             |     DVWA Server      |
-             +----------+-----------+
-                        |
-                        v
-        +-----------------------------------+
-        |     Target Scanning Module        |
-        |        Week-2 : scanner.py        |
-        |  - Discover URLs                  |
-        |  - Extract Forms                  |
-        |  - Identify Input Fields          |
-        +----------------+------------------+
-                         |
-                         v
-              +-----------------------+
-              |   Scan Output Files   |
-              | output.json / txt     |
-              +-----------+-----------+
-                          |
-                          v
-        +-----------------------------------+
-        |     SQL Injection Detection       |
-        |      Week-3 : sqli_tester.py      |
-        |  - Payload Injection              |
-        |  - Response Analysis              |
-        |  - AI Classification              |
-        +----------------+------------------+
-                         |
-                         v
-               +----------------------+
-               |   sqli_results.json  |
-               +----------+-----------+
-                          |
-                          v
-        +-----------------------------------+
-        |        XSS Detection Engine       |
-        |      Week-4 : xss_tester.py       |
-        |  - Script Injection               |
-        |  - Payload Reflection Check       |
-        |  - AI Detection                   |
-        +----------------+------------------+
-                         |
-                         v
-               +----------------------+
-               |   xss_results.json   |
-               +----------+-----------+
-                          |
-                          v
-        +-----------------------------------+
-        | Authentication & Session Testing  |
-        |   Week-5 : auth_session_tester.py |
-        |  - Weak Credential Detection      |
-        |  - Session Cookie Analysis        |
-        +----------------+------------------+
-                         |
-                         v
-               +----------------------+
-               |  auth_results.json   |
-               +----------+-----------+
-                          |
-                          v
-              +------------------------+
-              |   Final Security Data  |
-              | JSON Reports + CLI     |
-              +------------------------+
+┌─────────────────────────────────────────────────────────────┐
+│                         User Interface                      │
+│                         (CLI - main.py)                     │
+└──────────────────────────────┬──────────────────────────────┘
+                               │ Run Security Scan
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│                       WebScanPro Engine                     │
+│                       (Python Framework)                    │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌──────────────┐     ┌──────────────┐     ┌──────────────┐ │
+│  │   Scanner    │     │  SQLi AI     │     │   XSS AI     │ │
+│  │ (Week-2)     │ ───►│ (Week-3)     │ ───►│ (Week-4)     │ │
+│  │ scanner.py   │     │ sqli_tester  │     │ xss_tester   │ │
+│  └──────────────┘     └──────────────┘     └──────────────┘ │
+│         │                    │                    │          │
+│         ▼                    ▼                    ▼          │
+│  ┌────────────────────────────────────────────────────────┐ │
+│  │         Authentication & Session Testing               │ │
+│  │                (Week-5 Module)                         │ │
+│  │             auth_session_tester.py                     │ │
+│  └────────────────────────────────────────────────────────┘ │
+│                                                             │
+└──────────────────────────────┬──────────────────────────────┘
+                               │ HTTP Requests / Payloads
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    Target Web Application                   │
+│                         (DVWA)                              │
+│                                                             │
+│   • SQL Injection Vulnerabilities                           │
+│   • Cross-Site Scripting (XSS)                              │
+│   • Weak Authentication                                     │
+│   • Session Cookies                                         │
+└──────────────────────────────┬──────────────────────────────┘
+                               │
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│                      Security Reports                       │
+│                                                             │
+│  output.json      → Scanner Results                         │
+│  sqli_results.json → SQL Injection Findings                 │
+│  xss_results.json  → XSS Vulnerabilities                    │
+│  auth_results.json → Authentication Issues                  │
+└─────────────────────────────────────────────────────────────┘
+
+```
+
+---
+
+## 🔄 WebScanPro Data Flow Diagram
+
+```
+┌──────────┐   1. Start Scan Request   ┌──────────────┐
+│  User    │──────────────────────────►│   main.py    │
+│  (CLI)   │                           │  Controller  │
+└──────────┘                           └──────────────┘
+                                              │
+                                              │ 2. Initialize Scan
+                                              ▼
+                                        ┌─────────────┐
+                                        │   Scanner   │
+                                        │  Week-2     │
+                                        └─────────────┘
+                                              │
+                         ┌────────────────────┼────────────────────┐
+                         │ 3. Discover URLs   │ 4. Extract Forms   │
+                         ▼                    ▼                    ▼
+                   ┌─────────────┐     ┌─────────────┐      ┌─────────────┐
+                   │  URL Crawl  │────►│ Form Parser │─────►│ Scan Data   │
+                   └─────────────┘     └─────────────┘      │ Repository  │
+                                                            │ output.json │
+                                                            └─────────────┘
+                                              │
+                                              │ 5. Vulnerability Testing
+                                              ▼
+                                  ┌───────────────────────┐
+                                  │  SQL Injection Module │
+                                  │      Week-3 (AI)      │
+                                  └───────────────────────┘
+                                              │
+                                              │ 6. Behavioral + Rule Analysis
+                                              ▼
+                                  ┌───────────────────────┐
+                                  │   XSS Testing Module  │
+                                  │      Week-4 (AI)      │
+                                  └───────────────────────┘
+                                              │
+                                              │ 7. Authentication Testing
+                                              ▼
+                              ┌────────────────────────────────┐
+                              │ Authentication & Session Test  │
+                              │        Week-5 Module           │
+                              └────────────────────────────────┘
+                                              │
+                                              │ 8. Store Findings
+                                              ▼
+                                ┌─────────────────────────────┐
+                                │  Security Reports Generator │
+                                │                             │
+                                │  output.json                │
+                                │  sqli_results.json          │
+                                │  xss_results.json           │
+                                │  auth_results.json          │
+                                └─────────────────────────────┘
+                                              │
+                                              │ 9. Display Results
+                                              ▼
+                                        ┌─────────────┐
+                                        │   Terminal  │
+                                        │   Output    │
+                                        └─────────────┘
 ```
