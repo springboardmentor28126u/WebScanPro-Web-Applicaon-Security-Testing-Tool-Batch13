@@ -865,6 +865,8 @@ The framework can now detect:
 
 This milestone strengthens the system by expanding its coverage from **input-based vulnerabilities (SQLi, XSS)** to **authentication and session security flaws**, which are among the most exploited vulnerabilities in modern web applications.
 
+---
+
 ## 🧠 WebScanPro System Architecture
 
 ```
