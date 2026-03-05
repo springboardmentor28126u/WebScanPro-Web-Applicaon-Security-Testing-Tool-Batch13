@@ -1,0 +1,42 @@
+[
+    {
+        "type": "Weak Credentials",
+        "username": "admin",
+        "password": "admin",
+        "severity": "High"
+    },
+    {
+        "type": "Weak Credentials",
+        "username": "admin",
+        "password": "password",
+        "severity": "High"
+    },
+    {
+        "type": "Weak Credentials",
+        "username": "root",
+        "password": "root",
+        "severity": "High"
+    },
+    {
+        "type": "Weak Credentials",
+        "username": "test",
+        "password": "test",
+        "severity": "High"
+    },
+    {
+        "type": "Weak Credentials",
+        "username": "admin",
+        "password": "123456",
+        "severity": "High"
+    },
+    {
+        "type": "Cookie Found",
+        "cookie_name": "security",
+        "severity": "Info"
+    },
+    {
+        "type": "Cookie Found",
+        "cookie_name": "PHPSESSID",
+        "severity": "Info"
+    }
+]

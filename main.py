@@ -1,3 +1,4 @@
+
 import subprocess
 import os
 import sys
@@ -10,6 +11,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SCANNER_PATH = os.path.join(BASE_DIR, "Week-2", "scanner.py")
 SQLI_PATH = os.path.join(BASE_DIR, "Week-3", "sqli_tester.py")
 XSS_PATH = os.path.join(BASE_DIR, "Week-4", "xss_tester.py")
+AUTH_PATH = os.path.join(BASE_DIR, "Week-5", "auth_session_tester.py")
 
 # ---------------- COLOR SYSTEM ---------------- #
 
@@ -35,12 +37,13 @@ def banner():
           + Colors.END)
     print(Colors.CYAN + "=" * 70 + Colors.END)
     print(Colors.GREEN + "   Target Environment : DVWA (Localhost)" + Colors.END)
-    print(Colors.GREEN + "   Modules : Scanner | SQLi (AI) | XSS (AI)" + Colors.END)
+    print(Colors.GREEN + "   Modules : Scanner | SQLi (AI) | XSS (AI) | Auth(Session)" + Colors.END)
     print(Colors.CYAN + "=" * 70 + Colors.END + "\n")
 
 
 def run_module(name, path):
-    print(Colors.YELLOW if hasattr(Colors, "YELLOW") else Colors.WARNING)
+
+    print(Colors.WARNING)
     print(f"\n[+] Starting {name}...\n" + Colors.END)
 
     if not os.path.exists(path):
@@ -60,16 +63,17 @@ def run_module(name, path):
     print(Colors.GREEN +
           f"\n[✔] {name} completed in {round(end_time - start_time, 2)} seconds."
           + Colors.END)
+
     return True
 
 
 def show_menu():
-    print(Colors.BOLD + "Select an option:\n" + Colors.END)
     print("  1️⃣  Run Target Scanner")
     print("  2️⃣  Run SQL Injection Module (AI)")
     print("  3️⃣  Run XSS Module (AI)")
-    print("  4️⃣  Run Full Security Scan")
-    print("  5️⃣  Exit\n")
+    print("  4️⃣  Run Authentication & Session Testing")
+    print("  5️⃣  Run Full Security Scan")
+    print("  6️⃣  Exit\n")
 
 
 # ---------------- MAIN ---------------- #
@@ -79,26 +83,37 @@ if __name__ == "__main__":
     banner()
 
     while True:
+
         show_menu()
-        choice = input("Enter your choice (1-5): ").strip()
+
+        choice = input("Enter your choice (1-6): ").strip()
 
         total_start = time.time()
 
         if choice == "1":
+
             run_module("Target Scanner Module", SCANNER_PATH)
 
         elif choice == "2":
+
             run_module("SQL Injection Module (AI)", SQLI_PATH)
 
         elif choice == "3":
+
             run_module("XSS Module (AI)", XSS_PATH)
 
         elif choice == "4":
+
+            run_module("Authentication & Session Module", AUTH_PATH)
+
+        elif choice == "5":
+
             print(Colors.CYAN + "\n🚀 Running Full AI Security Scan...\n" + Colors.END)
 
             run_module("Target Scanner Module", SCANNER_PATH)
             run_module("SQL Injection Module (AI)", SQLI_PATH)
             run_module("XSS Module (AI)", XSS_PATH)
+            run_module("Authentication & Session Module", AUTH_PATH)
 
             total_end = time.time()
 
@@ -116,11 +131,15 @@ if __name__ == "__main__":
             print("    → Week-2/output.json")
             print("    → Week-3/sqli_results.json")
             print("    → Week-4/xss_results.json")
+            print("    → Week-5/auth_results.json")
+
             print(Colors.CYAN + "=" * 70 + Colors.END + "\n")
 
-        elif choice == "5":
+        elif choice == "6":
+
             print(Colors.GREEN + "\nExiting WebScanPro... Stay Secure 🔐\n" + Colors.END)
             break
 
         else:
+
             print(Colors.RED + "\nInvalid choice. Try again.\n" + Colors.END)
