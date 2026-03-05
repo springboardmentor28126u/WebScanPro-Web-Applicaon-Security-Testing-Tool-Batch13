@@ -1,35 +1,41 @@
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
-from scanner.crawler import session  # Import authenticated session
 
-
-def extract_forms(url):
+def extract_forms(url, session):
     forms_data = []
 
     try:
-        response = session.get(url)  # Use session instead of requests
+        response = session.get(url)
         soup = BeautifulSoup(response.text, "html.parser")
 
         forms = soup.find_all("form")
 
         for form in forms:
             form_info = {}
-            form_info["action"] = urljoin(url, form.get("action"))
-            form_info["method"] = form.get("method", "get").lower()
 
-            inputs = []
+            # Handle relative actions properly
+            action = form.get("action")
+            full_action = urljoin(url, action) if action else url
+
+            method = form.get("method", "get").lower()
+
+            form_info["action"] = full_action
+            form_info["method"] = method
+            form_info["inputs"] = []
+
             for input_tag in form.find_all("input"):
-                input_data = {
-                    "name": input_tag.get("name"),
-                    "type": input_tag.get("type", "text")
-                }
-                inputs.append(input_data)
+                input_name = input_tag.get("name")
+                input_type = input_tag.get("type", "text")
 
-            form_info["inputs"] = inputs
+                form_info["inputs"].append({
+                    "name": input_name,
+                    "type": input_type
+                })
+
             forms_data.append(form_info)
 
-        return forms_data
-
     except Exception as e:
-        print("Error extracting forms from:", url)
-        return []
+        print(f"Error extracting forms from: {url}")
+        print(e)
+
+    return forms_data

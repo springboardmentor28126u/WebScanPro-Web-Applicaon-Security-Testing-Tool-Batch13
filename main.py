@@ -1,41 +1,135 @@
+import requests
 from urllib.parse import urlparse
-from scanner.crawler import crawl, login_dvwa
+from scanner.crawler import login_dvwa, crawl
 from scanner.extractor import extract_forms
-from scanner.storage import save_to_json
+from scanner.sqli_tester import test_sqli
+from scanner.xss_tester import test_xss, test_xss_url_params
+from scanner.storage import save_report
 
-# Target
-target = "http://localhost/dvwa/"
-base_domain = urlparse(target).netloc
 
-# Login first
-login_dvwa()
+def main():
+    start_url = "http://localhost/dvwa/"
+    base_domain = urlparse(start_url).netloc
 
-# Start crawling
-to_visit = [target]
-all_pages = set()
+    # ==============================
+    # 1️⃣ LOGIN
+    # ==============================
+    session = login_dvwa()
+    if not session:
+        return
 
-while to_visit:
-    current = to_visit.pop()
-    if current not in all_pages:
-        print("Scanning:", current)
-        links = crawl(current, base_domain)
-        all_pages.add(current)
-        to_visit.extend(links)
+    # ==============================
+    # 2️⃣ CRAWLING
+    # ==============================
+    print("\n[+] Crawling site...\n")
 
-print("Total pages found:", len(all_pages))
+    visited = set()
+    links = crawl(start_url, base_domain, session, visited)
 
-# Extract forms
-target_metadata = []
+    all_pages = [start_url] + links
 
-for page in all_pages:
-    forms = extract_forms(page)
-    page_data = {
-        "url": page,
-        "forms": forms
+    for page in all_pages:
+        print("Scanning:", page)
+
+    print(f"\nTotal pages found: {len(all_pages)}")
+
+    from scanner.storage import save_metadata
+
+    save_metadata(all_pages, "data/targets.json")
+
+    # ==============================
+    # 3️⃣ FORM EXTRACTION
+    # ==============================
+    print("\n[+] Extracting forms...\n")
+
+    target_data = []
+
+    for page in all_pages:
+        forms = extract_forms(page, session)
+
+        if forms:
+            target_data.append({
+                "url": page,
+                "forms": forms
+            })
+
+    # ==============================
+    # 4️⃣ SQL INJECTION TESTING
+    # ==============================
+    print("\nStarting Advanced SQL Injection Testing...\n")
+
+    sqli_results = test_sqli(session, target_data)
+
+    print("\nTesting Complete.\n")
+
+    if sqli_results:
+        print("Potential SQL Injection Vulnerabilities Found:\n")
+
+        for v in sqli_results:
+            print("Type:", v["type"])
+            print("URL:", v["url"])
+            print("Parameter:", v["parameter"])
+
+            if "payload" in v:
+                print("Payload Used:", v["payload"])
+
+            if "length_difference" in v:
+                print("Length Difference:", v["length_difference"])
+
+            print("Remediation Suggestions:")
+            for _, value in v.get("remediation", {}).items():
+                print(" -", value)
+
+            print("-" * 60)
+    else:
+        print("No SQL Injection patterns detected.")
+
+    # ==============================
+    # 5️⃣ XSS TESTING
+    # ==============================
+    print("\nStarting XSS Testing...\n")
+
+    xss_form_results = test_xss(session, target_data)
+    xss_url_results = test_xss_url_params(session, target_data)
+
+    all_xss_results = xss_form_results + xss_url_results
+
+    if all_xss_results:
+        print("Potential XSS Vulnerabilities Found:\n")
+
+        for v in all_xss_results:
+            print("Type:", v["type"])
+            print("URL:", v["url"])
+            print("Parameter:", v.get("parameter"))
+            print("Severity:", v.get("severity", "Unknown"))
+
+            if "payload" in v:
+                print("Payload Used:", v["payload"])
+
+            print("Remediation Suggestions:")
+            for _, value in v.get("remediation", {}).items():
+                print(" -", value)
+
+            print("-" * 60)
+    else:
+        print("No XSS patterns detected.")
+
+    # ==============================
+    # 6️⃣ SAVE REPORT
+    # ==============================
+    all_results = {
+        "sqli": sqli_results,
+        "xss": all_xss_results
     }
-    target_metadata.append(page_data)
 
-# Save results
-save_to_json(target_metadata)
+    save_report(all_results, "data/vulnerabilities.json")
 
-print("[+] Metadata saved successfully!")
+    # ==============================
+    # 7️⃣ FINAL SUMMARY
+    # ==============================
+    if not sqli_results and not all_xss_results:
+        print("\nNo vulnerabilities detected.")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,80 @@
+{
+    "sqli": [
+        {
+            "type": "Error-Based SQLi",
+            "url": "http://localhost/dvwa/vulnerabilities/brute/",
+            "parameter": "username",
+            "payload": "'",
+            "baseline_length": 4735,
+            "injected_length": 644,
+            "length_difference": 4091,
+            "remediation": {
+                "primary_fix": "Use parameterized queries (prepared statements).",
+                "avoid": "Avoid concatenating raw user input into SQL queries.",
+                "input_validation": "Validate and sanitize all user inputs.",
+                "db_principle": "Apply least-privilege access to database users.",
+                "error_handling": "Disable detailed SQL error messages in production."
+            }
+        },
+        {
+            "type": "Error-Based SQLi",
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/",
+            "parameter": "id",
+            "payload": "'",
+            "baseline_length": 4651,
+            "injected_length": 610,
+            "length_difference": 4041,
+            "remediation": {
+                "primary_fix": "Use parameterized queries (prepared statements).",
+                "avoid": "Avoid concatenating raw user input into SQL queries.",
+                "input_validation": "Validate and sanitize all user inputs.",
+                "db_principle": "Apply least-privilege access to database users.",
+                "error_handling": "Disable detailed SQL error messages in production."
+            }
+        }
+    ],
+    "xss": [
+        {
+            "type": "Reflected XSS",
+            "url": "http://localhost/dvwa/vulnerabilities/xss_r/",
+            "parameter": "name",
+            "payload": "<script>alert(1337)</script>",
+            "severity": "High",
+            "remediation": {
+                "primary_fix": "Escape user input before rendering in HTML.",
+                "framework": "Enable template auto-escaping.",
+                "csp": "Implement strict Content Security Policy.",
+                "validation": "Apply strict input validation.",
+                "dom": "Avoid using innerHTML with user input."
+            }
+        },
+        {
+            "type": "Reflected XSS",
+            "url": "http://localhost/dvwa/vulnerabilities/xss_s/",
+            "parameter": "txtName",
+            "payload": "<script>alert(1337)</script>",
+            "severity": "High",
+            "remediation": {
+                "primary_fix": "Escape user input before rendering in HTML.",
+                "framework": "Enable template auto-escaping.",
+                "csp": "Implement strict Content Security Policy.",
+                "validation": "Apply strict input validation.",
+                "dom": "Avoid using innerHTML with user input."
+            }
+        },
+        {
+            "type": "Reflected XSS",
+            "url": "http://localhost/dvwa/vulnerabilities/csp/",
+            "parameter": "include",
+            "payload": "<script>alert(1337)</script>",
+            "severity": "High",
+            "remediation": {
+                "primary_fix": "Escape user input before rendering in HTML.",
+                "framework": "Enable template auto-escaping.",
+                "csp": "Implement strict Content Security Policy.",
+                "validation": "Apply strict input validation.",
+                "dom": "Avoid using innerHTML with user input."
+            }
+        }
+    ]
+}
