@@ -682,3 +682,211 @@ Stored XSS proved to be more dangerous than Reflected XSS as the malicious scrip
 - **Environment:** Localhost
 - **XSS Types Tested:** Reflected XSS, Stored XSS
 - **Security Levels Tested:** Low, High
+- # 📘 Week 5 – Authentication and Session Testing Module
+
+---
+
+## 📌 Introduction
+
+In Week 5, **Authentication and Session Security Testing** was performed on **DVWA (Damn Vulnerable Web Application)** to analyze how web applications handle **login authentication and session management**.
+
+Authentication systems protect user accounts, while session management maintains the user’s logged-in state. If these mechanisms are poorly implemented, attackers can perform attacks such as:
+
+- Brute Force login attacks
+- Credential guessing
+- Session hijacking
+- Session fixation
+
+This module demonstrates how weak authentication mechanisms can expose user accounts and sensitive data.
+
+---
+
+## 🎯 Objectives
+
+- Understand authentication vulnerabilities in web applications  
+- Test **Brute Force login attacks** on DVWA  
+- Analyze weak authentication mechanisms  
+- Observe authentication behavior at **Low and High security levels**  
+- Identify session management weaknesses  
+- Compare vulnerable and protected authentication systems  
+
+---
+
+## 🛠️ Tools Used
+
+| Tool | Purpose |
+|------|---------|
+| DVWA (Damn Vulnerable Web Application) | Target vulnerable web application |
+| Google Chrome Browser | Testing interface |
+| Localhost Environment | Safe testing lab |
+| Browser Developer Tools | Inspect session cookies |
+
+---
+
+## 🔐 Authentication Attack Tested
+
+### Brute Force Attack
+
+A **Brute Force Attack** attempts to guess a user's password by trying many possible combinations until the correct password is found.
+
+Example login credentials tested:
+
+Other tested passwords:
+123456
+admin
+password
+test123
+
+---
+
+## 🔬 Procedure
+
+### Phase 1: Low Security Testing
+
+1. Logged into DVWA
+2. Navigated to **Brute Force** module
+3. Set **DVWA Security Level to Low**
+4. Entered login credentials manually
+5. Attempted multiple password combinations
+6. Observed system behavior
+
+#### Observations
+
+- The application allowed **unlimited login attempts**
+- No CAPTCHA protection was present
+- No account lockout mechanism existed
+- The system responded immediately to each login attempt
+- Attackers could repeatedly try passwords until successful
+
+This confirms the application is **vulnerable to brute force attacks**.
+
+---
+
+### Phase 2: High Security Testing
+
+1. Changed **DVWA Security Level to High**
+2. Repeated the same login attempts
+3. Observed system behavior
+
+#### Observations
+
+- Additional security checks were applied
+- Login attempts were restricted
+- Brute force attacks became more difficult
+- Authentication bypass attempts failed
+
+This indicates the application implemented **stronger authentication protections**.
+
+---
+
+## 🍪 Session Cookie Analysis
+
+After successful login, the browser generated a **session cookie** to maintain the logged-in state.
+
+Example cookie:
+
+### Observations
+
+- The session ID uniquely identifies a logged-in user
+- If attackers steal this cookie, they may hijack the session
+- Secure applications protect cookies using security flags
+
+| Security Feature | Purpose |
+|-----------------|---------|
+| HttpOnly | Prevents JavaScript from accessing cookies |
+| Secure | Ensures cookies are sent only over HTTPS |
+| SameSite | Prevents cross-site request attacks |
+
+---
+
+## 🔎 Observations
+
+### 🔴 Low Security — Vulnerable
+
+- Unlimited login attempts allowed
+- No CAPTCHA protection
+- No account lockout mechanism
+- Easy password guessing
+- High risk of brute force attack
+- Weak authentication controls
+
+### 🟢 High Security — Protected
+
+- Stronger authentication mechanisms applied
+- Login attempts restricted
+- Brute force attack prevented
+- Improved security configuration
+
+---
+
+## 📊 Results
+
+| Test | Result |
+|------|--------|
+| Brute Force at Low Security | ✅ Successful (Attack possible) |
+| Authentication Status at Low | ❌ Vulnerable |
+| Brute Force at High Security | ❌ Failed (Attack prevented) |
+| Authentication Status at High | ✅ Secure |
+
+---
+
+## 📈 Comparison: Low vs High Security
+
+| Feature | 🔴 Low Security | 🟢 High Security |
+|--------|----------------|----------------|
+| Login Attempt Limit | ❌ None | ✅ Restricted |
+| CAPTCHA Protection | ❌ Not Present | ✅ Present |
+| Brute Force Success | ✅ Possible | ❌ Not Possible |
+| Authentication Strength | Weak | Strong |
+| Application Status | **Vulnerable** | **Secure** |
+
+---
+
+## 🛡️ Authentication Security Best Practices
+
+**1. Strong Password Policy**  
+Require complex passwords with letters, numbers, and symbols.
+
+**2. Account Lockout Mechanism**  
+Lock the account after multiple failed login attempts.
+
+**3. CAPTCHA Verification**  
+Prevent automated login attacks.
+
+**4. Secure Session Management**  
+Regenerate session IDs after login and logout.
+
+**5. HTTPS Encryption**  
+Encrypt login credentials during transmission.
+
+---
+
+## 📚 Learning Outcomes
+
+- Learned how brute force attacks target login systems  
+- Understood the importance of authentication protection  
+- Observed how weak login systems allow attackers to guess passwords  
+- Learned how security configurations prevent brute force attacks  
+- Gained practical experience in authentication testing  
+
+---
+
+## ✅ Conclusion
+
+The Week 5 Authentication Testing module demonstrated how **weak login security can expose user accounts to brute force attacks**.
+
+At **Low security level**, the application allowed unlimited login attempts, making it vulnerable to password guessing attacks.
+
+At **High security level**, additional security controls prevented repeated login attempts and protected the authentication system.
+
+This experiment highlights the importance of **secure authentication mechanisms and proper session management** to protect web applications from unauthorized access.
+
+---
+
+## 📁 Module Info
+
+- **Module:** Week 5 — Authentication and Session Testing  
+- **Platform:** DVWA (Damn Vulnerable Web Application)  
+- **Environment:** Localhost  
+- **Attack Type Tested:** Brute Force Authentication Attack  
+- **Security Levels Tested:** Low, High  
