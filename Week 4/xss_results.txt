@@ -1,0 +1,74 @@
+{
+    "vulnerabilities": [
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/xss_r/",
+            "method": "GET",
+            "payload": "<script>alert(1)</script>",
+            "type": "XSS",
+            "severity": "Medium"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/xss_r/",
+            "method": "GET",
+            "payload": "\"><script>alert(1)</script>",
+            "type": "XSS",
+            "severity": "Medium"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/xss_r/",
+            "method": "GET",
+            "payload": "'><script>alert(1)</script>",
+            "type": "XSS",
+            "severity": "Medium"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/xss_r/",
+            "method": "GET",
+            "payload": "<img src=x onerror=alert(1)>",
+            "type": "XSS",
+            "severity": "Medium"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/xss_r/",
+            "method": "GET",
+            "payload": "<svg/onload=alert(1)>",
+            "type": "XSS",
+            "severity": "Medium"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/xss_s/",
+            "method": "POST",
+            "payload": "<script>alert(1)</script>",
+            "type": "XSS",
+            "severity": "Medium"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/xss_s/",
+            "method": "POST",
+            "payload": "\"><script>alert(1)</script>",
+            "type": "XSS",
+            "severity": "Medium"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/xss_s/",
+            "method": "POST",
+            "payload": "'><script>alert(1)</script>",
+            "type": "XSS",
+            "severity": "Medium"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/xss_s/",
+            "method": "POST",
+            "payload": "<img src=x onerror=alert(1)>",
+            "type": "XSS",
+            "severity": "Medium"
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/xss_s/",
+            "method": "POST",
+            "payload": "<svg/onload=alert(1)>",
+            "type": "XSS",
+            "severity": "Medium"
+        }
+    ]
+}
