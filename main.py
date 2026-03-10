@@ -1,4 +1,3 @@
-
 import subprocess
 import os
 import sys
@@ -12,6 +11,8 @@ SCANNER_PATH = os.path.join(BASE_DIR, "Week-2", "scanner.py")
 SQLI_PATH = os.path.join(BASE_DIR, "Week-3", "sqli_tester.py")
 XSS_PATH = os.path.join(BASE_DIR, "Week-4", "xss_tester.py")
 AUTH_PATH = os.path.join(BASE_DIR, "Week-5", "auth_session_tester.py")
+IDOR_PATH = os.path.join(BASE_DIR, "Week-6", "idor_tester.py")
+
 
 # ---------------- COLOR SYSTEM ---------------- #
 
@@ -36,8 +37,13 @@ def banner():
           "        🛡  WebScanPro - AI Powered Security Scanner  🛡"
           + Colors.END)
     print(Colors.CYAN + "=" * 70 + Colors.END)
-    print(Colors.GREEN + "   Target Environment : DVWA (Localhost)" + Colors.END)
-    print(Colors.GREEN + "   Modules : Scanner | SQLi (AI) | XSS (AI) | Auth(Session)" + Colors.END)
+
+    print(Colors.GREEN + " Target Environment : DVWA (Localhost)" + Colors.END)
+
+    print(Colors.GREEN +
+          " Modules : Scanner | SQLi (AI) | XSS (AI) | Auth(Session) | IDOR (AI)"
+          + Colors.END)
+
     print(Colors.CYAN + "=" * 70 + Colors.END + "\n")
 
 
@@ -72,8 +78,9 @@ def show_menu():
     print("  2️⃣  Run SQL Injection Module (AI)")
     print("  3️⃣  Run XSS Module (AI)")
     print("  4️⃣  Run Authentication & Session Testing")
-    print("  5️⃣  Run Full Security Scan")
-    print("  6️⃣  Exit\n")
+    print("  5️⃣  Run IDOR / Access Control Scanner (AI)")
+    print("  6️⃣  Run Full Security Scan")
+    print("  7️⃣  Exit\n")
 
 
 # ---------------- MAIN ---------------- #
@@ -86,7 +93,7 @@ if __name__ == "__main__":
 
         show_menu()
 
-        choice = input("Enter your choice (1-6): ").strip()
+        choice = input("Enter your choice (1-7): ").strip()
 
         total_start = time.time()
 
@@ -108,12 +115,17 @@ if __name__ == "__main__":
 
         elif choice == "5":
 
+            run_module("IDOR / Access Control Module (AI)", IDOR_PATH)
+
+        elif choice == "6":
+
             print(Colors.CYAN + "\n🚀 Running Full AI Security Scan...\n" + Colors.END)
 
             run_module("Target Scanner Module", SCANNER_PATH)
             run_module("SQL Injection Module (AI)", SQLI_PATH)
             run_module("XSS Module (AI)", XSS_PATH)
             run_module("Authentication & Session Module", AUTH_PATH)
+            run_module("IDOR / Access Control Module (AI)", IDOR_PATH)
 
             total_end = time.time()
 
@@ -132,10 +144,11 @@ if __name__ == "__main__":
             print("    → Week-3/sqli_results.json")
             print("    → Week-4/xss_results.json")
             print("    → Week-5/auth_results.json")
+            print("    → Week-6/idor_results.json")
 
             print(Colors.CYAN + "=" * 70 + Colors.END + "\n")
 
-        elif choice == "6":
+        elif choice == "7":
 
             print(Colors.GREEN + "\nExiting WebScanPro... Stay Secure 🔐\n" + Colors.END)
             break

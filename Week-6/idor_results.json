@@ -1,0 +1,34 @@
+[
+    {
+        "type": "IDOR Vulnerability",
+        "parameter": "id",
+        "tested_value": 2,
+        "similarity_score": 1.0,
+        "severity": "High",
+        "recommendation": "Implement proper access control checks"
+    },
+    {
+        "type": "IDOR Vulnerability",
+        "parameter": "id",
+        "tested_value": 3,
+        "similarity_score": 1.0,
+        "severity": "High",
+        "recommendation": "Implement proper access control checks"
+    },
+    {
+        "type": "IDOR Vulnerability",
+        "parameter": "id",
+        "tested_value": 4,
+        "similarity_score": 1.0,
+        "severity": "High",
+        "recommendation": "Implement proper access control checks"
+    },
+    {
+        "type": "IDOR Vulnerability",
+        "parameter": "id",
+        "tested_value": 5,
+        "similarity_score": 1.0,
+        "severity": "High",
+        "recommendation": "Implement proper access control checks"
+    }
+]
