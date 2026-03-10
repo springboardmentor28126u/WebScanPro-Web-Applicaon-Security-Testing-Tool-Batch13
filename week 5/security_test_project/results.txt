@@ -1,0 +1,6 @@
+[WEAK CREDENTIAL FOUND] admin:password
+[WEAK CREDENTIAL FOUND] root:password
+[WEAK CREDENTIAL FOUND] test:password
+[WEAK CREDENTIAL FOUND] user:password
+Cookie Found -> security:low
+Cookie Found -> PHPSESSID:3jfp5ifj0o5b3ii4fu1h56bcls
