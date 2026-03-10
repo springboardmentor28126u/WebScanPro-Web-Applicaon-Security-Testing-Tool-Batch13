@@ -2,41 +2,25 @@
     {
         "type": "Weak Credentials",
         "username": "admin",
-        "password": "admin",
-        "severity": "High"
-    },
-    {
-        "type": "Weak Credentials",
-        "username": "admin",
         "password": "password",
-        "severity": "High"
+        "severity": "High",
+        "recommendation": "Use strong passwords and enforce password policy"
     },
     {
-        "type": "Weak Credentials",
-        "username": "root",
-        "password": "root",
-        "severity": "High"
-    },
-    {
-        "type": "Weak Credentials",
-        "username": "test",
-        "password": "test",
-        "severity": "High"
-    },
-    {
-        "type": "Weak Credentials",
-        "username": "admin",
-        "password": "123456",
-        "severity": "High"
-    },
-    {
-        "type": "Cookie Found",
+        "type": "Cookie Security",
         "cookie_name": "security",
-        "severity": "Info"
+        "severity": "Medium",
+        "recommendation": "Use Secure and HttpOnly cookie flags"
     },
     {
-        "type": "Cookie Found",
+        "type": "Cookie Security",
         "cookie_name": "PHPSESSID",
-        "severity": "Info"
+        "severity": "Medium",
+        "recommendation": "Use Secure and HttpOnly cookie flags"
+    },
+    {
+        "type": "Session Hijacking Risk",
+        "severity": "High",
+        "recommendation": "Use HTTPS and secure cookies"
     }
 ]
