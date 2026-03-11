@@ -2,17 +2,16 @@ import requests
 from bs4 import BeautifulSoup
 import json
 
+
 session = requests.Session()
 
-# -------------------------------
-# Step 1: Get login page token
+# Get login page token
 # -------------------------------
 login_page = session.get("http://localhost/dvwa/login.php")
 soup = BeautifulSoup(login_page.text, "html.parser")
 user_token = soup.find("input", {"name": "user_token"})["value"]
 
-# -------------------------------
-# Step 2: Login
+# Login
 # -------------------------------
 login_data = {
     "username": "admin",
@@ -23,8 +22,7 @@ login_data = {
 
 session.post("http://localhost/dvwa/login.php", data=login_data)
 
-# -------------------------------
-# Step 3: Set Security Level LOW
+# Set Security Level LOW
 # -------------------------------
 security_page = session.get("http://localhost/dvwa/security.php")
 soup = BeautifulSoup(security_page.text, "html.parser")
@@ -40,8 +38,7 @@ session.post("http://localhost/dvwa/security.php", data=security_data)
 
 print("Login & Security Level Set to LOW ✅")
 
-# -------------------------------
-# Step 4: SQL Injection Testing
+# SQL Injection Testing
 # -------------------------------
 
 target_url = "http://localhost/dvwa/vulnerabilities/sqli/"
@@ -70,8 +67,11 @@ for payload in payloads:
     response = session.get(target_url, params=params)
     injected_length = len(response.text)
 
-    print("\nTesting Payload:", payload)
+    print("\n----------------------------------------")
+    print("URL :", target_url)
+    print("Testing Payload:", payload)
     print("Response Code:", response.status_code)
+    print("Injected Length:", injected_length)
 
     # Detection Logic
     if injected_length != normal_length:
@@ -80,18 +80,20 @@ for payload in payloads:
         sqli_results.append({
             "url": target_url,
             "payload": payload,
-            "severity": "High"
+            "severity": "High",
+            "response_length": injected_length
         })
+
     else:
         print("[-] Not Vulnerable with this payload")
 
-# -------------------------------
-# Step 5: Save Report
+# Save Report
 # -------------------------------
 
 if sqli_results:
     with open("sqli_report.json", "w") as f:
         json.dump(sqli_results, f, indent=4)
+
     print("\n✅ SQL Injection Report Saved as sqli_report.json")
 else:
     print("\nNo SQL Injection vulnerabilities detected.")

@@ -1,16 +1,15 @@
 import json
 import os
 
-# Open output file properly
 with open("output.txt", "w", encoding="utf-8") as output_file:
 
     output_file.write("=====================================\n")
     output_file.write("        WebScanPro Final Report\n")
-    output_file.write("=====================================\n\n")
+    output_file.write("        =============++===========   \n\n")
 
-    # ---------------------------------
+    # -------------------------------
     # Milestone 1 - Target Scanning
-    # ---------------------------------
+    # -------------------------------
 
     if os.path.exists("scan_results.json"):
 
@@ -25,7 +24,7 @@ with open("output.txt", "w", encoding="utf-8") as output_file:
 
             for form in forms:
                 output_file.write(
-                    f"  Form Action: {form.get('form_action', 'N/A')}\n"
+                    f"  Form Action: {form.get('action', 'N/A')}\n"
                 )
                 output_file.write(
                     f"  Method: {form.get('method', 'N/A')}\n"
@@ -43,9 +42,9 @@ with open("output.txt", "w", encoding="utf-8") as output_file:
     else:
         output_file.write("scan_results.json not found.\n\n")
 
-    # ---------------------------------
+    # -------------------------------
     # Milestone 2 - SQL Injection
-    # ---------------------------------
+    # -------------------------------
 
     if os.path.exists("sqli_report.json"):
 
@@ -66,9 +65,9 @@ with open("output.txt", "w", encoding="utf-8") as output_file:
     else:
         output_file.write("sqli_report.json not found.\n\n")
 
-    # ---------------------------------
+    # -------------------------------
     # Milestone 2 - XSS
-    # ---------------------------------
+    # -------------------------------
 
     if os.path.exists("xss_report.json"):
 

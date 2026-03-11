@@ -4,8 +4,8 @@ import json
 
 session = requests.Session()
 
-# -------------------------------
-# Step 1: Login
+
+#  Login
 # -------------------------------
 login_page = session.get("http://localhost/dvwa/login.php")
 soup = BeautifulSoup(login_page.text, "html.parser")
@@ -20,8 +20,7 @@ login_data = {
 
 session.post("http://localhost/dvwa/login.php", data=login_data)
 
-# -------------------------------
-# Step 2: Set Security Level LOW
+# Set Security Level LOW
 # -------------------------------
 security_page = session.get("http://localhost/dvwa/security.php")
 soup = BeautifulSoup(security_page.text, "html.parser")
@@ -37,38 +36,48 @@ session.post("http://localhost/dvwa/security.php", data=security_data)
 
 print("Login & Security Level Set to LOW ✅")
 
-# -------------------------------
-# Step 3: XSS Testing
+
+#  XSS Testing
 # -------------------------------
 
-target_url = "http://localhost/dvwa/vulnerabilities/xss_r/"
+target_urls = [
+    "http://localhost/dvwa/vulnerabilities/xss_r/",
+    "http://localhost/dvwa/vulnerabilities/xss_s/"
+]
 
 payload = "<script>alert('XSS')</script>"
 
-params = {
-    "name": payload,
-    "Submit": "Submit"
-}
-
-response = session.get(target_url, params=params)
-
-print("Testing XSS Payload...")
-print("Response Code:", response.status_code)
-
 xss_results = []
 
-if payload in response.text:
-    print("[+] Reflected XSS Vulnerable!")
-    xss_results.append({
-        "url": target_url,
-        "payload": payload,
-        "severity": "High"
-    })
-else:
-    print("[-] Not Vulnerable")
+for target_url in target_urls:
 
-# -------------------------------
-# Step 4: Save Report
+    print("\n-------------------------------------")
+    print("Scanning Target URL:", target_url)
+   
+    
+
+    params = {
+        "name": payload,
+        "Submit": "Submit"
+    }
+
+    response = session.get(target_url, params=params)
+
+    print("Testing XSS Payload...")
+    print("Response Code:", response.status_code)
+
+    if payload in response.text:
+        print("[+] Reflected XSS Vulnerable!")
+
+        xss_results.append({
+            "url": target_url,
+            "payload": payload,
+            "severity": "High"
+        })
+    else:
+        print("[-] Not Vulnerable")
+
+#Save Report
 # -------------------------------
 
 if xss_results:
