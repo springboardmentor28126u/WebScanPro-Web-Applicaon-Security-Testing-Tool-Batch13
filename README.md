@@ -50,7 +50,7 @@ I developed `scanner.py`, a Python-based discovery engine that identifies "Entry
 In this milestone, the tool was upgraded from a simple crawler to a functional **Vulnerability Scanner**. The core focus was on implementing detection logic for the two most common web attacks: **SQL Injection (SQLi)** and **Cross-Site Scripting (XSS)**.
 
 ### 📸 Execution Screenshot
-![Milestone 2 Scan](vulnerable.jpeg)
+![Milestone 2 Scan](vulnerable_result.jpeg)
 *Figure: WebScanPro detecting SQLi and XSS vulnerabilities on a local Docker environment.*
 
 ---
