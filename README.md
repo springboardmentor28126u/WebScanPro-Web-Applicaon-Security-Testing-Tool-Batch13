@@ -1190,6 +1190,7 @@ idor_results.json
 ![Detailed Findings](Week-7/screenshots/detailed_findings.png)
 
 *Fig 7.4: Detailed findings section showing vulnerability type, affected URL, payload, and remediation recommendations.*
+
 ---
 
 # 🔹 Week 8 – Documentation & Presentation Preparation
