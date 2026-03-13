@@ -889,4 +889,186 @@ This experiment highlights the importance of **secure authentication mechanisms 
 - **Platform:** DVWA (Damn Vulnerable Web Application)  
 - **Environment:** Localhost  
 - **Attack Type Tested:** Brute Force Authentication Attack  
-- **Security Levels Tested:** Low, High  
+- **Security Levels Tested:** Low, High
+- # 📘 Week 6 – Access Control and IDOR Testing Module
+
+---
+
+## 📌 Introduction
+
+In Week 6, **Access Control Testing** was performed on **DVWA (Damn Vulnerable Web Application)** to understand how web applications protect sensitive resources from unauthorized users.
+
+Access control ensures that users can only access the data and actions they are permitted to use. If access control is weak, attackers may exploit vulnerabilities such as **Insecure Direct Object Reference (IDOR)**.
+
+An **IDOR vulnerability** occurs when an application exposes internal object identifiers such as **user IDs, file IDs, or account numbers** without verifying whether the current user is authorized to access that resource.
+
+This module demonstrates how attackers can manipulate request parameters to gain unauthorized access to sensitive data.
+
+---
+
+## 🎯 Objectives
+
+- Understand **Access Control vulnerabilities**
+- Identify **Insecure Direct Object Reference (IDOR)**
+- Test unauthorized access by modifying object identifiers
+- Observe application behavior at **Low and High security levels**
+- Compare vulnerable and secure access control implementations
+
+---
+
+## 🛠️ Tools Used
+
+| Tool | Purpose |
+|------|---------|
+| DVWA (Damn Vulnerable Web Application) | Target vulnerable web application |
+| Google Chrome Browser | Testing interface |
+| Localhost Environment | Safe testing lab |
+| Browser Developer Tools | Inspect requests and responses |
+
+---
+
+## 🔓 Vulnerability Tested
+
+### Insecure Direct Object Reference (IDOR)
+
+An IDOR vulnerability occurs when an application allows direct access to objects using user-controlled parameters.
+
+Example request:
+http://localhost:8080/vulnerabilities/idor/?id=1
+If an attacker changes the parameter value:
+?id=2
+?id=3
+?id=4
+
+and the application displays other users' data, it indicates an **IDOR vulnerability**.
+
+---
+
+## 🔬 Procedure
+
+### Phase 1: Low Security Testing
+
+1. Logged into DVWA  
+2. Navigated to the **Access Control / IDOR module**  
+3. Set **DVWA Security Level to Low**  
+4. Observed the request parameter containing a user ID  
+5. Modified the ID value manually in the URL  
+6. Sent the request and observed the response  
+
+#### Observations
+
+- The application returned **data belonging to different users**
+- No authorization validation was applied
+- Direct object identifiers were exposed
+- Unauthorized data access was possible
+
+This confirms the application is **vulnerable to IDOR attacks**.
+
+---
+
+### Phase 2: High Security Testing
+
+1. Changed **DVWA Security Level to High**
+2. Repeated the same parameter manipulation
+3. Observed system behavior
+
+#### Observations
+
+- The application restricted access to unauthorized resources
+- Requests for other user IDs were blocked
+- Authorization checks were properly implemented
+
+This indicates the application implemented **stronger access control mechanisms**.
+
+---
+
+## 🔎 Observations
+
+### 🔴 Low Security — Vulnerable
+
+- Direct object identifiers exposed
+- No authorization checks
+- Users could access other users' data
+- Sensitive information exposed
+- Application vulnerable to IDOR attacks
+
+### 🟢 High Security — Protected
+
+- Authorization checks implemented
+- Unauthorized access blocked
+- User data properly protected
+- Secure access control mechanisms applied
+
+---
+
+## 📊 Results
+
+| Test | Result |
+|------|--------|
+| IDOR Attack at Low Security | ✅ Successful (Unauthorized access possible) |
+| Application Status at Low | ❌ Vulnerable |
+| IDOR Attack at High Security | ❌ Failed (Access blocked) |
+| Application Status at High | ✅ Secure |
+
+---
+
+## 📈 Comparison: Low vs High Security
+
+| Feature | 🔴 Low Security | 🟢 High Security |
+|--------|----------------|----------------|
+| Authorization Check | ❌ Not Implemented | ✅ Implemented |
+| Direct Object Access | Allowed | Restricted |
+| Unauthorized Data Access | ✅ Possible | ❌ Not Possible |
+| Sensitive Data Exposure | High Risk | Protected |
+| Application Status | **Vulnerable** | **Secure** |
+
+---
+
+## 🛡️ Access Control Security Best Practices
+
+**1. Implement Authorization Checks**  
+Verify that the user requesting a resource has permission to access it.
+
+**2. Use Indirect Object References**  
+Avoid exposing internal database IDs directly in URLs.
+
+**3. Role-Based Access Control (RBAC)**  
+Restrict system functionality based on user roles.
+
+**4. Validate Every Request**  
+Each request must verify authorization before returning data.
+
+**5. Monitor Access Logs**  
+Track suspicious access attempts to detect attacks.
+
+---
+
+## 📚 Learning Outcomes
+
+- Learned how **access control mechanisms protect sensitive data**
+- Understood how **IDOR vulnerabilities allow unauthorized data access**
+- Observed the difference between **vulnerable and secure implementations**
+- Gained practical experience in **access control testing**
+- Learned the importance of **proper authorization checks**
+
+---
+
+## ✅ Conclusion
+
+The Week 6 Access Control Testing module demonstrated how **improper authorization checks can expose sensitive data through IDOR vulnerabilities**.
+
+At **Low security level**, the application allowed direct access to different user records by modifying object identifiers, confirming the presence of an IDOR vulnerability.
+
+At **High security level**, the application implemented proper authorization checks and prevented unauthorized access.
+
+This experiment highlights the importance of **secure access control mechanisms** in protecting web applications from unauthorized data exposure.
+
+---
+
+## 📁 Module Info
+
+- **Module:** Week 6 — Access Control and IDOR Testing  
+- **Platform:** DVWA (Damn Vulnerable Web Application)  
+- **Environment:** Localhost  
+- **Vulnerability Tested:** Insecure Direct Object Reference (IDOR)  
+- **Security Levels Tested:** Low, High
