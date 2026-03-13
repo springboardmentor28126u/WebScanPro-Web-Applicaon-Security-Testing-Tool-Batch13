@@ -5,8 +5,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 RESULT_FILE = os.path.join(BASE_DIR, "idor_results.json")
-
-# Example vulnerable endpoint
 target_url = "http://localhost/dvwa/vulnerabilities/idor/?id="
 
 results = []
@@ -26,7 +24,7 @@ def test_idor():
 
     try:
 
-        # baseline request
+      
         base = requests.get(target_url + "1")
         base_text = base.text
 
@@ -40,7 +38,7 @@ def test_idor():
 
             print(f"[+] Testing ID={i} | Similarity: {score:.2f}")
 
-            # AI logic: if pages are very similar
+           
             if score > 0.90:
 
                 print(f"[VULNERABLE] Possible IDOR detected at ID={i}")

@@ -876,22 +876,384 @@ The module generates a structured vulnerability report:
 ✔ Structured vulnerability reporting added
 
 ---
+# 🔹 Week 6 – Access Control & IDOR Testing Module (AI-Enhanced)
 
-# 🎯 Milestone 3 Outcome
+## 🔸 Objective
 
-Milestone 3 enhances **WebScanPro** with **AI-assisted authentication security analysis capabilities**.
+The objective of Week 6 is to design a module capable of detecting **Access Control vulnerabilities**, specifically **Insecure Direct Object Reference (IDOR)** issues.
 
-The framework can now detect:
+IDOR vulnerabilities occur when applications expose internal object identifiers such as:
 
-✔ Weak authentication mechanisms
-✔ Default credential vulnerabilities
-✔ AI-generated password weaknesses
-✔ Session cookie exposure risks
+```
+?id=1
+?id=2
+?id=3
+```
 
-This milestone strengthens the system by expanding its coverage from **input-based vulnerabilities (SQL Injection, XSS)** to **authentication and session security flaws**, which are among the **most exploited vulnerabilities in modern web applications**.
+Without proper access control validation, attackers may manipulate these identifiers to **access unauthorized data belonging to other users**.
+
+This module performs **automated parameter manipulation and AI-assisted response analysis** to detect such vulnerabilities.
 
 ---
 
+# 🤖 AI Features Introduced
+
+The Week 6 module integrates **AI-inspired response comparison techniques** to improve detection accuracy.
+
+### 1️⃣ AI Response Similarity Analysis
+
+Instead of only checking for error messages, the system compares **entire HTTP responses** between different object IDs.
+
+If two responses are **highly similar**, it may indicate that the application is returning **unauthorized data without proper validation**.
+
+Example similarity result:
+
+```
+Testing ID=2 | Similarity Score: 0.94
+```
+
+A similarity score above **0.90** suggests a potential IDOR vulnerability.
+
+---
+
+### 2️⃣ Behavioral Response Comparison
+
+The module analyzes multiple behavioral indicators:
+
+- Response content similarity  
+- HTTP response status codes  
+- Page structure patterns  
+- Returned data consistency  
+
+These indicators help the system **detect unauthorized data exposure even when responses are slightly different**.
+
+---
+
+### 3️⃣ Automated Vulnerability Classification
+
+Detected issues are automatically classified with severity levels:
+
+| Vulnerability | Severity |
+|---------------|----------|
+| IDOR Detected | High |
+| Suspicious Access | Medium |
+| Normal Response | Info |
+
+This allows the system to produce **structured security findings automatically**.
+
+---
+
+# 🔸 Technologies Used
+
+- Python  
+- Requests  
+- Difflib (Response Similarity Engine)  
+- JSON  
+- DVWA (Security Level: LOW)  
+- XAMPP  
+
+---
+
+# 🔸 About `idor_tester.py`
+
+The Access Control testing module performs the following tasks:
+
+- Sends requests with **different object IDs**
+- Compares responses against a **baseline response**
+- Calculates **response similarity scores**
+- Detects potential **unauthorized data access**
+- Logs findings in a structured JSON report
+
+---
+
+# 🔸 IDOR Testing Methodology
+
+The module targets a vulnerable endpoint such as:
+
+```
+http://localhost/dvwa/vulnerabilities/idor/?id=
+```
+
+### Step 1 — Baseline Request
+
+The system first sends a request with a known ID:
+
+```
+?id=1
+```
+
+This response becomes the **baseline reference**.
+
+---
+
+### Step 2 — Parameter Manipulation
+
+The module automatically tests multiple IDs:
+
+```
+?id=2
+?id=3
+?id=4
+?id=5
+```
+
+This simulates how attackers attempt **horizontal privilege escalation**.
+
+---
+
+### Step 3 — AI Similarity Detection
+
+The responses are compared using a similarity function.
+
+Example logic used in the module:
+
+```python
+def similarity_score(a, b):
+    return difflib.SequenceMatcher(None, a, b).ratio()
+```
+
+This calculates a **similarity ratio between responses**.
+
+If the similarity score exceeds **0.90**, the system flags a **possible IDOR vulnerability**.
+
+---
+
+# 📄 Output – `idor_results.json`
+
+The module generates a structured vulnerability report:
+
+```json
+[
+  {
+    "type": "IDOR Vulnerability",
+    "parameter": "id",
+    "tested_value": 2,
+    "similarity_score": 0.94,
+    "severity": "High"
+  }
+]
+```
+
+---
+
+# 📸 Week 6 Screenshots
+
+### 🔍 IDOR Module Execution
+
+![IDOR Module](Week-6/screenshots/idor_module_running.png)
+
+*Fig 6.1: Execution of the IDOR testing module showing similarity scores for tested object IDs.*
+
+---
+
+### ⚠️ IDOR Vulnerability Detection
+
+![IDOR Detection](Week-6/screenshots/idor_vulnerability_detected.png)
+
+*Fig 6.2: Detection of possible unauthorized access caused by insecure direct object references.*
+
+---
+
+### 📄 IDOR JSON Report
+
+```
+[
+  {
+    "type": "IDOR Vulnerability",
+    "parameter": "id",
+    "tested_value": 2,
+    "similarity_score": 0.94,
+    "severity": "High"
+  }
+]
+```
+
+*Fig 6.3: Structured vulnerability report generated by the IDOR testing module.*
+
+---
+
+# 🔸 Week 6 Result
+
+✔ Automated IDOR vulnerability detection implemented  
+✔ AI-assisted response similarity analysis integrated  
+✔ Unauthorized object access detection enabled  
+✔ Horizontal privilege escalation testing implemented  
+✔ Structured vulnerability reporting added  
+
+---
+
+# 🎯 Milestone 3  Outcome
+
+Milestone 3 significantly expands **WebScanPro's security coverage** by introducing **authentication security testing and access control vulnerability detection**.
+
+The system can now detect:
+
+✔ Weak authentication mechanisms  
+✔ Default credential vulnerabilities  
+✔ Session cookie exposure risks  
+✔ Insecure Direct Object Reference (IDOR) vulnerabilities  
+✔ Unauthorized data access attempts  
+
+This milestone strengthens WebScanPro by covering **two critical OWASP Top 10 categories**:
+
+- Broken Authentication  
+- Broken Access Control  
+
+With these additions, WebScanPro evolves into a **more comprehensive AI-assisted web application security testing framework** capable of detecting both **input-based vulnerabilities and access control weaknesses**.
+
+---
+---
+
+# 📌 MILESTONE 4  
+## Security Report Generation & Final Documentation
+
+Milestone 4 focuses on **finalizing WebScanPro as a complete security testing framework** by implementing a **centralized vulnerability reporting system and project documentation**.
+
+At this stage, all previously developed modules are integrated and their results are compiled into structured reports for easier analysis and presentation.
+
+This milestone transforms WebScanPro from a collection of individual testing modules into a **complete automated security assessment tool**.
+
+---
+
+# 🔹 Week 7 – Security Report Generation Module
+
+## 🔸 Objective
+
+The goal of Week 7 is to create a **centralized reporting system** that collects vulnerability results from all modules and generates structured security reports.
+
+The report summarizes findings from:
+
+- Target Scanner  
+- SQL Injection Module  
+- XSS Detection Module  
+- Authentication Testing Module  
+- IDOR Access Control Module  
+
+This allows security testers to **quickly understand the security posture of the target web application**.
+
+---
+
+## 🔸 Features Implemented
+
+The report generation system performs the following tasks:
+
+- Collects vulnerability findings from all module result files  
+- Organizes results based on vulnerability type  
+- Displays severity levels  
+- Identifies affected endpoints  
+- Generates structured JSON reports  
+
+The reporting system consolidates outputs from:
+
+```
+output.json
+sqli_results.json
+xss_results.json
+auth_results.json
+idor_results.json
+```
+
+---
+
+## 🔸 Example Combined Security Report
+
+```json
+{
+  "vulnerabilities": [
+    {
+      "type": "SQL Injection",
+      "severity": "High",
+      "endpoint": "/dvwa/vulnerabilities/sqli/"
+    },
+    {
+      "type": "Cross-Site Scripting",
+      "severity": "High",
+      "endpoint": "/dvwa/vulnerabilities/xss_r/"
+    },
+    {
+      "type": "Weak Credentials",
+      "severity": "High",
+      "endpoint": "/dvwa/login.php"
+    },
+    {
+      "type": "IDOR",
+      "severity": "High",
+      "endpoint": "/dvwa/vulnerabilities/idor/"
+    }
+  ]
+}
+```
+
+---
+
+# 🔹 Week 8 – Documentation & Presentation Preparation
+
+## 🔸 Objective
+
+The final week focuses on **preparing complete project documentation and presentation materials**.
+
+This includes explaining the architecture, implementation, and testing results of WebScanPro.
+
+---
+
+## 🔸 Documentation Work
+
+The following documentation tasks were completed:
+
+- Project overview documentation  
+- Module explanation for each milestone  
+- Security testing methodology description  
+- Vulnerability detection results  
+- Screenshots and output demonstrations  
+
+---
+
+## 🔸 Presentation Preparation
+
+To demonstrate the functionality of WebScanPro, a presentation was prepared covering:
+
+- Project introduction  
+- Architecture of WebScanPro  
+- AI-assisted vulnerability detection modules  
+- Testing process on DVWA  
+- Security findings and reports  
+
+A **live demonstration** was also prepared showing:
+
+- Running the scanner  
+- Detecting vulnerabilities  
+- Generating security reports
+
+---
+
+# 🔸 Week 7–8 Result
+
+✔ Integrated vulnerability reporting system created  
+✔ Security findings consolidated from all modules  
+✔ Structured report generation implemented  
+✔ Complete project documentation prepared  
+✔ Final project presentation completed  
+
+---
+
+# 🎯 Milestone 4 Outcome
+
+Milestone 4 completes the **WebScanPro security testing framework** by adding reporting and documentation capabilities.
+
+The final system now provides:
+
+✔ Automated target scanning  
+✔ AI-enhanced SQL Injection detection  
+✔ AI-enhanced XSS detection  
+✔ Authentication and session security testing  
+✔ Access control and IDOR vulnerability detection  
+✔ Centralized vulnerability reporting  
+
+With these components combined, **WebScanPro becomes a fully functional AI-assisted web application security testing tool capable of identifying multiple OWASP Top 10 vulnerabilities in a structured and automated manner.**
+
+---
+
+---
 ## 🧠 WebScanPro System Architecture (AI-Enhanced)
 
 ```

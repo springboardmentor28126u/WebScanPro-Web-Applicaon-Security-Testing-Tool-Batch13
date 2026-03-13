@@ -1,10 +1,12 @@
 import requests
 import json
 import os
+import time
 from bs4 import BeautifulSoup
 
 from ai.feature_extractor import extract_xss_features
 from ai.ai_xss_engine import predict
+
 
 # ---------------- PATH CONFIG ---------------- #
 
@@ -17,11 +19,22 @@ LOGIN_URL = BASE_URL + "login.php"
 
 session = requests.Session()
 
-XSS_PAYLOAD = "<script>alert(1)</script>"
+
+# ---------------- XSS PAYLOADS ---------------- #
+
+XSS_PAYLOADS = [
+    "<script>alert(1)</script>",
+    "<img src=x onerror=alert(1)>",
+    "<svg/onload=alert(1)>",
+    "\"><script>alert(1)</script>",
+    "<body onload=alert(1)>"
+]
+
 
 # ---------------- LOGIN FUNCTION ---------------- #
 
 def login_dvwa():
+
     print("[+] Logging into DVWA for XSS testing...")
 
     response = session.get(LOGIN_URL)
@@ -38,11 +51,14 @@ def login_dvwa():
     }
 
     session.post(LOGIN_URL, data=login_data)
+
     print("[+] Login successful.")
 
- 
+    # Set security level LOW
+
     security_url = BASE_URL + "security.php"
     sec_page = session.get(security_url)
+
     soup = BeautifulSoup(sec_page.text, "html.parser")
 
     token_input = soup.find("input", {"name": "user_token"})
@@ -55,12 +71,14 @@ def login_dvwa():
     }
 
     session.post(security_url, data=security_data)
+
     print("[+] Security level set to LOW.")
 
 
 # ---------------- LOAD FORMS ---------------- #
 
 def load_forms():
+
     if not os.path.exists(SCANNER_OUTPUT):
         print("[!] Scanner output.json not found.")
         return None
@@ -70,7 +88,6 @@ def load_forms():
 
     return data.get("forms", [])
 
-import time
 
 # ---------------- XSS TESTING ---------------- #
 
@@ -86,11 +103,11 @@ def test_xss(forms):
         method = form["method"]
         inputs = form["inputs"]
 
-        
         if "xss" not in action.lower():
             continue
 
         input_names = [inp.get("name") for inp in inputs if inp.get("name")]
+
         if not input_names:
             continue
 
@@ -98,7 +115,9 @@ def test_xss(forms):
         print(f"[*] Testing: {action}")
 
         try:
-           
+
+            # -------- Get CSRF token -------- #
+
             page_response = session.get(action)
             soup = BeautifulSoup(page_response.text, "html.parser")
 
@@ -110,6 +129,7 @@ def test_xss(forms):
             start_normal = time.time()
 
             if method == "get":
+
                 normal_response = session.get(
                     action,
                     params={
@@ -118,7 +138,9 @@ def test_xss(forms):
                         "user_token": user_token
                     }
                 )
+
             else:
+
                 normal_response = session.post(
                     action,
                     data={
@@ -131,96 +153,105 @@ def test_xss(forms):
             normal_time = time.time() - start_normal
             normal_text = normal_response.text.lower()
 
-            # -------- Injected Request -------- #
+            # -------- Test Multiple Payloads -------- #
 
-            start_injected = time.time()
+            for payload in XSS_PAYLOADS:
 
-            if method == "get":
-                injected_response = session.get(
-                    action,
-                    params={
-                        input_names[0]: XSS_PAYLOAD,
-                        "Submit": "Submit",
-                        "user_token": user_token
-                    }
-                )
-            else:
-                injected_response = session.post(
-                    action,
-                    data={
-                        input_names[0]: XSS_PAYLOAD,
-                        "Submit": "Submit",
-                        "user_token": user_token
-                    }
-                )
+                print(f"→ Testing Payload: {payload}")
 
-            injected_time = time.time() - start_injected
-            injected_text = injected_response.text.lower()
+                start_injected = time.time()
 
-            # -------- CLI OUTPUT -------- #
+                if method == "get":
 
-            length_diff = len(injected_text) - len(normal_text)
-            payload_reflected = XSS_PAYLOAD.lower() in injected_text
+                    injected_response = session.get(
+                        action,
+                        params={
+                            input_names[0]: payload,
+                            "Submit": "Submit",
+                            "user_token": user_token
+                        }
+                    )
 
-            print(f"Normal Status Code   : {normal_response.status_code}")
-            print(f"Injected Status Code : {injected_response.status_code}")
-            print(f"Normal Response Time : {round(normal_time, 4)} sec")
-            print(f"Injected Resp Time   : {round(injected_time, 4)} sec")
-            print(f"Response Length Diff : {length_diff}")
-            print(f"Payload Reflected    : {payload_reflected}")
-
-            # ---------------- RULE-BASED DETECTION ---------------- #
-
-            rule_based_detected = False
-
-            if payload_reflected:
-                rule_based_detected = True
-
-            if "<script>" in injected_text and "alert(1)" in injected_text:
-                rule_based_detected = True
-
-            if "&lt;script&gt;" in injected_text:
-                rule_based_detected = True
-
-            # ---------------- AI DETECTION ---------------- #
-
-            features = extract_xss_features(
-                normal_text,
-                injected_text,
-                injected_response.status_code
-            )
-
-            prediction, probability = predict(features)
-
-            # ---------------- FINAL DECISION ---------------- #
-
-            if rule_based_detected or prediction == 1:
-
-                if rule_based_detected:
-                    confidence = 92.0
                 else:
-                    confidence = round(probability * 100, 2)
 
-                print("\n[✔] XSS Detected!")
-                print(f"Confidence Score     : {confidence}%")
+                    injected_response = session.post(
+                        action,
+                        data={
+                            input_names[0]: payload,
+                            "Submit": "Submit",
+                            "user_token": user_token
+                        }
+                    )
 
-                vulnerable.append({
-                    "url": action,
-                    "method": method.upper(),
-                    "payload": XSS_PAYLOAD,
-                    "type": "XSS",
-                    "severity": "High",
-                    "confidence": confidence
-                })
+                injected_time = time.time() - start_injected
+                injected_text = injected_response.text.lower()
 
-            else:
-                print("[–] No XSS Detected.")
+                length_diff = len(injected_text) - len(normal_text)
+
+                payload_reflected = payload.lower() in injected_text
+
+                # -------- CLI OUTPUT -------- #
+
+                print(f"Injected Status Code : {injected_response.status_code}")
+                print(f"Injected Resp Time   : {round(injected_time,4)} sec")
+                print(f"Response Length Diff : {length_diff}")
+                print(f"Payload Reflected    : {payload_reflected}")
+
+                # ---------------- RULE BASED DETECTION ---------------- #
+
+                rule_based_detected = False
+
+                if payload_reflected:
+                    rule_based_detected = True
+
+                if "<script>" in injected_text and "alert(1)" in injected_text:
+                    rule_based_detected = True
+
+                if "&lt;script&gt;" in injected_text:
+                    rule_based_detected = True
+
+                # ---------------- AI DETECTION ---------------- #
+
+                features = extract_xss_features(
+                    normal_text,
+                    injected_text,
+                    injected_response.status_code
+                )
+
+                prediction, probability = predict(features)
+
+                # ---------------- FINAL DECISION ---------------- #
+
+                if rule_based_detected or prediction == 1:
+
+                    confidence = 92.0 if rule_based_detected else round(probability * 100, 2)
+
+                    print("\n[✔] XSS Detected!")
+                    print(f"Confidence Score : {confidence}%")
+
+                    vulnerable.append({
+                        "url": action,
+                        "method": method.upper(),
+                        "payload": payload,
+                        "type": "XSS",
+                        "severity": "High",
+                        "confidence": confidence
+                    })
+
+                    # Stop testing more payloads after detection
+                    break
+
+                else:
+
+                    print("[–] No XSS with this payload.")
 
         except Exception as e:
+
             print(f"[!] Error testing {action}: {e}")
             continue
 
     print("=" * 60)
+
     return vulnerable
 
 
@@ -231,6 +262,7 @@ if __name__ == "__main__":
     login_dvwa()
 
     forms = load_forms()
+
     if forms is None:
         exit()
 

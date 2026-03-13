@@ -7,6 +7,14 @@
             "type": "SQL Injection",
             "severity": "High",
             "confidence": 95.0
+        },
+        {
+            "url": "http://localhost/dvwa/vulnerabilities/sqli_blind/",
+            "method": "GET",
+            "payload": "' OR '1'='1",
+            "type": "SQL Injection",
+            "severity": "High",
+            "confidence": 95.0
         }
     ]
 }

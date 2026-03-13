@@ -117,7 +117,7 @@
         {
             "url": "http://localhost/dvwa/vulnerabilities/cryptography/",
             "status_code": 200,
-            "content_length": 7378,
+            "content_length": 7376,
             "title": "Vulnerability: Cryptography Problems :: Damn Vulnerable Web Application (DVWA)"
         },
         {
@@ -135,7 +135,7 @@
         {
             "url": "http://localhost/dvwa/phpinfo.php",
             "status_code": 200,
-            "content_length": 83211,
+            "content_length": 83210,
             "title": "PHP 8.2.12 - phpinfo()"
         },
         {
@@ -265,7 +265,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "a44a2a4259b3e2b7fec590efe6407f70"
+                    "value": "90c321889a3eb63388330cfe2759a911"
                 }
             ]
         },
@@ -287,7 +287,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "a6758a500c7b93712d0e032b30d7b15f"
+                    "value": "1f8296e61f1d3c2a8fc7181b6d3d6f78"
                 }
             ]
         },
@@ -319,7 +319,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "9d6d600503a5900f294d8c4ecd66e5b1"
+                    "value": "8dad54fd4043557385475f0ee8dae6f7"
                 }
             ]
         },
@@ -346,7 +346,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "13df744a767d8ce52295c3311ca38724"
+                    "value": "303b89bb718cbfc9f4c334d99fd6be25"
                 }
             ]
         },
@@ -378,7 +378,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "e331e9b00d51284320e40f055bac7776"
+                    "value": "cb76e40eee87150af3d0787ae3042151"
                 },
                 {
                     "name": "Change",
@@ -405,7 +405,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "90a31169b5592e00dd1e5ba0e52b758c"
+                    "value": "50bb3c23871cbc1dfc66bed574b95e71"
                 }
             ]
         },
@@ -427,7 +427,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "00f49327cfb5c01074afe51a36339fa0"
+                    "value": "7b63ce512df694a81a792f979acac916"
                 }
             ]
         },
@@ -444,7 +444,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "987286e304d3f487544a19bf7cefa5f8"
+                    "value": "40186f9337e407edcda3c963ca1f77b8"
                 }
             ]
         },
@@ -471,7 +471,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "f50ef2de09eb3a65e9d3e133c06391de"
+                    "value": "61b44f3a0b4476129a33681a61945348"
                 }
             ]
         },
@@ -488,7 +488,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "cacf5e29b2520ea7304c683f5634edf0"
+                    "value": "85c5ffdd766c2536d21f0478f69653c0"
                 }
             ]
         },
@@ -505,7 +505,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "28cb2d0cdb12485016585fc0de225de5"
+                    "value": "2926da1e2767dea2eef75eb537b38f68"
                 }
             ]
         }

