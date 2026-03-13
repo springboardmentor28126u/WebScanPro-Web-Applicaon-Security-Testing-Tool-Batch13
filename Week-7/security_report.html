@@ -108,7 +108,7 @@ font-weight:bold;
 <p style="text-align:center"><b>Target:</b> http://localhost/dvwa</p>
 <p style="text-align:center"><b>Scan Date:</b> 2026-03-13</p>
 
-<h2>Security Score: 45/100</h2>
+<h2>Security Score: 35/100</h2>
 
 <h2>Executive Summary</h2>
 
@@ -116,12 +116,12 @@ font-weight:bold;
 
 <div class="card">
 Total Vulnerabilities<br>
-<span>6</span>
+<span>7</span>
 </div>
 
 <div class="card">
 High Risk<br>
-<span>5</span>
+<span>6</span>
 </div>
 
 <div class="card">
@@ -150,6 +150,12 @@ Low Risk<br>
 <th>OWASP Category</th>
 </tr>
 
+
+<tr>
+<td>SQL Injection</td>
+<td><span class="badge high">High</span></td>
+<td>A03: Injection</td>
+</tr>
 
 <tr>
 <td>SQL Injection</td>
@@ -215,7 +221,27 @@ Review application security controls
 
 <div class="finding">
 
-<h3>2. XSS</h3>
+<h3>2. SQL Injection</h3>
+
+<p><b>Severity:</b> High</p>
+<p><b>OWASP Category:</b> A03: Injection</p>
+<p><b>Affected URL:</b> http://localhost/dvwa/vulnerabilities/sqli_blind/</p>
+<p><b>Payload:</b> &#x27; OR &#x27;1&#x27;=&#x27;1</p>
+
+<p><b>Impact:</b><br>
+This vulnerability could allow attackers to manipulate application behavior
+or access sensitive information.
+</p>
+
+<p><b>Recommendation:</b><br>
+Review application security controls
+</p>
+
+</div>
+
+<div class="finding">
+
+<h3>3. XSS</h3>
 
 <p><b>Severity:</b> High</p>
 <p><b>OWASP Category:</b> A03: Injection</p>
@@ -235,7 +261,7 @@ Review application security controls
 
 <div class="finding">
 
-<h3>3. Weak Credentials</h3>
+<h3>4. Weak Credentials</h3>
 
 <p><b>Severity:</b> High</p>
 <p><b>OWASP Category:</b> A07: Identification & Authentication Failures</p>
@@ -255,7 +281,7 @@ Use strong passwords and enforce password policy
 
 <div class="finding">
 
-<h3>4. Cookie Security</h3>
+<h3>5. Cookie Security</h3>
 
 <p><b>Severity:</b> Medium</p>
 <p><b>OWASP Category:</b> A05: Security Misconfiguration</p>
@@ -275,7 +301,7 @@ Use Secure and HttpOnly cookie flags
 
 <div class="finding">
 
-<h3>5. Session Hijacking Risk</h3>
+<h3>6. Session Hijacking Risk</h3>
 
 <p><b>Severity:</b> High</p>
 <p><b>OWASP Category:</b> A07: Identification & Authentication Failures</p>
@@ -295,7 +321,7 @@ Use HTTPS and secure cookies
 
 <div class="finding">
 
-<h3>6. IDOR Vulnerability</h3>
+<h3>7. IDOR Vulnerability</h3>
 
 <p><b>Severity:</b> High</p>
 <p><b>OWASP Category:</b> A01: Broken Access Control</p>
@@ -325,7 +351,7 @@ type:'doughnut',
 data:{
 labels:['High','Medium','Low'],
 datasets:[{
-data:[5,1,0],
+data:[6,1,0],
 backgroundColor:['#ff4d4d','#ff9800','#4caf50']
 }]
 }
