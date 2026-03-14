@@ -65,7 +65,7 @@ def test_sql_injection(url):
                 "url": response.url
             }
 
-            with open("results.json", "w") as file:
+            with open("sqli_results.json", "w") as file:
                 json.dump(result, file, indent=4)
 
             print("Results saved to results.json")

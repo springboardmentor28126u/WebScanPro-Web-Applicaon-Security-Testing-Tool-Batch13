@@ -1,0 +1,22 @@
+[
+    {
+        "tested_id": 1,
+        "result": "Data Found - Possible IDOR"
+    },
+    {
+        "tested_id": 2,
+        "result": "Data Found - Possible IDOR"
+    },
+    {
+        "tested_id": 3,
+        "result": "Data Found - Possible IDOR"
+    },
+    {
+        "tested_id": 4,
+        "result": "Data Found - Possible IDOR"
+    },
+    {
+        "tested_id": 5,
+        "result": "Data Found - Possible IDOR"
+    }
+]

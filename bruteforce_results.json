@@ -1,0 +1,27 @@
+[
+    {
+        "username": "admin",
+        "password": "admin",
+        "status": "Possible login found"
+    },
+    {
+        "username": "admin",
+        "password": "password",
+        "status": "Possible login found"
+    },
+    {
+        "username": "admin",
+        "password": "123456",
+        "status": "Possible login found"
+    },
+    {
+        "username": "admin",
+        "password": "1234",
+        "status": "Possible login found"
+    },
+    {
+        "username": "admin",
+        "password": "test",
+        "status": "Possible login found"
+    }
+]
