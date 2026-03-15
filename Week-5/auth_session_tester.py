@@ -43,7 +43,6 @@ def load_credentials():
 def ai_generate_passwords():
 
     base_words = ["admin", "password", "root", "test"]
-
     numbers = ["123", "1234", "123456", "2024"]
 
     generated = []
@@ -120,7 +119,7 @@ def attempt_login(username, password):
             "username": username,
             "password": password,
             "severity": "High",
-            "recommendation": "Use strong passwords and enforce password policy"
+            "recommendation": "Use strong passwords"
         })
 
         return session
@@ -183,13 +182,15 @@ def check_cookies():
 
 def test_session_fixation():
 
-    print("[*] Testing session fixation...")
+    print("\n[*] Testing session fixation...")
 
     session = requests.Session()
 
     session.get(login_url)
 
     before = session.cookies.get("PHPSESSID")
+
+    print("Session ID BEFORE login :", before)
 
     token = get_token(session)
 
@@ -204,6 +205,8 @@ def test_session_fixation():
 
     after = session.cookies.get("PHPSESSID")
 
+    print("Session ID AFTER login  :", after)
+
     if before == after:
 
         print("[VULNERABLE] Session Fixation detected")
@@ -214,17 +217,24 @@ def test_session_fixation():
             "recommendation": "Regenerate session ID after login"
         })
 
+    else:
+
+        print("[SAFE] Session ID regenerated after login")
+
 
 # ---------------- SESSION HIJACK TEST ---------------- #
 
 def test_session_hijacking(session):
 
+    print("\n[*] Testing session hijacking simulation...")
+
     if not session:
+        print("[!] No valid session available.")
         return
 
-    print("[*] Testing session hijacking simulation...")
-
     cookies = session.cookies.get_dict()
+
+    print("Captured Session Cookies:", cookies)
 
     hijack = requests.get(protected_url, cookies=cookies)
 
@@ -235,8 +245,12 @@ def test_session_hijacking(session):
         results.append({
             "type": "Session Hijacking Risk",
             "severity": "High",
-            "recommendation": "Use HTTPS and secure cookies"
+            "recommendation": "Use HTTPS and Secure cookies"
         })
+
+    else:
+
+        print("[SAFE] Session hijacking simulation failed")
 
 
 # ---------------- SAVE RESULTS ---------------- #
@@ -246,7 +260,7 @@ def save_results():
     with open(RESULT_FILE, "w") as f:
         json.dump(results, f, indent=4)
 
-    print("[+] Results saved to auth_results.json")
+    print("\n[+] Results saved to auth_results.json")
 
 
 # ---------------- RUN MODULE ---------------- #
@@ -281,6 +295,7 @@ if __name__ == "__main__":
 
     try:
         run_auth_tests()
+
     except Exception as e:
         print("[!] Authentication & Session Module failed.")
         print(e)
