@@ -135,7 +135,7 @@
         {
             "url": "http://localhost/dvwa/phpinfo.php",
             "status_code": 200,
-            "content_length": 83210,
+            "content_length": 83211,
             "title": "PHP 8.2.12 - phpinfo()"
         },
         {
@@ -265,7 +265,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "43f488dbda8bc726b501362c45b7a12b"
+                    "value": "e28cf4858c887e172f04db2347b15a4c"
                 }
             ]
         },
@@ -287,7 +287,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "688dd28e6d963e3296a43946ddc07652"
+                    "value": "142949f68a8accbe4d132b79148aa46d"
                 }
             ]
         },
@@ -319,7 +319,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "7165f26b8f7d313be43abe11b42a34ce"
+                    "value": "e2d2676bbf04eb3e2ac89bf08116dcb1"
                 }
             ]
         },
@@ -346,7 +346,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "260f5225dd84aa9b4714dc9a002f292c"
+                    "value": "f1dc79448bd51379b50c09caed3e3e44"
                 }
             ]
         },
@@ -378,7 +378,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "6f16bf1ba684d92433c0055b34f9393f"
+                    "value": "3f052cc87f5c4dfc7636b2e4f4f5d971"
                 },
                 {
                     "name": "Change",
@@ -405,7 +405,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "49a64e4c3845c5ccc39ea0268c7a82dc"
+                    "value": "44026fd8173003d91980dff597d0890e"
                 }
             ]
         },
@@ -427,7 +427,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "88f9d7ffcf9ac412788c6bd9813e5a32"
+                    "value": "29a6b1de00685c929f716d047ba7a591"
                 }
             ]
         },
@@ -444,7 +444,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "9124140fe6a35439e2bdf02940208a7f"
+                    "value": "c1ce776f9461cbcb6826285e9d942c5f"
                 }
             ]
         },
@@ -471,7 +471,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "dad150ca6018de3f921b70b5f6d7dc46"
+                    "value": "5b37598567694f236798df2f818af0ff"
                 }
             ]
         },
@@ -488,7 +488,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "aa275013ed76191b99a74b7907c3347c"
+                    "value": "d5302602465cd734de68a4f502cd7248"
                 }
             ]
         },
@@ -505,7 +505,7 @@
                 {
                     "name": "user_token",
                     "type": "hidden",
-                    "value": "3bd24a19ac9cc3e82b79e42501d564cf"
+                    "value": "76ad0ae214c89fd8fc3ad47642ae5f79"
                 }
             ]
         }
