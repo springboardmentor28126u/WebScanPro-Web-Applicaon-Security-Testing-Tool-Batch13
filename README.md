@@ -684,6 +684,7 @@ The framework can now detect:
 ✔ Vulnerabilities with confidence-based scoring  
 
 By combining **rule-based vulnerability detection with machine learning-driven behavioral analysis**, WebScanPro becomes capable of **performing automated vulnerability discovery with improved accuracy and reliability**.
+
 ---
 # 📌 MILESTONE 3
 
