@@ -1,4 +1,3 @@
----
 
 # 📄 Week 4: Cross-Site Scripting (XSS) Testing Module
 
@@ -30,7 +29,6 @@ Payload,Technical Purpose
 3. **Detection:** If the exact payload string (e.g., `<script>alert(1)</script>`) is found inside the HTML, it confirms the site is vulnerable.
 4. **Data Storage:** Like the SQLi module, confirmed hits are stored in `reports/results.json` with a **HIGH** severity rating.
 
----
 
 # 📊 Results and JSON Persistence
 
