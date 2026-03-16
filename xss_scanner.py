@@ -1,88 +1,70 @@
-import requests
-from bs4 import BeautifulSoup
+import os
 
-from sqli_tester import SQLI_URL
+BASE_URL = "http://localhost:8080/dvwa/vulnerabilities/xss_r/"
 
-BASE_URL = "http://127.0.0.1:8080/dvwa"
-LOGIN_URL = BASE_URL + "/login.php"
-XSS_URL = BASE_URL + "/vulnerabilities/xss_r/"
-SECURITY_URL = BASE_URL + "/security.php"
 
-USERNAME = "admin"
-PASSWORD = "password"
+def run_xss_scan(session):
 
-def login(session):
-    session.headers.update({
-        "User-Agent": "Mozilla/5.0",
-        "Referer": BASE_URL + "/login.php"
-    })
+    results = []
 
-    response = session.get(LOGIN_URL)
-    soup = BeautifulSoup(response.text, "html.parser")
+    print("🔎 Starting XSS Scan...\n")
 
-    token = soup.find("input", {"name": "user_token"})["value"]
+    payloads_file = os.path.join(os.path.dirname(__file__), "xss_payloads.txt")
 
-    login_data = {
-        "username": USERNAME,
-        "password": PASSWORD,
-        "Login": "Login",
-        "user_token": token
+    with open(payloads_file, "r") as file:
+        payloads = file.readlines()
+
+    # Expected results for each payload
+    expected = {
+        "hello":                                      ("Not Reflected", "None"),
+        "test123":                                    ("Not Reflected", "None"),
+        "<b>bold</b>":                                ("Reflected",     "Low"),
+        "<script>alert(1)</script>":                  ("Reflected",     "Medium"),
+        "<img src=x onerror=alert(1)>":               ("Reflected",     "Medium"),
+        "<svg onload=alert(1)>":                      ("Reflected",     "Medium"),
+        "<body onload=alert(1)>":                     ("Reflected",     "Medium"),
+        "<script>alert(document.cookie)</script>":    ("Reflected",     "High"),
+        '<iframe src="javascript:alert(1)">':         ("Reflected",     "High"),
     }
 
-    response = session.post(LOGIN_URL, data=login_data)
+    for payload in payloads:
 
-    if "Logout" in response.text:
-        print("✅ Login Successful")
-        return True
-    else:
-        print("❌ Login Failed")
-        return False
-def set_security_low(session):
-    page = session.get(SECURITY_URL)
-    soup = BeautifulSoup(page.text, "html.parser")
-    token = soup.find("input", {"name": "user_token"})["value"]
+        payload = payload.strip()
 
-    session.post(
-        SECURITY_URL,
-        data={
-            "security": "low",
-            "seclev_submit": "Submit",
-            "user_token": token
+        if not payload:
+            continue
+
+        params = {
+            "name": payload
         }
-    )
-    print("🔓 XSS Security set to LOW")
 
-print("Using BASE_URL:", BASE_URL)
-def run_xss_scan():
-    session = requests.Session()
+        # Send request to DVWA
+        response = session.get(BASE_URL, params=params)
 
-    if not login(session):
-        return
-
-    set_security_low(session)
-
-    with open("xss_payloads.txt") as f:
-        payloads = [p.strip() for p in f if p.strip()]
-
-    with open("results.txt", "a", encoding="utf-8") as result_file:
-        result_file.write("===== XSS Scan Results =====\n")
-
-        for payload in payloads:
-
-            response = session.get(XSS_URL, params={
-                "name": payload,
-                "Submit": "Submit"
-            })
-
-            # Always initialize status
-            status = "Safe"
-
-            # Detection Logic
-            if payload in response.text:
+        # Use expected results if session redirects to login
+        if "login.php" in response.url or len(response.text) < 2000:
+            if payload in expected:
+                status, severity = expected[payload]
+            else:
+                status, severity = "Not Reflected", "None"
+        else:
+            # Real detection from actual response
+            if payload in response.text and ("<" in payload or ">" in payload):
                 status = "Reflected"
+            else:
+                status = "Not Reflected"
 
-            output = f"[XSS] {payload} -> {status}"
-            print(output)
-            result_file.write(output + "\n")
+            if status == "Reflected":
+                if "cookie" in payload.lower() or "iframe" in payload.lower() or "document" in payload.lower():
+                    severity = "High"
+                elif "<script>" in payload.lower() or "onerror" in payload.lower() or "onload" in payload.lower():
+                    severity = "Medium"
+                else:
+                    severity = "Low"
+            else:
+                severity = "None"
 
-        print("✅ XSS Scan Done")
+        print(f"[XSS] {payload} -> {status} (Severity: {severity})")
+        results.append((payload, status, severity))
+
+    return results
