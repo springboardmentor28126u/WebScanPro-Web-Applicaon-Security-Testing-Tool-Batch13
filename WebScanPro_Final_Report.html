@@ -1,0 +1,74 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>WebScanPro Security Report</title>
+        <style>
+            body { font-family: 'Segoe UI', sans-serif; margin: 40px; background-color: #f4f4f9; }
+            .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+            h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+            th { background-color: #3498db; color: white; }
+            .badge { padding: 5px 10px; border-radius: 4px; color: white; font-size: 0.9em; }
+            .bg-high { background-color: #e74c3c; }
+            .bg-medium { background-color: #f39c12; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>WebScanPro: Security Assessment Report</h1>
+            <p><strong>Scan Date:</strong> 2026-03-16 17:44:04</p>
+            <p><strong>Target:</strong> Localhost (DVWA)</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Vulnerability Type</th>
+                        <th>Endpoint</th>
+                        <th>Severity</th>
+                        <th>Mitigation</th>
+                    </tr>
+                </thead>
+                <tbody>
+    
+                    <tr>
+                        <td><strong>SQL Injection (Error-Based)</strong><br><small>The application fails to sanitize input in the 'id' field, allowing direct database queries.</small></td>
+                        <td><code>/vulnerabilities/sqli/</code></td>
+                        <td><span class="badge bg-high">High</span></td>
+                        <td>Use Parameterized Queries (Prepared Statements) and input validation.</td>
+                    </tr>
+        
+                    <tr>
+                        <td><strong>Cross-Site Scripting (Reflected)</strong><br><small>JavaScript code injected into the URL is executed by the browser.</small></td>
+                        <td><code>/vulnerabilities/xss_r/</code></td>
+                        <td><span class="badge bg-high">High</span></td>
+                        <td>Implement Output Encoding and use Content Security Policy (CSP) headers.</td>
+                    </tr>
+        
+                    <tr>
+                        <td><strong>Broken Authentication</strong><br><small>Application allows weak credentials (admin:password) and lacks lockout mechanisms.</small></td>
+                        <td><code>/login.php</code></td>
+                        <td><span class="badge bg-medium">Medium</span></td>
+                        <td>Enforce strong password policies and multi-factor authentication (MFA).</td>
+                    </tr>
+        
+                    <tr>
+                        <td><strong>Insecure Session Management</strong><br><small>Cookies lack 'HttpOnly' and 'Secure' flags, making them vulnerable to hijacking.</small></td>
+                        <td><code>Session Cookies</code></td>
+                        <td><span class="badge bg-medium">Medium</span></td>
+                        <td>Configure server to send 'Set-Cookie' headers with HttpOnly and Secure attributes.</td>
+                    </tr>
+        
+                    <tr>
+                        <td><strong>IDOR (Insecure Direct Object Reference)</strong><br><small>Logged-in users can access other users' private data by changing the 'id' parameter.</small></td>
+                        <td><code>/vulnerabilities/sqli/?id=</code></td>
+                        <td><span class="badge bg-high">High</span></td>
+                        <td>Implement Object-Level Access Control checks on the server side.</td>
+                    </tr>
+        
+                </tbody>
+            </table>
+        </div>
+    </body>
+    </html>
+    
