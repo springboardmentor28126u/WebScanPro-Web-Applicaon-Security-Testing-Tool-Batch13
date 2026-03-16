@@ -1,34 +1,50 @@
 import requests
 from bs4 import BeautifulSoup
-from scanner.config import LOGIN_URL
 
 # Common passwords attackers try first
 COMMON_PASSWORDS = ["password", "123456", "admin", "letmein", "qwerty", "password1"]
 
 def brute_force(login_url, username, passwords=COMMON_PASSWORDS):
     findings = []
+
     for pwd in passwords:
-        session = requests.Session()     # Fresh session for each attempt
+        session = requests.Session()
+
+        # Step 1: Get login page
         r = session.get(login_url)
-        soup = BeautifulSoup(r.text, 'html.parser')
-        token_tag = soup.find('input', {'name': 'user_token'})
+        soup = BeautifulSoup(r.text, "html.parser")
 
-        data = {'username': username, 'password': pwd, 'Login': 'Login'}
-        if token_tag: data['user_token'] = token_tag['value']
+        token_tag = soup.find("input", {"name": "user_token"})
+        token = token_tag["value"] if token_tag else ""
 
-        resp = session.post(login_url, data=data)
+        # Step 2: Send login request
+        payload = {
+            "username": username,
+            "password": pwd,
+            "Login": "Login",
+            "user_token": token
+        }
 
-        # "Welcome" or "logout" only appear when logged in = weak creds found
-        if "Welcome" in resp.text or "logout" in resp.text.lower():
+        resp = session.post(login_url, data=payload)
+
+        # Success indicator
+        if "Username and/or password incorrect." not in resp.text:
             findings.append({
-                'username': username, 'password': pwd,
-                'type': 'Weak Credentials', 'severity': 'HIGH',
-                'url': login_url, 'parameter': 'password', 'payload': pwd
+                "username": username,
+                "password": pwd,
+                "type": "Weak Credentials",
+                "severity": "HIGH",
+                "url": login_url,
+                "parameter": "password",
+                "payload": pwd
             })
+
             print(f"  [VULN] Weak credentials: {username}:{pwd}")
-            break   # Found working password — stop trying more
+            break
+
         else:
             print(f"  Tried {username}:{pwd} - failed")
+
     return findings
 
 def check_cookie_security(session, url):

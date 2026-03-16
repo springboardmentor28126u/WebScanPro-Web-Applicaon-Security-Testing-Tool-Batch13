@@ -6,7 +6,7 @@ DVWA_SECURITY = "low"
 
 # Session cookie — copy from browser DevTools after login
 COOKIES = {
-    "PHPSESSID": "YOUR_SESSION_ID",
+    "PHPSESSID": "j7ksf6cb27pekelcm0k933jq26",
     "security": "low"
 }
 

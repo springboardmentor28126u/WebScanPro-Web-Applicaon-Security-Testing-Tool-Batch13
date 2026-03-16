@@ -143,6 +143,15 @@
         "mitigation": "Implement context-aware output encoding and use Content Security Policy (CSP)."
     },
     {
+        "username": "admin",
+        "password": "password",
+        "type": "Weak Credentials",
+        "severity": "HIGH",
+        "url": "http://localhost:8081/vulnerabilities/brute/",
+        "parameter": "password",
+        "payload": "password"
+    },
+    {
         "type": "Insecure Cookie",
         "parameter": "PHPSESSID",
         "payload": "Missing Secure flag",
@@ -177,14 +186,6 @@
     {
         "type": "Insecure Cookie",
         "parameter": "security",
-        "payload": "Missing Secure flag",
-        "url": "http://localhost:8081/login.php",
-        "issue": "Missing Secure flag",
-        "severity": "MEDIUM"
-    },
-    {
-        "type": "Insecure Cookie",
-        "parameter": "PHPSESSID",
         "payload": "Missing Secure flag",
         "url": "http://localhost:8081/login.php",
         "issue": "Missing Secure flag",

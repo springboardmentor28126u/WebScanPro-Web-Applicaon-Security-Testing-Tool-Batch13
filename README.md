@@ -241,3 +241,84 @@ By the end of Milestone 2, the system could:
 * Establishment of a structured vulnerability findings database in `reports/results.json`.
 
 Milestone 2 successfully turned the passive discovery engine into an active security testing tool capable of identifying high-risk vulnerabilities.
+
+
+---
+
+# 📌 Milestone 3 – Authentication, Session & Access Control Testing
+
+Milestone 3 extended WebScanPro beyond injection-based attacks into authentication weaknesses and access control flaws. This phase involved testing whether the application could be broken into using common passwords, whether session cookies were properly secured, and whether users could access data they should not be allowed to see.
+
+---
+
+# 📅 Week 5 – Authentication & Session Testing Module
+
+## 🎯 Week 5 Objectives
+
+- Test the login page for weak or default credentials using brute force
+- Inspect session cookies for missing security flags
+- Log findings and suggest security best practices
+
+---
+
+## 🛠 Auth Tester Implementation (`auth_tester.py`)
+
+### Brute Force (`brute_force`):
+
+- Tries passwords from `payloads/passwords.txt` one by one against the login page
+- For each attempt, grabs the CSRF token, sends an authenticated GET request to the brute force endpoint
+- If the response contains `"Welcome"` or `"logout"` — login succeeded — saves a **HIGH** severity finding and stops
+
+### Cookie Security Check (`check_cookie_security`):
+
+- Inspects the session cookie sent by the server after login
+- Checks for `Secure` flag — if missing, the cookie can travel over plain HTTP and be intercepted
+- Checks for `HttpOnly` flag — if missing, JavaScript can read and steal the cookie via XSS
+- Missing flags are saved as **MEDIUM** severity findings
+
+---
+
+# ✅ Week 5 Outcome
+
+- Automated brute force detection with wordlist support
+- Session cookie security audit against two critical flags
+- Weak credential `admin:password` successfully detected on DVWA
+
+---
+
+# 📅 Week 6 – Access Control & IDOR Testing Module
+
+## 🎯 Week 6 Objectives
+
+- Test whether users can access other users' data by changing ID values in the URL
+- Test whether file path inputs can be manipulated to read sensitive server files
+- Log findings and suggest access control improvements
+
+---
+
+## 🛠 IDOR Scanner Implementation (`idor_scanner.py`)
+
+### IDOR Test (`test_idor`):
+
+- Sends a baseline request using the authorized user's own ID to record a normal response
+- Loops through IDs 1 to 10 and sends a request for each
+- If the response differs from the baseline and returns real content — another user's data was accessed without authorization
+- Saves confirmed cases as **HIGH** severity findings
+
+### Path Traversal Test (`test_path_traversal`):
+
+- Injects four traversal payloads such as `../../etc/passwd` and a URL-encoded version `%2e%2e%2fetc%2fpasswd` to bypass simple filters
+- After each request checks if `root:` appears in the response — this confirms the server followed the path and returned a real system file
+- Saves confirmed cases as **HIGH** severity findings
+
+---
+
+# ✅ Milestone 3 Outcome
+
+- Automated brute force attack simulation against DVWA login
+- Session cookie security audit identifying missing `Secure` and `HttpOnly` flags
+- IDOR detection confirming unauthorized access to other users' data
+- Path traversal detection confirming server-side file exposure
+- All findings saved to `reports/results.json` for Week 7 report generation
+
+Milestone 3 successfully extended WebScanPro into authentication and access control testing, completing the full vulnerability detection engine before final report generation in Milestone 4.
