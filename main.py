@@ -4,7 +4,8 @@ from scanner.auth import get_session
 from scanner.crawler import crawl
 from scanner.sqli_scanner import test_sql_injection
 from scanner.xss_scanner import test_xss
-from scanner.config import TARGET_URL, RESULTS_JSON
+from scanner.auth_tester import brute_force, check_cookie_security   # Week 5
+from scanner.config import TARGET_URL, RESULTS_JSON, LOGIN_URL
 
 def main():
     print("[*] Web Scan Pro Starting...")
@@ -45,11 +46,21 @@ def main():
                 session, 
                 form['action'], 
                 clean_inputs, 
-                form['method'] # Uses GET or POST based on crawler data
+                form['method']  # Uses GET or POST based on crawler data
             )
             all_findings.extend(xss_results)
 
-    # 4. Save Results for Week 7 Report
+    # 4. Auth & Session Testing (Week 5)
+    print("\n[*] Starting Brute Force Test...")
+    brute_findings = brute_force(LOGIN_URL, "admin")
+    all_findings.extend(brute_findings)
+
+    print("\n[*] Checking Cookie Security...")
+    session3 = get_session()
+    cookie_findings = check_cookie_security(session3, LOGIN_URL)
+    all_findings.extend(cookie_findings)
+
+    # 5. Save Results for Week 7 Report
     print(f"\n[+] Total vulnerabilities found: {len(all_findings)}")
     with open("reports/results.json", "w") as f:
         json.dump(all_findings, f, indent=4)
