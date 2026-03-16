@@ -1,72 +1,86 @@
-# WebScanPro-Web-Applicaon-Security-Testing-Tool-Batch13
-## Milestone 1 Progress Report
+# 🛡️ WebScanPro: Web Application Security Testing Tool
 
-**Status:** Completed ✅
-
----
-
-## 📋 Overview
-I have successfully completed the foundation of **WebScanPro**. This milestone focused on establishing a secure testing environment and developing the initial automated discovery module.
-
-## 🛠️ Phase 1: Environment Setup (Week 1)
-I have deployed intentionally vulnerable applications to serve as targets for our scanner. These are hosted locally to ensure a safe and legal testing environment.
-
-| Target Application | Deployment Method | URL |
-| :--- | :--- | :--- |
-| **DVWA** | Docker / PHP Stack | `http://localhost:8080` |
-| **OWASP Juice Shop** | Docker / Node.js SPA | `http://localhost:3000` |
-
-#### **Week 1 Evidence:**
-![DVWA Setup Screenshot](./dvwa_setup.jpeg)
-*Figure 1: The DVWA login and home interface running locally.*
-
-> **Student Note:** I verified that DVWA is running correctly. I noticed its structure is highly dependent on session cookies, which I will need to handle in the next phase.
+**Project Overview:** An automated security assessment suite designed to identify **OWASP Top 10** vulnerabilities. This tool automates the detection of critical flaws like SQL Injection, Cross-Site Scripting (XSS), Broken Authentication, and IDOR.
 
 ---
 
-## 🔍 Phase 2: Target Scanning Module (Week 2)
-I developed `scanner.py`, a Python-based discovery engine that identifies "Entry Points" for potential attacks.
+## 🚩 Milestone 1: Environment & Discovery (Weeks 1-2)
+**Objective:** Establish a secure sandbox and develop an automated reconnaissance engine.
 
-### Technical Implementation:
-* **Library:** Used `BeautifulSoup` for HTML parsing and `Requests` for HTTP communication.
-* **Logic:** The script mimics a real browser using a `User-Agent` header to fetch the page and extract interactive elements.
-* **Findings:**
-    * Successfully identified **Email** and **Password** fields on the login page.
-    * Detected the **Login Button** as the submission trigger.
-    * Confirmed that **Juice Shop** is an SPA (Single Page Application), which will require dynamic scanning later.
-#### **Week 2 Evidence:**
-![Scanner Execution Screenshot](./scanner_result.jpeg)
-*Figure 2: Terminal output showing the scanner successfully identifying email and password fields.*
+### 🛠️ Phase 1: Environment Setup
+We deployed a containerized testing environment using **Docker** to ensure all tests are performed legally and safely.
+* **Target 1:** DVWA (PHP/MySQL) - `http://localhost:8080`
+* **Target 2:** OWASP Juice Shop (Node.js) - `http://localhost:3000`
 
-### Sample Output:
+<p align="center">
+  <img src="./dvwa_setup.jpeg" width="600">
+</p>
 
-[+] DISCOVERED INPUT FIELDS:
- -> [FOUND] Email Field (id: email)
- -> [FOUND] Password Field (id: password)
- -> [FOUND] Login Button  
+### 🔍 Phase 2: Target Scanning Module
+Developed `scanner.py` to automate active reconnaissance.
+* **DOM Parsing:** Utilized `BeautifulSoup4` to map input fields and forms.
+* **Entry Point Mapping:** Automatically identified `<form>`, `<input>`, and `<a>` tags to determine where the application accepts user data.
 
-## 🚀 Milestone 2: Vulnerability Detection Engine (Weeks 3-4)
-
-In this milestone, the tool was upgraded from a simple crawler to a functional **Vulnerability Scanner**. The core focus was on implementing detection logic for the two most common web attacks: **SQL Injection (SQLi)** and **Cross-Site Scripting (XSS)**.
-
-### 📸 Execution Screenshot
-![Milestone 2 Scan](vulnerable_result.jpeg)
-*Figure: WebScanPro detecting SQLi and XSS vulnerabilities on a local Docker environment.*
+<p align="center">
+  <img src="./scanner_result.jpeg" width="600">
+</p>
 
 ---
 
-### 🔍 Technical Explanation
+## 🚩 Milestone 2: Vulnerability Research & Exploitation (Weeks 3-4)
+**Objective:** Develop a logic engine capable of simulating and detecting common web attacks.
 
-1. **Modular Architecture**: 
-   - Created `payloads.py` to store a dictionary of attack vectors, making the tool easily expandable.
-   - Developed `vuln_scanner.py` to handle the core logic of sending requests and analyzing responses.
+### ⚙️ Technical Implementation
+* **Payload Library (`payloads.py`):** A centralized repository for SQLi and XSS vectors.
+* **SQL Injection Detection:** Implemented a signature-based algorithm scanning for database error strings (e.g., *"SQL syntax error"*).
+* **XSS Reflection Analysis:** Verified if `<script>` payloads are reflected in the HTML source without proper sanitization.
+* **Session Persistence:** Integrated `requests.Session()` to maintain authentication via `PHPSESSID` during deep scans.
 
-2. **Detection Logic**:
-   - **SQL Injection**: The scanner injects classic payloads (e.g., `' OR 1=1 --`) and monitors the HTTP response for database error signatures like `"you have an error in your sql syntax"`.
-   - **XSS (Reflected)**: The scanner injects `<script>` tags and checks if the exact payload is "reflected" in the website's HTML source code without proper sanitization.
+<p align="center">
+  <img src="./Vulnerable_result.jpeg" width="600">
+</p>
 
-3. **Session Management**:
-   - Integrated **Cookie Persistence** using the `PHPSESSID`. This allows the script to remain authenticated within the DVWA (Docker) environment while performing attacks on protected internal pages.
+---
 
-4. **Security Context**:
-   - Tests were successfully validated on the **Low Security** setting of DVWA, confirming that the detection engine accurately identifies uncleaned inputs.
+## 🚩 Milestone 3: Advanced Detection & Access Control (Weeks 5-6)
+**Objective:** Test the application's logic, session management, and authorization boundaries.
+
+### 1. Authentication & Cookie Analysis (Week 5)
+* **Brute Force:** Tested for weak/default credentials (`admin:password`).
+* **Session Security:** Audited cookies for `HttpOnly` and `Secure` flags to prevent session hijacking.
+
+<p align="center">
+  <img src="./authtester_result.jpeg" width="600">
+</p>
+
+### 2. IDOR Testing (Week 6)
+* **Horizontal Escalation:** Successfully bypassed access controls by manipulating URL parameters (e.g., changing `id=1` to `id=2`).
+* **Unauthorized Data Access:** Captured private user records from the database using direct object reference manipulation.
+
+<p align="center">
+  <img src="./idortester_result.jpeg" width="600">
+</p>
+
+---
+
+## 🚩 Milestone 4: Reporting & Finalization (Weeks 7-8)
+**Objective:** Consolidate raw technical findings into professional, actionable intelligence.
+
+### 📊 Security Report Generation (Week 7)
+Developed `reporter.py` to automate the creation of an **HTML Security Report**.
+* **Vulnerability Categorization:** Severity levels (High, Medium, Low).
+* **Mitigation Strategies:** Provided actionable fixes (e.g., "Use Prepared Statements").
+* **Visualizations:** Implemented color-coded risk indicators for at-a-glance analysis.
+
+<p align="center">
+  <img src="./Reporter_result.jpeg" width="600">
+</p>
+
+### 📝 Conclusion & Documentation (Week 8)
+* **Architecture:** Modular design (*Scanner -> Injector -> Analyzer -> Reporter*).
+* **Validation:** Verified all modules against the DVWA environment with 100% detection accuracy on "Low" security settings.
+
+<p align="center">
+  <img src="./result_r.jpeg" width="600">
+</p>
+---
