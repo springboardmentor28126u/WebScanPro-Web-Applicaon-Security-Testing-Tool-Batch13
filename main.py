@@ -4,6 +4,9 @@ from crawler import crawl
 from xss import test_xss
 import json
 
+from authorization_test import test_horizontal_privilege
+from authorization_test import test_vertical_privilege
+from authorization_test import test_idor
 from auth_session_test import test_default_credentials
 from auth_session_test import simulate_bruteforce
 from auth_session_test import check_cookie_security
@@ -73,7 +76,19 @@ def main():
     vulnerabilities.extend(
         test_session_fixation(base_url, request_handler)
     )
+    # Authorization Testing (Week 6)
 
+    vulnerabilities.extend(
+        test_horizontal_privilege(base_url, request_handler)
+    )
+
+    vulnerabilities.extend(
+        test_vertical_privilege(base_url, request_handler)
+    )
+
+    vulnerabilities.extend(
+        test_idor(base_url, request_handler)
+    )
 
     final_report = {
         "total_forms": len(forms),
