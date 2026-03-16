@@ -12,7 +12,7 @@ def crawl(start_url, requester, max_depth=2):
         if url in visited or depth > max_depth:
             continue
 
-        print(f"Crawling: {url}")
+        # print(f"Crawling: {url}")
         visited.add(url)
 
         try:

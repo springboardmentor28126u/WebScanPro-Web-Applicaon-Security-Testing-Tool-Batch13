@@ -5,7 +5,7 @@ class RequestHandler:
     def set_security_low(self, base_url):
         security_url = f"{base_url}security.php"
 
-        # Step 1: Get security page to extract CSRF token
+       
         response = self.session.get(security_url)
         soup = BeautifulSoup(response.text, "html.parser")
 
@@ -16,7 +16,7 @@ class RequestHandler:
 
         user_token = token_input.get("value")
 
-        # Step 2: Send POST request with token
+        
         payload = {
             "security": "low",
             "seclev_submit": "Submit",
@@ -53,7 +53,7 @@ class RequestHandler:
 
             login_response = self.session.post(login_url, data=payload)
 
-            # ✅ Correct success check
+            
             if "Logout" in login_response.text:
                 print("[+] Login successful!")
                 return True
