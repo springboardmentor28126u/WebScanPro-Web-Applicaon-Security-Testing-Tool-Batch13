@@ -1,25 +1,42 @@
 import requests
 from urllib.parse import urlparse
+
 from scanner.crawler import login_dvwa, crawl
 from scanner.extractor import extract_forms
 from scanner.sqli_tester import test_sqli
 from scanner.xss_tester import test_xss, test_xss_url_params
-from scanner.storage import save_report
+
+from scanner.auth_tester import (
+    test_default_credentials,
+    test_bruteforce,
+    test_session_security,
+    test_session_fixation
+)
+
+from scanner.idor_tester import (
+    test_idor,
+    test_horizontal_privilege_escalation,
+    test_vertical_privilege_escalation
+)
+
+from scanner.storage import save_report, save_metadata
 
 
 def main():
+
     start_url = "http://localhost/dvwa/"
+    login_url = "http://localhost/dvwa/login.php"
     base_domain = urlparse(start_url).netloc
 
     # ==============================
-    # 1️⃣ LOGIN
+    # LOGIN
     # ==============================
     session = login_dvwa()
     if not session:
         return
 
     # ==============================
-    # 2️⃣ CRAWLING
+    # CRAWLING
     # ==============================
     print("\n[+] Crawling site...\n")
 
@@ -33,12 +50,10 @@ def main():
 
     print(f"\nTotal pages found: {len(all_pages)}")
 
-    from scanner.storage import save_metadata
-
     save_metadata(all_pages, "data/targets.json")
 
     # ==============================
-    # 3️⃣ FORM EXTRACTION
+    # FORM EXTRACTION
     # ==============================
     print("\n[+] Extracting forms...\n")
 
@@ -54,16 +69,14 @@ def main():
             })
 
     # ==============================
-    # 4️⃣ SQL INJECTION TESTING
+    # SQL INJECTION TESTING
     # ==============================
     print("\nStarting Advanced SQL Injection Testing...\n")
 
     sqli_results = test_sqli(session, target_data)
 
-    print("\nTesting Complete.\n")
-
     if sqli_results:
-        print("Potential SQL Injection Vulnerabilities Found:\n")
+        print("\nPotential SQL Injection Vulnerabilities Found:\n")
 
         for v in sqli_results:
             print("Type:", v["type"])
@@ -85,7 +98,7 @@ def main():
         print("No SQL Injection patterns detected.")
 
     # ==============================
-    # 5️⃣ XSS TESTING
+    # XSS TESTING
     # ==============================
     print("\nStarting XSS Testing...\n")
 
@@ -95,7 +108,7 @@ def main():
     all_xss_results = xss_form_results + xss_url_results
 
     if all_xss_results:
-        print("Potential XSS Vulnerabilities Found:\n")
+        print("\nPotential XSS Vulnerabilities Found:\n")
 
         for v in all_xss_results:
             print("Type:", v["type"])
@@ -115,19 +128,44 @@ def main():
         print("No XSS patterns detected.")
 
     # ==============================
-    # 6️⃣ SAVE REPORT
+    # AUTHENTICATION TESTING
+    # ==============================
+    print("\nStarting Authentication Testing...\n")
+
+    auth_results = test_default_credentials(login_url)
+    brute_results = test_bruteforce(login_url)
+    session_results = test_session_security(session, start_url)
+    fixation_results = test_session_fixation(session, login_url)
+
+    auth_all = auth_results + brute_results + session_results + fixation_results
+
+    # ==============================
+    # ACCESS CONTROL / IDOR TESTING
+    # ==============================
+    print("\nStarting Access Control and IDOR Testing...\n")
+
+    idor_results = test_idor(session, all_pages)
+    horizontal_results = test_horizontal_privilege_escalation(session, all_pages)
+    vertical_results = test_vertical_privilege_escalation(session)
+
+    access_results = idor_results + horizontal_results + vertical_results
+
+    # ==============================
+    # SAVE REPORT
     # ==============================
     all_results = {
         "sqli": sqli_results,
-        "xss": all_xss_results
+        "xss": all_xss_results,
+        "authentication": auth_all,
+        "access_control": access_results
     }
 
     save_report(all_results, "data/vulnerabilities.json")
 
     # ==============================
-    # 7️⃣ FINAL SUMMARY
+    # FINAL SUMMARY
     # ==============================
-    if not sqli_results and not all_xss_results:
+    if not sqli_results and not all_xss_results and not auth_all and not access_results:
         print("\nNo vulnerabilities detected.")
 
 

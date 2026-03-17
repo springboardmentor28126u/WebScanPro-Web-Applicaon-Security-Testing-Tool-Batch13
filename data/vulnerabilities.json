@@ -76,5 +76,63 @@
                 "dom": "Avoid using innerHTML with user input."
             }
         }
-    ]
+    ],
+    "authentication": [
+        {
+            "type": "Weak Credentials",
+            "username": "admin",
+            "password": "admin"
+        },
+        {
+            "type": "Weak Credentials",
+            "username": "admin",
+            "password": "password"
+        },
+        {
+            "type": "Weak Credentials",
+            "username": "test",
+            "password": "test"
+        },
+        {
+            "type": "Brute Force Success",
+            "password": "1234"
+        },
+        {
+            "type": "Brute Force Success",
+            "password": "password"
+        },
+        {
+            "type": "Brute Force Success",
+            "password": "admin"
+        },
+        {
+            "type": "Brute Force Success",
+            "password": "root"
+        },
+        {
+            "type": "Insecure Cookie",
+            "cookie": "security",
+            "issue": "Missing Secure flag"
+        },
+        {
+            "type": "Insecure Cookie",
+            "cookie": "security",
+            "issue": "Missing HttpOnly flag"
+        },
+        {
+            "type": "Insecure Cookie",
+            "cookie": "PHPSESSID",
+            "issue": "Missing Secure flag"
+        },
+        {
+            "type": "Insecure Cookie",
+            "cookie": "PHPSESSID",
+            "issue": "Missing HttpOnly flag"
+        },
+        {
+            "type": "Session Fixation",
+            "issue": "Session ID did not change after login"
+        }
+    ],
+    "access_control": []
 }
