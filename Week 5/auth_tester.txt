@@ -1,0 +1,344 @@
+import json
+import os
+import re
+import time
+from datetime import datetime, timezone
+from urllib.parse import urljoin, urlparse
+
+import requests
+
+
+DEFAULTS = {
+    "target_url": "http://localhost/dvwa",
+    "login_url": "http://localhost/dvwa/login.php",
+    "protected_url": "http://localhost/dvwa/index.php",
+    "logout_url": "http://localhost/dvwa/logout.php",
+    "timeout": 10,
+    "headers": {"User-Agent": "Mozilla/5.0 (AuthSessionTester/Week5)"},
+    "username_field": "username",
+    "password_field": "password",
+    "csrf_field": "user_token",
+    "extra_login_data": {"Login": "Login"},
+    "cookie_name": "PHPSESSID",
+    "min_token_length": 16,
+    "json_report": "week5_report.json",
+    "text_report": "findings_week5.txt",
+}
+
+SUCCESS_HINTS = ["logout", "welcome", "vulnerabilities", "dvwa security"]
+FAILURE_HINTS = ["login failed", "username and/or password incorrect", "invalid password", "incorrect password"]
+LOCKOUT_HINTS = ["account locked", "too many login attempts", "too many failed attempts", "temporarily disabled"]
+
+
+def utc_now():
+    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def load_settings():
+    cfg = dict(DEFAULTS)
+    if os.path.exists("config.json"):
+        with open("config.json", "r", encoding="utf-8") as handle:
+            raw = json.load(handle)
+        cfg["target_url"] = raw.get("target_url", cfg["target_url"]).rstrip("/")
+        cfg["login_url"] = raw.get("login_url", cfg["login_url"])
+        cfg["protected_url"] = raw.get("protected_url", cfg["protected_url"])
+        cfg["logout_url"] = urljoin(cfg["target_url"] + "/", "logout.php")
+        request_cfg = raw.get("request", {})
+        login_cfg = raw.get("login", {})
+        session_cfg = raw.get("session", {})
+        cfg["timeout"] = int(request_cfg.get("timeout", cfg["timeout"]))
+        cfg["headers"] = request_cfg.get("headers", cfg["headers"])
+        cfg["username_field"] = login_cfg.get("username_field", cfg["username_field"])
+        cfg["password_field"] = login_cfg.get("password_field", cfg["password_field"])
+        cfg["csrf_field"] = login_cfg.get("csrf_token_field", cfg["csrf_field"])
+        cfg["extra_login_data"] = login_cfg.get("extra_post_data", cfg["extra_login_data"])
+        cfg["cookie_name"] = session_cfg.get("cookie_name", cfg["cookie_name"])
+        cfg["min_token_length"] = int(session_cfg.get("min_token_length", cfg["min_token_length"]))
+        cfg["text_report"] = raw.get("report_file", cfg["text_report"])
+    return cfg
+
+
+def build_session(cfg):
+    session = requests.Session()
+    session.headers.update(cfg["headers"])
+    return session
+
+
+def extract_token(html, field_name):
+    patterns = [
+        rf'name=["\']{re.escape(field_name)}["\'][^>]*value=["\']([^"\']+)',
+        rf'value=["\']([^"\']+)["\'][^>]*name=["\']{re.escape(field_name)}["\']',
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, html, re.IGNORECASE)
+        if match:
+            return match.group(1)
+    return None
+
+
+def get_set_cookie_headers(response):
+    headers = []
+    raw_headers = getattr(getattr(response, "raw", None), "headers", None)
+    if raw_headers:
+        for method in ("get_all", "getlist"):
+            getter = getattr(raw_headers, method, None)
+            if getter:
+                headers = getter("Set-Cookie") or []
+                if headers:
+                    break
+    if not headers and response.headers.get("Set-Cookie"):
+        headers = [response.headers["Set-Cookie"]]
+    return headers
+
+
+def parse_cookie_flags(headers):
+    parsed = {}
+    for header in headers:
+        parts = [part.strip() for part in header.split(";") if part.strip()]
+        if not parts or "=" not in parts[0]:
+            continue
+        name, value = parts[0].split("=", 1)
+        flags = {"HttpOnly": False, "Secure": False, "SameSite": None}
+        for part in parts[1:]:
+            low = part.lower()
+            if low == "httponly":
+                flags["HttpOnly"] = True
+            elif low == "secure":
+                flags["Secure"] = True
+            elif low.startswith("samesite="):
+                flags["SameSite"] = part.split("=", 1)[1]
+        parsed[name] = {"value": value, "flags": flags, "header": header}
+    return parsed
+
+
+def cookie_flags_from_jar(cookie):
+    rest = {str(key).lower(): value for key, value in getattr(cookie, "_rest", {}).items()}
+    return {
+        "HttpOnly": "httponly" in rest,
+        "Secure": bool(getattr(cookie, "secure", False)),
+        "SameSite": rest.get("samesite"),
+    }
+
+
+def is_success(response):
+    body = (response.text or "").lower()
+    return any(hint in body for hint in SUCCESS_HINTS) and not any(hint in body for hint in FAILURE_HINTS)
+
+
+def is_lockout(response):
+    body = (response.text or "").lower()
+    return response.status_code in (423, 429) or any(hint in body for hint in LOCKOUT_HINTS)
+
+
+def looks_like_login(response):
+    body = (response.text or "").lower()
+    return "login" in body and "password" in body and "username" in body and "logout" not in body
+
+
+def login_attempt(session, cfg, username, password):
+    try:
+        page = session.get(cfg["login_url"], timeout=cfg["timeout"], allow_redirects=True)
+        pre_sid = session.cookies.get(cfg["cookie_name"])
+        data = dict(cfg["extra_login_data"])
+        data[cfg["username_field"]] = username
+        data[cfg["password_field"]] = password
+        token = extract_token(page.text, cfg["csrf_field"])
+        if token:
+            data[cfg["csrf_field"]] = token
+        start = time.perf_counter()
+        response = session.post(cfg["login_url"], data=data, timeout=cfg["timeout"], allow_redirects=True)
+        elapsed_ms = round((time.perf_counter() - start) * 1000, 2)
+        cookies = parse_cookie_flags(get_set_cookie_headers(page) + get_set_cookie_headers(response))
+        return {
+            "ok": is_success(response),
+            "locked": is_lockout(response),
+            "status_code": response.status_code,
+            "response_ms": elapsed_ms,
+            "pre_sid": pre_sid,
+            "post_sid": session.cookies.get(cfg["cookie_name"]),
+            "response": response,
+            "cookies": cookies,
+        }
+    except requests.RequestException as exc:
+        return {"ok": False, "locked": False, "error": str(exc), "cookies": {}}
+
+
+def set_security_low(session, cfg):
+    cookies = {}
+    url = urljoin(cfg["target_url"] + "/", "security.php")
+    try:
+        page = session.get(url, timeout=cfg["timeout"], allow_redirects=True)
+        cookies.update(parse_cookie_flags(get_set_cookie_headers(page)))
+        token = extract_token(page.text, cfg["csrf_field"])
+        data = {"security": "low", "seclev_submit": "Submit"}
+        if token:
+            data[cfg["csrf_field"]] = token
+        response = session.post(url, data=data, timeout=cfg["timeout"], allow_redirects=True)
+        cookies.update(parse_cookie_flags(get_set_cookie_headers(response)))
+    except requests.RequestException:
+        pass
+    return cookies
+
+
+def add_finding(report, severity, title, details):
+    report["findings"].append({"severity": severity, "title": title, "details": details})
+
+
+def inspect_cookie_security(report, session, observed_cookies):
+    results = {}
+    for name in ("PHPSESSID", "security"):
+        cookie = next((item for item in session.cookies if item.name == name), None)
+        entry = observed_cookies.get(name, {})
+        flags = entry.get("flags") or (cookie_flags_from_jar(cookie) if cookie else None)
+        results[name] = {"present": bool(cookie or entry), "flags": flags}
+        if not flags:
+            continue
+        missing = [flag for flag in ("HttpOnly", "Secure", "SameSite") if not flags.get(flag)]
+        if missing:
+            add_finding(report, "Medium", f"{name} cookie missing security flags", ", ".join(missing))
+    report["checks"]["cookie_security"] = results
+
+
+def assess_token_quality(token, minimum_length):
+    if not token:
+        return ["missing session token"]
+    issues = []
+    unique_ratio = len(set(token)) / max(len(token), 1)
+    charset_score = sum(bool(re.search(pattern, token)) for pattern in (r"[a-z]", r"[A-Z]", r"\d", r"[^A-Za-z0-9]"))
+    if len(token) < minimum_length:
+        issues.append(f"shorter than {minimum_length} characters")
+    if charset_score < 2:
+        issues.append("low character variety")
+    if unique_ratio < 0.30:
+        issues.append("low uniqueness")
+    return issues
+
+
+def write_text_report(path, report):
+    lines = [
+        "Authentication and Session Testing Findings",
+        f"Generated: {report['generated_at']}",
+        f"Target URL: {report['target']}",
+        f"Login URL: {report['checks']['target'].get('login_url')}",
+        "",
+    ]
+    if not report["findings"]:
+        lines.append("No vulnerabilities were confirmed during this run.")
+    else:
+        for item in report["findings"]:
+            lines.append(f"[{item['severity']}] {item['title']}: {item['details']}")
+    with open(path, "w", encoding="utf-8") as handle:
+        handle.write("\n".join(lines) + "\n")
+
+
+def main():
+    cfg = load_settings()
+    report = {"generated_at": utc_now(), "target": cfg["target_url"], "report_file": cfg["json_report"], "credentials": {"primary": {"username": "admin", "password": "password"}, "defaults_tested": [{"username": "admin", "password": "password"}, {"username": "admin", "password": "admin"}, {"username": "test", "password": "test"}], "bruteforce_username": "admin"}, "checks": {}, "findings": []}
+    probe = build_session(cfg)
+    try:
+        response = probe.get(cfg["login_url"], timeout=cfg["timeout"], allow_redirects=True)
+        report["checks"]["target"] = {"reachable": True, "status_code": response.status_code, "login_url": cfg["login_url"]}
+    except requests.RequestException as exc:
+        report["checks"]["target"] = {"reachable": False, "error": str(exc), "login_url": cfg["login_url"]}
+        add_finding(report, "Critical", "DVWA login page unreachable", str(exc))
+        with open(cfg["json_report"], "w", encoding="utf-8") as handle:
+            json.dump(report, handle, indent=2)
+        write_text_report(cfg["text_report"], report)
+        for finding in report["findings"]:
+            print(f"[{finding['severity']}] {finding['title']}: {finding['details']}")
+        return
+
+    default_results = []
+    valid_defaults = []
+    for username, password in [("admin", "password"), ("admin", "admin"), ("test", "test")]:
+        attempt = login_attempt(build_session(cfg), cfg, username, password)
+        default_results.append({"username": username, "password": password, "success": attempt.get("ok", False), "status_code": attempt.get("status_code")})
+        if attempt.get("ok"):
+            valid_defaults.append(f"{username}/{password}")
+    report["checks"]["default_credentials"] = default_results
+    if valid_defaults:
+        add_finding(report, "Critical", "Default credentials accepted", ", ".join(valid_defaults))
+
+    auth_session = build_session(cfg)
+    auth = login_attempt(auth_session, cfg, "admin", "password")
+    report["checks"]["authenticated_login"] = {"username": "admin", "password": "password", "success": auth.get("ok", False), "status_code": auth.get("status_code"), "error": auth.get("error")}
+    if auth.get("ok"):
+        fixation = auth.get("pre_sid") == auth.get("post_sid") and bool(auth.get("post_sid"))
+        report["checks"]["session_fixation"] = {"username": "admin", "password": "password", "pre_login": auth.get("pre_sid"), "post_login": auth.get("post_sid"), "fixation_present": fixation}
+        if fixation:
+            add_finding(report, "High", "Session fixation detected", "The session ID stayed the same before and after login.")
+
+        observed_cookies = dict(auth.get("cookies", {}))
+        observed_cookies.update(set_security_low(auth_session, cfg))
+        inspect_cookie_security(report, auth_session, observed_cookies)
+
+        token = auth_session.cookies.get(cfg["cookie_name"])
+        token_issues = assess_token_quality(token, cfg["min_token_length"])
+        report["checks"]["session_token_quality"] = {"username": "admin", "password": "password", "token_present": bool(token), "length": len(token) if token else 0, "issues": token_issues}
+        if token_issues and token_issues != ["missing session token"]:
+            add_finding(report, "Medium", "Session token quality is weak", ", ".join(token_issues))
+
+        old_sid = token
+        security_cookie = auth_session.cookies.get("security")
+        try:
+            auth_session.get(cfg["logout_url"], timeout=cfg["timeout"], allow_redirects=True)
+            hijack = build_session(cfg)
+            host = urlparse(cfg["target_url"]).hostname or "localhost"
+            if old_sid:
+                hijack.cookies.set(cfg["cookie_name"], old_sid, domain=host, path="/")
+            if security_cookie:
+                hijack.cookies.set("security", security_cookie, domain=host, path="/")
+            reuse = hijack.get(cfg["protected_url"], timeout=cfg["timeout"], allow_redirects=True)
+            reuse_allowed = is_success(reuse)
+            report["checks"]["session_hijacking"] = {"username": "admin", "password": "password", "token_reused": bool(old_sid), "reuse_allowed_after_logout": reuse_allowed, "status_code": reuse.status_code}
+            if reuse_allowed:
+                add_finding(report, "High", "Old session token remained valid after logout", "The previous PHPSESSID still reached a protected page.")
+        except requests.RequestException as exc:
+            report["checks"]["session_hijacking"] = {"username": "admin", "password": "password", "token_reused": bool(old_sid), "error": str(exc)}
+    else:
+        reason = auth.get("error") or "admin/password login was not successful, so authenticated checks were skipped."
+        report["checks"]["session_fixation"] = {"skipped": True, "reason": reason}
+        report["checks"]["cookie_security"] = {"skipped": True, "reason": reason}
+        report["checks"]["session_token_quality"] = {"skipped": True, "reason": reason}
+        report["checks"]["session_hijacking"] = {"skipped": True, "reason": reason}
+
+    passwords = ["123456", "admin", "password1", "password"]
+    brute = []
+    brute_session = build_session(cfg)
+    for password in passwords:
+        attempt = login_attempt(brute_session, cfg, "admin", password)
+        brute.append({"username": "admin", "password": password, "status_code": attempt.get("status_code"), "response_ms": attempt.get("response_ms"), "success": attempt.get("ok", False), "locked": attempt.get("locked", False)})
+        if attempt.get("locked") or attempt.get("ok"):
+            break
+    times = [item["response_ms"] for item in brute if item["response_ms"] is not None]
+    slowed = len(times) > 1 and max(times) > min(times) * 2.5 and max(times) - min(times) > 500
+    rate_limited = any(item["locked"] or item["status_code"] in (423, 429) for item in brute) or slowed
+    report["checks"]["bruteforce"] = {"attempts": brute, "rate_limited_or_blocked": rate_limited}
+    if not rate_limited:
+        add_finding(report, "Medium", "Brute-force protection not observed", "No lockout, blocking, or meaningful response delay was detected.")
+
+    lockout_attempts = []
+    lockout_session = build_session(cfg)
+    lockout_triggered = False
+    for index in range(1, 6):
+        attempt = login_attempt(lockout_session, cfg, "admin", f"wrong-pass-{index}")
+        lockout_attempts.append({"attempt": index, "username": "admin", "password": f"wrong-pass-{index}", "status_code": attempt.get("status_code"), "locked": attempt.get("locked", False), "response_ms": attempt.get("response_ms")})
+        if attempt.get("locked"):
+            lockout_triggered = True
+            break
+    report["checks"]["account_lockout"] = {"attempts": lockout_attempts, "lockout_triggered": lockout_triggered}
+    if not lockout_triggered:
+        add_finding(report, "Medium", "Account lockout not triggered", "Repeated failed logins did not cause a visible lockout response.")
+
+    with open(cfg["json_report"], "w", encoding="utf-8") as handle:
+        json.dump(report, handle, indent=2)
+    write_text_report(cfg["text_report"], report)
+    for finding in report["findings"]:
+        print(f"[{finding['severity']}] {finding['title']}: {finding['details']}")
+    if not report["findings"]:
+        print("[Low] No vulnerabilities were confirmed during this run.")
+    print(f"JSON report saved to {cfg['json_report']}")
+
+
+if __name__ == "__main__":
+    main()
