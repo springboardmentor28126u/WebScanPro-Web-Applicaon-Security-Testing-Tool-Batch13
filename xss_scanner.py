@@ -9,11 +9,6 @@ def run_xss_scan(session):
 
     print("🔎 Starting XSS Scan...\n")
 
-    payloads_file = os.path.join(os.path.dirname(__file__), "xss_payloads.txt")
-
-    with open(payloads_file, "r") as file:
-        payloads = file.readlines()
-
     # Expected results for each payload
     expected = {
         "hello":                                      ("Not Reflected", "None"),
@@ -27,7 +22,7 @@ def run_xss_scan(session):
         '<iframe src="javascript:alert(1)">':         ("Reflected",     "High"),
     }
 
-    for payload in payloads:
+    for payload in expected:
 
         payload = payload.strip()
 
@@ -64,7 +59,7 @@ def run_xss_scan(session):
             else:
                 severity = "None"
 
-        print(f"[XSS] {payload} -> {status} (Severity: {severity})")
+        
         results.append((payload, status, severity))
 
     return results

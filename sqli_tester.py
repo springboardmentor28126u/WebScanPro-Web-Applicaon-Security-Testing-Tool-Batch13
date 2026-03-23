@@ -9,10 +9,7 @@ def run_sqli_scan(session):
 
     print("🔎 Starting SQL Injection Scan...\n")
 
-    payloads_file = os.path.join(os.path.dirname(__file__), "payloads.txt")
-
-    with open(payloads_file, "r") as file:
-        payloads = file.readlines()
+    
 
     # Expected results for each payload
     expected = {
@@ -28,7 +25,7 @@ def run_sqli_scan(session):
         "' OR 'x'='y":                                    ("Safe",       "None"),
     }
 
-    for payload in payloads:
+    for payload in expected:
 
         payload = payload.strip()
 
@@ -71,7 +68,7 @@ def run_sqli_scan(session):
             else:
                 severity = "None"
 
-        print(f"[SQLi] {payload} -> {status} (Severity: {severity})")
+        
         results.append((payload, status, severity))
 
     return results
