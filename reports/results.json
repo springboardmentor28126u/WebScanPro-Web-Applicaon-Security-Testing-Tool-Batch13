@@ -1,55 +1,55 @@
 [
     {
-        "url": "http://localhost:8081/vulnerabilities/brute/",
+        "url": "http://localhost/vulnerabilities/brute/",
         "parameter": "username",
         "payload": "'",
         "type": "SQL Injection",
         "severity": "HIGH"
     },
     {
-        "url": "http://localhost:8081/vulnerabilities/brute/",
+        "url": "http://localhost/vulnerabilities/brute/",
         "parameter": "username",
         "payload": "' OR '1'='1' --",
         "type": "SQL Injection",
         "severity": "HIGH"
     },
     {
-        "url": "http://localhost:8081/vulnerabilities/brute/",
+        "url": "http://localhost/vulnerabilities/brute/",
         "parameter": "username",
         "payload": "1' ORDER BY 1--",
         "type": "SQL Injection",
         "severity": "HIGH"
     },
     {
-        "url": "http://localhost:8081/vulnerabilities/brute/",
+        "url": "http://localhost/vulnerabilities/brute/",
         "parameter": "username",
         "payload": "1' ORDER BY 2--",
         "type": "SQL Injection",
         "severity": "HIGH"
     },
     {
-        "url": "http://localhost:8081/vulnerabilities/brute/",
+        "url": "http://localhost/vulnerabilities/brute/",
         "parameter": "username",
         "payload": "1' UNION SELECT NULL--",
         "type": "SQL Injection",
         "severity": "HIGH"
     },
     {
-        "url": "http://localhost:8081/vulnerabilities/brute/",
+        "url": "http://localhost/vulnerabilities/brute/",
         "parameter": "username",
         "payload": "1' UNION SELECT NULL, NULL--",
         "type": "SQL Injection",
         "severity": "HIGH"
     },
     {
-        "url": "http://localhost:8081/vulnerabilities/brute/",
+        "url": "http://localhost/vulnerabilities/brute/",
         "parameter": "username",
         "payload": "admin'--",
         "type": "SQL Injection",
         "severity": "HIGH"
     },
     {
-        "url": "http://localhost:8081/vulnerabilities/brute/#",
+        "url": "http://localhost/vulnerabilities/brute/#",
         "parameter": "username",
         "payload": "'\"><script>alert(1)</script>",
         "type": "Cross-Site Scripting (XSS)",
@@ -58,56 +58,56 @@
         "mitigation": "Implement context-aware output encoding and use Content Security Policy (CSP)."
     },
     {
-        "url": "http://localhost:8081/vulnerabilities/sqli/",
+        "url": "http://localhost/vulnerabilities/sqli/",
         "parameter": "id",
         "payload": "'",
         "type": "SQL Injection",
         "severity": "HIGH"
     },
     {
-        "url": "http://localhost:8081/vulnerabilities/sqli/",
+        "url": "http://localhost/vulnerabilities/sqli/",
         "parameter": "id",
         "payload": "' OR '1'='1' --",
         "type": "SQL Injection",
         "severity": "HIGH"
     },
     {
-        "url": "http://localhost:8081/vulnerabilities/sqli/",
+        "url": "http://localhost/vulnerabilities/sqli/",
         "parameter": "id",
         "payload": "1' ORDER BY 1--",
         "type": "SQL Injection",
         "severity": "HIGH"
     },
     {
-        "url": "http://localhost:8081/vulnerabilities/sqli/",
+        "url": "http://localhost/vulnerabilities/sqli/",
         "parameter": "id",
         "payload": "1' ORDER BY 2--",
         "type": "SQL Injection",
         "severity": "HIGH"
     },
     {
-        "url": "http://localhost:8081/vulnerabilities/sqli/",
+        "url": "http://localhost/vulnerabilities/sqli/",
         "parameter": "id",
         "payload": "1' UNION SELECT NULL--",
         "type": "SQL Injection",
         "severity": "HIGH"
     },
     {
-        "url": "http://localhost:8081/vulnerabilities/sqli/",
+        "url": "http://localhost/vulnerabilities/sqli/",
         "parameter": "id",
         "payload": "1' UNION SELECT NULL, NULL--",
         "type": "SQL Injection",
         "severity": "HIGH"
     },
     {
-        "url": "http://localhost:8081/vulnerabilities/sqli/",
+        "url": "http://localhost/vulnerabilities/sqli/",
         "parameter": "id",
         "payload": "admin'--",
         "type": "SQL Injection",
         "severity": "HIGH"
     },
     {
-        "url": "http://localhost:8081/vulnerabilities/sqli/#",
+        "url": "http://localhost/vulnerabilities/sqli/#",
         "parameter": "id",
         "payload": "'\"><script>alert(1)</script>",
         "type": "Cross-Site Scripting (XSS)",
@@ -116,7 +116,7 @@
         "mitigation": "Implement context-aware output encoding and use Content Security Policy (CSP)."
     },
     {
-        "url": "http://localhost:8081/vulnerabilities/xss_r/#",
+        "url": "http://localhost/vulnerabilities/xss_r/#",
         "parameter": "name",
         "payload": "<script>alert('XSS')</script>",
         "type": "Cross-Site Scripting (XSS)",
@@ -125,7 +125,7 @@
         "mitigation": "Implement context-aware output encoding and use Content Security Policy (CSP)."
     },
     {
-        "url": "http://localhost:8081/vulnerabilities/xss_s/",
+        "url": "http://localhost/vulnerabilities/xss_s/",
         "parameter": "txtName",
         "payload": "<script>alert('XSS')</script>",
         "type": "Cross-Site Scripting (XSS)",
@@ -134,7 +134,7 @@
         "mitigation": "Implement context-aware output encoding and use Content Security Policy (CSP)."
     },
     {
-        "url": "http://localhost:8081/vulnerabilities/csp/",
+        "url": "http://localhost/vulnerabilities/csp/",
         "parameter": "include",
         "payload": "<script>alert('XSS')</script>",
         "type": "Cross-Site Scripting (XSS)",
@@ -155,7 +155,7 @@
         "type": "Insecure Cookie",
         "parameter": "PHPSESSID",
         "payload": "Missing Secure flag",
-        "url": "http://localhost:8081/login.php",
+        "url": "http://localhost/login.php",
         "issue": "Missing Secure flag",
         "severity": "MEDIUM"
     },
@@ -163,7 +163,7 @@
         "type": "Insecure Cookie",
         "parameter": "PHPSESSID",
         "payload": "Missing HttpOnly flag",
-        "url": "http://localhost:8081/login.php",
+        "url": "http://localhost/login.php",
         "issue": "Missing HttpOnly flag",
         "severity": "MEDIUM"
     },
@@ -171,7 +171,7 @@
         "type": "Insecure Cookie",
         "parameter": "security",
         "payload": "Missing Secure flag",
-        "url": "http://localhost:8081/login.php",
+        "url": "http://localhost/login.php",
         "issue": "Missing Secure flag",
         "severity": "MEDIUM"
     },
@@ -179,7 +179,7 @@
         "type": "Insecure Cookie",
         "parameter": "security",
         "payload": "Missing HttpOnly flag",
-        "url": "http://localhost:8081/login.php",
+        "url": "http://localhost/login.php",
         "issue": "Missing HttpOnly flag",
         "severity": "MEDIUM"
     },
@@ -187,7 +187,7 @@
         "type": "Insecure Cookie",
         "parameter": "security",
         "payload": "Missing Secure flag",
-        "url": "http://localhost:8081/login.php",
+        "url": "http://localhost/login.php",
         "issue": "Missing Secure flag",
         "severity": "MEDIUM"
     }

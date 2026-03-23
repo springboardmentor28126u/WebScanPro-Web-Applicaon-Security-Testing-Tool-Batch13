@@ -1,5 +1,5 @@
-TARGET_URL = "http://localhost:8081"
-LOGIN_URL  = "http://localhost:8081/login.php"
+TARGET_URL = "http://localhost"
+LOGIN_URL  = "http://localhost/login.php"
 USERNAME      = "admin"
 PASSWORD      = "password"
 DVWA_SECURITY = "low"
