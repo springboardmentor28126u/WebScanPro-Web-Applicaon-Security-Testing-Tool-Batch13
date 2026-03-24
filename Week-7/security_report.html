@@ -1,30 +1,31 @@
 
 <html>
-
 <head>
-
-<title>WebScanPro Security Report</title>
-
+<title>WebScanPro Report</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
-
 body {
-background:#0f172a;
-color:white;
-font-family:Arial;
+background: radial-gradient(circle,#020617,#000);
+color:#e2e8f0;
+font-family:Courier New;
 padding:40px;
 }
 
-#report {
-max-width:900px;
-margin:auto;
+h1 {
+    text-align: center;
+    color: #00f7ff;
+    font-size: 48px;              /* 🔥 Bigger size */
+    letter-spacing: 2px;          /* cyber spacing */
+    margin-bottom: 20px;
+
+    text-shadow: 0 0 4px rgba(0,247,255,0.8),
+                 0 0 8px rgba(0,247,255,0.4);
 }
 
-h1,h2 {
-text-align:center;
-color:#38bdf8;
+
+p, td, th {
+text-shadow: none;
 }
 
 .cards {
@@ -35,121 +36,86 @@ margin:40px 0;
 
 .card {
 flex:1;
-background:#1e293b;
+background:rgba(255,255,255,0.05);
 padding:20px;
-border-radius:10px;
+border-radius:12px;
 text-align:center;
+border:1px solid rgba(0,255,255,0.2);
+box-shadow: 0 0 10px rgba(0,255,255,0.1);
 }
 
 .card span {
-font-size:28px;
-font-weight:bold;
+font-size:30px;
+color:#00f7ff;
 }
 
 .chart-box {
-width:350px;
+width:250px;
 margin:40px auto;
 }
+
+.badge {
+padding:5px 10px;
+border-radius:6px;
+font-weight:bold;
+}
+
+.high {background:#ff0033}
+.medium {background:#ff9800}
+.low {background:#00ff9c}
 
 table {
 width:100%;
 border-collapse:collapse;
-background:#1e293b;
 }
 
-th {
-background:#020617;
-padding:12px;
+td,th {
+padding:10px;
+border-bottom:1px solid #1e293b;
 }
-
-td {
-padding:12px;
-border-bottom:1px solid #334155;
-}
-
-.badge {
-padding:6px 12px;
-border-radius:6px;
-font-weight:bold;
-}
-
-.high {background:#ff4d4d}
-.medium {background:#ff9800}
-.low {background:#4caf50}
 
 .finding {
-background:#1e293b;
+background:rgba(255,255,255,0.05);
 padding:20px;
-border-radius:10px;
-margin-bottom:20px;
+margin-top:20px;
+border-left:4px solid #00f7ff;
 }
 
-button {
-margin-top:40px;
-padding:12px 25px;
-font-size:16px;
-background:#38bdf8;
-border:none;
-border-radius:6px;
-cursor:pointer;
-font-weight:bold;
+.score {
+font-size:40px;
+text-align:center;
+color:#00ff9c;
+text-shadow: 0 0 6px rgba(0,255,156,0.6),
+             0 0 12px rgba(0,255,156,0.3);
 }
-
 </style>
-
 </head>
 
 <body>
 
-<div id="report">
+<h1>⚡ WEBSCANPRO SECURITY TESTING TOOL REPORT ⚡</h1>
 
-<h1>🛡 WebScanPro Security Report</h1>
+<p style="text-align:center;">Target: http://localhost/dvwa</p>
+<p style="text-align:center;">Scan Time: 2026-03-24 18:59:11</p>
 
-<p style="text-align:center"><b>Target:</b> http://localhost/dvwa</p>
-<p style="text-align:center"><b>Scan Date:</b> 2026-03-15</p>
-
-<h2>Security Score: 35/100</h2>
-
-<h2>Executive Summary</h2>
+<h2 class="score">Security Posture Score: 35/100</h2>
+<h2>Threat Level: <span style="color:red;">CRITICAL</span></h2>
 
 <div class="cards">
-
-<div class="card">
-Total Vulnerabilities<br>
-<span>7</span>
-</div>
-
-<div class="card">
-High Risk<br>
-<span>6</span>
-</div>
-
-<div class="card">
-Medium Risk<br>
-<span>1</span>
-</div>
-
-<div class="card">
-Low Risk<br>
-<span>0</span>
-</div>
-
+<div class="card">Total<br><span>7</span></div>
+<div class="card">High<br><span>6</span></div>
+<div class="card">Medium<br><span>1</span></div>
+<div class="card">Low<br><span>0</span></div>
 </div>
 
 <div class="chart-box">
 <canvas id="chart"></canvas>
 </div>
 
-<h2>Vulnerability Summary</h2>
+<h2>Attack Surface Overview</h2>
 
 <table>
-
-<tr>
-<th>Vulnerability</th>
-<th>Severity</th>
-<th>OWASP Category</th>
-</tr>
-
+<tr><th>Type</th><th>Severity</th><th>OWASP</th></tr>
 
 <tr>
 <td>SQL Injection</td>
@@ -172,19 +138,19 @@ Low Risk<br>
 <tr>
 <td>Weak Credentials</td>
 <td><span class="badge high">High</span></td>
-<td>A07: Identification & Authentication Failures</td>
+<td>A07: Auth Failures</td>
 </tr>
 
 <tr>
 <td>Cookie Security</td>
 <td><span class="badge medium">Medium</span></td>
-<td>A05: Security Misconfiguration</td>
+<td>A05: Misconfiguration</td>
 </tr>
 
 <tr>
 <td>Session Hijacking Risk</td>
 <td><span class="badge high">High</span></td>
-<td>A07: Identification & Authentication Failures</td>
+<td>A07: Auth Failures</td>
 </tr>
 
 <tr>
@@ -193,170 +159,171 @@ Low Risk<br>
 <td>A01: Broken Access Control</td>
 </tr>
 
-
 </table>
 
-<h2>Detailed Findings</h2>
-
+<h2>Threat Vectors</h2>
 
 <div class="finding">
-
 <h3>1. SQL Injection</h3>
-
 <p><b>Severity:</b> High</p>
-<p><b>OWASP Category:</b> A03: Injection</p>
-<p><b>Affected URL:</b> http://localhost/dvwa/vulnerabilities/sqli/</p>
+<p><b>OWASP:</b> A03: Injection</p>
+<p><b>URL:</b> http://localhost/dvwa/vulnerabilities/sqli/</p>
 <p><b>Payload:</b> &#x27; OR 1=1 --</p>
 
 <p><b>Impact:</b><br>
-This vulnerability could allow attackers to manipulate application behavior
-or access sensitive information.
+Attackers may exploit this vulnerability to gain unauthorized access or manipulate data.
 </p>
 
 <p><b>Recommendation:</b><br>
-Review application security controls
+Apply secure coding practices
 </p>
-
 </div>
 
 <div class="finding">
-
 <h3>2. SQL Injection</h3>
-
 <p><b>Severity:</b> High</p>
-<p><b>OWASP Category:</b> A03: Injection</p>
-<p><b>Affected URL:</b> http://localhost/dvwa/vulnerabilities/sqli_blind/</p>
+<p><b>OWASP:</b> A03: Injection</p>
+<p><b>URL:</b> http://localhost/dvwa/vulnerabilities/sqli_blind/</p>
 <p><b>Payload:</b> &#x27; OR &#x27;1&#x27;=&#x27;1</p>
 
 <p><b>Impact:</b><br>
-This vulnerability could allow attackers to manipulate application behavior
-or access sensitive information.
+Attackers may exploit this vulnerability to gain unauthorized access or manipulate data.
 </p>
 
 <p><b>Recommendation:</b><br>
-Review application security controls
+Apply secure coding practices
 </p>
-
 </div>
 
 <div class="finding">
-
 <h3>3. XSS</h3>
-
 <p><b>Severity:</b> High</p>
-<p><b>OWASP Category:</b> A03: Injection</p>
-<p><b>Affected URL:</b> http://localhost/dvwa/vulnerabilities/xss_r/</p>
+<p><b>OWASP:</b> A03: Injection</p>
+<p><b>URL:</b> http://localhost/dvwa/vulnerabilities/xss_r/</p>
 <p><b>Payload:</b> &lt;script&gt;alert(1)&lt;/script&gt;</p>
 
 <p><b>Impact:</b><br>
-This vulnerability could allow attackers to manipulate application behavior
-or access sensitive information.
+Attackers may exploit this vulnerability to gain unauthorized access or manipulate data.
 </p>
 
 <p><b>Recommendation:</b><br>
-Review application security controls
+Apply secure coding practices
 </p>
-
 </div>
 
 <div class="finding">
-
 <h3>4. Weak Credentials</h3>
-
 <p><b>Severity:</b> High</p>
-<p><b>OWASP Category:</b> A07: Identification & Authentication Failures</p>
-<p><b>Affected URL:</b> N/A</p>
+<p><b>OWASP:</b> A07: Auth Failures</p>
+<p><b>URL:</b> N/A</p>
 <p><b>Payload:</b> N/A</p>
 
 <p><b>Impact:</b><br>
-This vulnerability could allow attackers to manipulate application behavior
-or access sensitive information.
+Attackers may exploit this vulnerability to gain unauthorized access or manipulate data.
 </p>
 
 <p><b>Recommendation:</b><br>
 Use strong passwords
 </p>
-
 </div>
 
 <div class="finding">
-
 <h3>5. Cookie Security</h3>
-
 <p><b>Severity:</b> Medium</p>
-<p><b>OWASP Category:</b> A05: Security Misconfiguration</p>
-<p><b>Affected URL:</b> N/A</p>
+<p><b>OWASP:</b> A05: Misconfiguration</p>
+<p><b>URL:</b> N/A</p>
 <p><b>Payload:</b> N/A</p>
 
 <p><b>Impact:</b><br>
-This vulnerability could allow attackers to manipulate application behavior
-or access sensitive information.
+Attackers may exploit this vulnerability to gain unauthorized access or manipulate data.
 </p>
 
 <p><b>Recommendation:</b><br>
 Use Secure and HttpOnly cookie flags
 </p>
-
 </div>
 
 <div class="finding">
-
 <h3>6. Session Hijacking Risk</h3>
-
 <p><b>Severity:</b> High</p>
-<p><b>OWASP Category:</b> A07: Identification & Authentication Failures</p>
-<p><b>Affected URL:</b> N/A</p>
+<p><b>OWASP:</b> A07: Auth Failures</p>
+<p><b>URL:</b> N/A</p>
 <p><b>Payload:</b> N/A</p>
 
 <p><b>Impact:</b><br>
-This vulnerability could allow attackers to manipulate application behavior
-or access sensitive information.
+Attackers may exploit this vulnerability to gain unauthorized access or manipulate data.
 </p>
 
 <p><b>Recommendation:</b><br>
 Use HTTPS and Secure cookies
 </p>
-
 </div>
 
 <div class="finding">
-
 <h3>7. IDOR Vulnerability</h3>
-
 <p><b>Severity:</b> High</p>
-<p><b>OWASP Category:</b> A01: Broken Access Control</p>
-<p><b>Affected URL:</b> N/A</p>
+<p><b>OWASP:</b> A01: Broken Access Control</p>
+<p><b>URL:</b> N/A</p>
 <p><b>Payload:</b> N/A</p>
 
 <p><b>Impact:</b><br>
-This vulnerability could allow attackers to manipulate application behavior
-or access sensitive information.
+Attackers may exploit this vulnerability to gain unauthorized access or manipulate data.
 </p>
 
 <p><b>Recommendation:</b><br>
 Implement proper access control checks
 </p>
-
 </div>
 
 
+<h2>Attack Timeline</h2>
+<div class="finding">
+<p>[+] Scan Started</p>
+<p>[!] Vulnerabilities Detected</p>
+<p>[!] Exploitable Inputs Found</p>
+<p>[+] Scan Completed</p>
+</div>
+
+<h2>Risk Analysis</h2>
+<div class="finding">
+Application contains security flaws that could expose sensitive data.
+Immediate fixes recommended.
+</div>
+
+<h2>Security Recommendations</h2>
+<div class="finding">
+<ul>
+<li>Use prepared statements</li>
+<li>Validate user input</li>
+<li>Use strong authentication</li>
+<li>Apply access control checks</li>
+<li>Secure cookies</li>
+</ul>
+</div>
+
+<h2>Severity Legend</h2>
+<div class="finding">
+<p><span class="badge high">High</span> → Critical</p>
+<p><span class="badge medium">Medium</span> → Moderate</p>
+<p><span class="badge low">Low</span> → Low Risk</p>
 </div>
 
 <script>
-
-const ctx = document.getElementById('chart');
-
-const chart = new Chart(ctx,{
+new Chart(document.getElementById('chart'), {
 type:'doughnut',
 data:{
 labels:['High','Medium','Low'],
 datasets:[{
 data:[6,1,0],
-backgroundColor:['#ff4d4d','#ff9800','#4caf50']
+backgroundColor:['#ff0033','#ff9800','#00ff9c']
 }]
+},
+options:{
+plugins:{
+legend:{labels:{color:'#fff'}}
+}
 }
 });
-
 </script>
 
 </body>
