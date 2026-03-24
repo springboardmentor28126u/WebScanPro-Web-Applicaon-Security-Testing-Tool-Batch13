@@ -174,22 +174,22 @@ Generated Files:
 WEBSCANPRO1/
 
 │
-├── crawler.py
-├── sqli_tester.py
-├── xss_tester.py
-├── auth_tester.py   ✅
-├── idor_tester.py   ✅
-├── generate_report.py
-├── main.py
+├── crawler.py <br>
+├── sqli_tester.py <br>
+├── xss_tester.py <br>
+├── auth_tester.py   ✅ <br>
+├── idor_tester.py   ✅ <br>
+├── generate_report.py <br>
+├── main.py <br>
 │
-├── scan_results.json
-├── sqli_report.json
-├── xss_report.json
-├── auth_report.json   ✅
-├── idor_report.json   ✅
+├── scan_results.json <br>
+├── sqli_report.json <br>
+├── xss_report.json <br>
+├── auth_report.json   ✅ <br>
+├── idor_report.json   ✅ <br>
 │
-├── final_report.html   ✅
-├── final_report.pdf    ✅
+├── final_report.html   ✅ <br>
+├── final_report.pdf    ✅ <br>
 │
 ├── output.txt
 
