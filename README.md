@@ -101,8 +101,7 @@ Output:
 Output:
 
 * idor_report.json
-    <img width="963" height="686" alt="Screenshot 2026-03-24 131125" src="https://github.com/user-attachments/assets/2842749d-c8e7-42af-88f7-20bfd0c6f32f" />
-
+    <img width="1117" height="382" alt="Screenshot 2026-03-24 131209" src="https://github.com/user-attachments/assets/be7a9f98-73ef-4d87-9604-ed238e20534f" />
 
 ---
 
