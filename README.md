@@ -171,7 +171,7 @@ Generated Files:
 
 ## 📂 Updated Project Structure
 
-'''
+```
 WEBSCANPRO1/
 
 │
@@ -193,7 +193,7 @@ WEBSCANPRO1/
 ├── final_report.pdf    ✅ 
 │
 ├── output.txt
-'''
+ ```
 ---
 
 ## 🚀 Final Status
