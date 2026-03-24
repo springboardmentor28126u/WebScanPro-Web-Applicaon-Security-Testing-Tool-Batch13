@@ -7,7 +7,7 @@ It is designed to identify common web vulnerabilities such as SQL Injection and 
 
 The tool was tested using DVWA (Damn Vulnerable Web Application) running on a local XAMPP server.
 
----
+----
 
 ## 🎯 Milestone-1: Setup ,Initiallization & Target Scanning
 
