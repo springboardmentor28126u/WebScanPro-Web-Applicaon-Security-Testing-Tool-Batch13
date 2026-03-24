@@ -172,6 +172,7 @@ Generated Files:
 ## 📂 Updated Project Structure
 
 WEBSCANPRO1/
+
 │
 ├── crawler.py
 ├── sqli_tester.py
