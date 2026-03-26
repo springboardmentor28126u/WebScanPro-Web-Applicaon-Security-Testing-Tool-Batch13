@@ -1,0 +1,1443 @@
+import argparse
+import copy
+import difflib
+import json
+import re
+from dataclasses import dataclass
+from datetime import datetime, timezone
+from pathlib import Path
+from urllib.parse import parse_qs, urlencode, urljoin, urlparse, urlunparse
+
+import requests
+from bs4 import BeautifulSoup
+
+
+DEFAULT_CONFIG = {
+    "target_url": "http://localhost/dvwa/",
+    "login_url": "http://localhost/dvwa/login.php",
+    "protected_url": "http://localhost/dvwa/index.php",
+    "request": {
+        "timeout": 10,
+        "verify_tls": False,
+        "headers": {"User-Agent": "Mozilla/5.0 (AccessControlIDORTester/1.0)"},
+    },
+    "login": {
+        "method": "POST",
+        "username_field": "username",
+        "password_field": "password",
+        "extra_post_data": {"Login": "Login"},
+        "success_keywords": [
+            "logout",
+            "welcome",
+            "vulnerabilities",
+            "my profile",
+            "dashboard",
+        ],
+        "failure_keywords": [
+            "login failed",
+            "username and/or password incorrect",
+            "invalid password",
+            "incorrect password",
+            "invalid credentials",
+        ],
+        "follow_redirects": True,
+    },
+    "session": {
+        "cookie_name": "PHPSESSID",
+        "post_login_cookies": {"security": "low"},
+    },
+    "access_control": {
+        "target_metadata_file": "reports/output.json",
+        "json_log_file": "reports/access_control_idor_log.json",
+        "report_file": "findings_week6.txt",
+        "probe_url": "",
+        "deny_status_codes": [401, 403],
+        "deny_keywords": ["access denied", "forbidden", "unauthorized", "not authorized"],
+        "resource_keywords": [
+            "profile",
+            "account",
+            "order",
+            "history",
+            "document",
+            "download",
+            "invoice",
+            "user",
+            "file",
+            "record",
+        ],
+        "admin_keywords": [
+            "admin",
+            "dashboard",
+            "manage",
+            "users",
+            "roles",
+            "setup",
+            "security",
+            "log",
+            "bac",
+        ],
+        "sensitive_keywords": [
+            "email",
+            "address",
+            "phone",
+            "document",
+            "invoice",
+            "order",
+            "account",
+            "profile",
+            "user id",
+            "customer",
+            "download",
+        ],
+        "horizontal": {
+            "enabled": True,
+            "resource_paths": [],
+            "max_urls": 30,
+        },
+        "vertical": {
+            "enabled": True,
+            "admin_paths": ["/admin", "/dashboard", "/manage/users"],
+        },
+        "idor": {
+            "enabled": True,
+            "account": "user_a",
+            "start_id": 1,
+            "end_id": 10,
+            "max_candidates": 25,
+            "object_reference_parameters": [
+                "id",
+                "user_id",
+                "userid",
+                "uid",
+                "account_id",
+                "profile_id",
+                "order_id",
+                "document_id",
+                "invoice_id",
+                "record_id",
+            ],
+            "additional_urls": [],
+        },
+        "accounts": {
+            "user_a": {
+                "username": "admin",
+                "password": "password",
+                "expected_markers": ["admin"],
+            },
+            "user_b": {
+                "username": "gordonb",
+                "password": "abc123",
+                "expected_markers": ["gordonb"],
+            },
+            "low_privilege": {
+                "username": "gordonb",
+                "password": "abc123",
+                "expected_markers": ["gordonb"],
+            },
+        },
+        "session_tokens": {
+            "cookie_name": "PHPSESSID",
+            "user_a": {"token": "", "extra_cookies": {"security": "low"}},
+            "user_b": {"token": "", "extra_cookies": {"security": "low"}},
+            "low_privilege": {"token": "", "extra_cookies": {"security": "low"}},
+        },
+    },
+}
+
+REMEDIATION_SUGGESTIONS = [
+    "Implement RBAC so users only receive the permissions required for their role.",
+    "Apply ABAC or ownership checks on every request instead of trusting client-side state.",
+    "Enforce authorization on the server for every object fetch, update, download, and admin route.",
+    "Avoid exposing direct object references; prefer indirect lookups or unguessable UUIDs.",
+]
+
+
+def utc_now():
+    return datetime.now(timezone.utc).isoformat()
+
+
+def ensure_parent_dir(path):
+    Path(path).expanduser().resolve().parent.mkdir(parents=True, exist_ok=True)
+
+
+def deep_merge(base, override):
+    merged = copy.deepcopy(base)
+    for key, value in override.items():
+        if isinstance(value, dict) and isinstance(merged.get(key), dict):
+            merged[key] = deep_merge(merged[key], value)
+        else:
+            merged[key] = value
+    return merged
+
+
+def load_json(path):
+    with open(path, "r", encoding="utf-8") as handle:
+        return json.load(handle)
+
+
+def resolve_path(raw_path, base_dir):
+    if not raw_path:
+        return raw_path
+    path = Path(raw_path).expanduser()
+    return str(path if path.is_absolute() else (base_dir / path).resolve())
+
+
+def normalize_url(url):
+    parsed = urlparse(url)
+    return f"{parsed.scheme}://{parsed.netloc}{parsed.path.rstrip('/') or '/'}"
+
+
+def collapse_whitespace(text):
+    return " ".join((text or "").split())
+
+
+def preview(text, length=220):
+    return collapse_whitespace(text)[:length]
+
+
+def unique_preserve_order(items):
+    seen = set()
+    unique = []
+    for item in items:
+        if item in seen:
+            continue
+        seen.add(item)
+        unique.append(item)
+    return unique
+
+
+def similarity_score(first, second):
+    return difflib.SequenceMatcher(None, collapse_whitespace(first), collapse_whitespace(second)).ratio()
+
+
+def value_looks_like_identifier(value):
+    if value is None:
+        return False
+    value = str(value).strip()
+    if not value:
+        return False
+    if value.isdigit():
+        return True
+    return bool(re.fullmatch(r"[0-9a-fA-F-]{8,}", value))
+
+
+@dataclass
+class AccountSession:
+    account_name: str
+    username: str | None
+    session: requests.Session
+    markers: list[str]
+    authenticated: bool
+    auth_mode: str
+    reason: str
+    status_code: int | None = None
+    final_url: str | None = None
+    cookie_name: str | None = None
+    cookie_value: str | None = None
+
+    def cookie_preview(self):
+        if not self.cookie_value:
+            return None
+        if len(self.cookie_value) <= 8:
+            return self.cookie_value
+        return f"{self.cookie_value[:8]}..."
+
+
+@dataclass
+class Finding:
+    category: str
+    severity: str
+    endpoint: str
+    method: str
+    description: str
+    evidence: str
+    response_snippet: str
+    remediation: list[str]
+    status_code: int | None = None
+    tampered_reference: str | None = None
+
+    def to_dict(self):
+        return {
+            "category": self.category,
+            "severity": self.severity,
+            "endpoint": self.endpoint,
+            "method": self.method,
+            "description": self.description,
+            "evidence": self.evidence,
+            "response_snippet": self.response_snippet,
+            "remediation": self.remediation,
+            "status_code": self.status_code,
+            "tampered_reference": self.tampered_reference,
+        }
+
+
+class JsonRunLogger:
+    def __init__(self, path, metadata):
+        self.path = path
+        self.payload = {"started_at": utc_now(), "metadata": metadata, "events": []}
+        ensure_parent_dir(path)
+        self._write()
+
+    def log(self, event_type, **details):
+        entry = {"timestamp": utc_now(), "event_type": event_type}
+        entry.update(details)
+        self.payload["events"].append(entry)
+        self._write()
+
+    def finalize(self, summary):
+        self.payload["finished_at"] = utc_now()
+        self.payload["summary"] = summary
+        self._write()
+
+    def _write(self):
+        with open(self.path, "w", encoding="utf-8") as handle:
+            json.dump(self.payload, handle, indent=2)
+
+
+class AccessControlIDORTester:
+    def __init__(self, config, logger):
+        self.config = config
+        self.logger = logger
+        self.access_cfg = config["access_control"]
+        self.timeout = int(config["request"].get("timeout", 10))
+        self.metadata = self.load_target_metadata()
+
+    def load_target_metadata(self):
+        path = self.access_cfg.get("target_metadata_file")
+        if not path or not Path(path).exists():
+            self.logger.log("metadata_missing", target_metadata_file=path)
+            return {"urls": [], "forms": []}
+
+        try:
+            metadata = load_json(path)
+        except Exception as exc:
+            self.logger.log("metadata_load_failed", target_metadata_file=path, error=str(exc))
+            return {"urls": [], "forms": []}
+
+        metadata.setdefault("urls", [])
+        metadata.setdefault("forms", [])
+        self.logger.log(
+            "metadata_loaded",
+            target_metadata_file=path,
+            url_count=len(metadata["urls"]),
+            form_count=len(metadata["forms"]),
+        )
+        return metadata
+
+    def build_session(self):
+        session = requests.Session()
+        session.headers.update(copy.deepcopy(self.config["request"].get("headers", {})))
+        session.verify = bool(self.config["request"].get("verify_tls", True))
+        return session
+
+    def safe_request(self, session, method, url, purpose, data=None):
+        try:
+            response = session.request(
+                method.upper(),
+                url,
+                data=data,
+                timeout=self.timeout,
+                allow_redirects=True,
+            )
+            self.logger.log(
+                "http_request",
+                purpose=purpose,
+                method=method.upper(),
+                url=url,
+                status_code=response.status_code,
+                final_url=response.url,
+            )
+            return response
+        except requests.RequestException as exc:
+            self.logger.log(
+                "http_request_error",
+                purpose=purpose,
+                method=method.upper(),
+                url=url,
+                error=str(exc),
+            )
+            return None
+
+    def url_is_login(self, url):
+        return normalize_url(url) == normalize_url(self.config["login_url"])
+
+    def looks_like_login_page(self, body, url):
+        lower = (body or "").lower()
+        username_field = self.config["login"]["username_field"].lower()
+        password_field = self.config["login"]["password_field"].lower()
+        if self.url_is_login(url):
+            return True
+        return (
+            "<form" in lower
+            and username_field in lower
+            and password_field in lower
+            and ("login" in lower or "sign in" in lower)
+        )
+
+    def response_is_denied(self, response):
+        if response is None:
+            return True
+        if response.status_code in set(self.access_cfg.get("deny_status_codes", [])):
+            return True
+        if self.looks_like_login_page(response.text, response.url):
+            return True
+        lower = (response.text or "").lower()
+        return any(keyword.lower() in lower for keyword in self.access_cfg.get("deny_keywords", []))
+
+    def extract_hidden_fields(self, html):
+        fields = {}
+        soup = BeautifulSoup(html, "html.parser")
+        for input_tag in soup.find_all("input"):
+            if (input_tag.get("type") or "").lower() != "hidden":
+                continue
+            name = input_tag.get("name")
+            if name:
+                fields[name] = input_tag.get("value", "")
+        return fields
+
+    def get_session_cookie(self, session):
+        preferred_name = (
+            self.access_cfg.get("session_tokens", {}).get("cookie_name")
+            or self.config["session"].get("cookie_name")
+            or "PHPSESSID"
+        )
+        for cookie in session.cookies:
+            if cookie.name == preferred_name:
+                return cookie
+        for cookie in session.cookies:
+            if "sess" in cookie.name.lower():
+                return cookie
+        for cookie in session.cookies:
+            return cookie
+        return None
+
+    def set_session_cookie(self, session, cookie_name, token):
+        parsed = urlparse(self.config["target_url"])
+        cookie_kwargs = {"path": "/"}
+        if parsed.hostname:
+            cookie_kwargs["domain"] = parsed.hostname
+        session.cookies.set(cookie_name, token, **cookie_kwargs)
+
+    def apply_post_login_cookies(self, session, account_name):
+        # These cookies carry shared app context such as DVWA security level.
+        for name, value in self.config["session"].get("post_login_cookies", {}).items():
+            session.cookies.set(name, value)
+
+        # These cookies let the caller attach extra token-bound state if the app needs it.
+        token_cfg = self.access_cfg.get("session_tokens", {}).get(account_name, {})
+        for name, value in token_cfg.get("extra_cookies", {}).items():
+            session.cookies.set(name, value)
+
+    def probe_authenticated_session(self, session):
+        probe_url = self.access_cfg.get("probe_url") or self.config.get("protected_url") or self.config["target_url"]
+        response = self.safe_request(session, "GET", probe_url, "authenticated_probe")
+        if response is None:
+            return False, "Authenticated probe failed due to a request error.", None
+        if self.response_is_denied(response):
+            return False, "Authenticated probe redirected to login or returned an access denied response.", response
+        return True, "Authenticated probe reached a protected page.", response
+
+    def build_identity_markers(self, account_cfg):
+        markers = []
+        for candidate in [account_cfg.get("username"), *account_cfg.get("expected_markers", [])]:
+            if candidate:
+                markers.append(str(candidate))
+        return unique_preserve_order(markers)
+
+    def authenticate_account(self, account_name):
+        account_cfg = self.access_cfg.get("accounts", {}).get(account_name, {})
+        token_cfg = self.access_cfg.get("session_tokens", {}).get(account_name, {})
+        cookie_name = (
+            self.access_cfg.get("session_tokens", {}).get("cookie_name")
+            or self.config["session"].get("cookie_name")
+            or "PHPSESSID"
+        )
+        markers = self.build_identity_markers(account_cfg)
+        session = self.build_session()
+
+        # If a captured token is present, we reuse it directly so the module can work with manual sessions too.
+        token = token_cfg.get("token")
+        if token:
+            self.set_session_cookie(session, cookie_name, token)
+            self.apply_post_login_cookies(session, account_name)
+            authenticated, reason, response = self.probe_authenticated_session(session)
+            cookie = self.get_session_cookie(session)
+            result = AccountSession(
+                account_name=account_name,
+                username=account_cfg.get("username"),
+                session=session,
+                markers=markers,
+                authenticated=authenticated,
+                auth_mode="session_token",
+                reason=reason,
+                status_code=response.status_code if response else None,
+                final_url=response.url if response else None,
+                cookie_name=cookie.name if cookie else cookie_name,
+                cookie_value=cookie.value if cookie else token,
+            )
+            self.logger.log(
+                "authentication_result",
+                account_name=account_name,
+                auth_mode=result.auth_mode,
+                authenticated=result.authenticated,
+                reason=result.reason,
+                status_code=result.status_code,
+                final_url=result.final_url,
+                cookie_name=result.cookie_name,
+                cookie_preview=result.cookie_preview(),
+            )
+            return result
+
+        username = account_cfg.get("username")
+        password = account_cfg.get("password")
+        if not username or not password:
+            result = AccountSession(
+                account_name=account_name,
+                username=username,
+                session=session,
+                markers=markers,
+                authenticated=False,
+                auth_mode="unconfigured",
+                reason="No credentials or session token were configured for this account.",
+            )
+            self.logger.log(
+                "authentication_result",
+                account_name=account_name,
+                auth_mode=result.auth_mode,
+                authenticated=result.authenticated,
+                reason=result.reason,
+            )
+            return result
+
+        login_page = self.safe_request(session, "GET", self.config["login_url"], f"{account_name}_login_page")
+        if login_page is None:
+            result = AccountSession(
+                account_name=account_name,
+                username=username,
+                session=session,
+                markers=markers,
+                authenticated=False,
+                auth_mode="credentials",
+                reason="Login page could not be reached.",
+            )
+            self.logger.log(
+                "authentication_result",
+                account_name=account_name,
+                auth_mode=result.auth_mode,
+                authenticated=result.authenticated,
+                reason=result.reason,
+            )
+            return result
+
+        payload = self.extract_hidden_fields(login_page.text)
+        payload.update(self.config["login"].get("extra_post_data", {}))
+        payload[self.config["login"]["username_field"]] = username
+        payload[self.config["login"]["password_field"]] = password
+
+        response = self.safe_request(
+            session,
+            self.config["login"].get("method", "POST"),
+            self.config["login_url"],
+            f"{account_name}_login_submit",
+            data=payload,
+        )
+        self.apply_post_login_cookies(session, account_name)
+        cookie = self.get_session_cookie(session)
+
+        authenticated = False
+        reason = "Login did not produce a reliable success indicator."
+        if response is not None:
+            body = (response.text or "").lower()
+            success_keywords = [keyword.lower() for keyword in self.config["login"].get("success_keywords", [])]
+            failure_keywords = [keyword.lower() for keyword in self.config["login"].get("failure_keywords", [])]
+
+            if any(keyword in body for keyword in failure_keywords):
+                reason = "Response body matched configured login failure markers."
+            elif any(keyword in body for keyword in success_keywords):
+                authenticated = True
+                reason = "Response body matched configured login success markers."
+            else:
+                authenticated, reason, _ = self.probe_authenticated_session(session)
+
+        result = AccountSession(
+            account_name=account_name,
+            username=username,
+            session=session,
+            markers=markers,
+            authenticated=authenticated,
+            auth_mode="credentials",
+            reason=reason,
+            status_code=response.status_code if response else None,
+            final_url=response.url if response else None,
+            cookie_name=cookie.name if cookie else cookie_name,
+            cookie_value=cookie.value if cookie else None,
+        )
+        self.logger.log(
+            "authentication_result",
+            account_name=account_name,
+            auth_mode=result.auth_mode,
+            authenticated=result.authenticated,
+            reason=result.reason,
+            status_code=result.status_code,
+            final_url=result.final_url,
+            cookie_name=result.cookie_name,
+            cookie_preview=result.cookie_preview(),
+        )
+        return result
+
+    def in_scope(self, url):
+        base = urlparse(self.config["target_url"])
+        candidate = urlparse(url)
+        return candidate.netloc == base.netloc
+
+    def url_matches_keywords(self, url, keywords):
+        return any(keyword.lower() in url.lower() for keyword in keywords)
+
+    def looks_like_object_reference_name(self, name):
+        if not name:
+            return False
+        lowered = name.lower()
+        configured = {item.lower() for item in self.access_cfg["idor"].get("object_reference_parameters", [])}
+        return lowered in configured or lowered == "id" or lowered.endswith("_id")
+
+    def url_has_object_reference(self, url):
+        parsed = urlparse(url)
+        query = parse_qs(parsed.query, keep_blank_values=True)
+        for name, values in query.items():
+            if self.looks_like_object_reference_name(name):
+                return True
+            if any(value_looks_like_identifier(value) for value in values):
+                return True
+        segments = [segment for segment in parsed.path.split("/") if segment]
+        return any(value_looks_like_identifier(segment) for segment in segments)
+
+    def extract_page_urls(self, page_url, html):
+        urls = []
+        soup = BeautifulSoup(html, "html.parser")
+
+        for link in soup.find_all("a", href=True):
+            candidate = urljoin(page_url, link["href"]).split("#", 1)[0]
+            if candidate:
+                urls.append(candidate)
+
+        for form in soup.find_all("form"):
+            action = form.get("action") or ""
+            if not action:
+                urls.append(page_url)
+                continue
+            urls.append(urljoin(page_url, action).split("#", 1)[0])
+
+        return unique_preserve_order(urls)
+
+    def discover_resource_urls(self, account_session):
+        horizontal_cfg = self.access_cfg["horizontal"]
+        max_urls = int(horizontal_cfg.get("max_urls", 30))
+        keywords = self.access_cfg.get("resource_keywords", [])
+
+        seeds = []
+        for raw_path in horizontal_cfg.get("resource_paths", []):
+            seeds.append(urljoin(self.config["target_url"], raw_path))
+
+        for url in self.metadata.get("urls", []):
+            if self.url_matches_keywords(url, keywords) or self.url_has_object_reference(url):
+                seeds.append(url)
+
+        queue = unique_preserve_order(seeds)
+        seen = set()
+        discovered = []
+
+        # We walk the URLs as User A first so later replay requests use real authenticated resources.
+        while queue and len(discovered) < max_urls:
+            url = queue.pop(0)
+            if url in seen or not self.in_scope(url):
+                continue
+            seen.add(url)
+
+            response = self.safe_request(account_session.session, "GET", url, "horizontal_discovery")
+            if response is None or self.response_is_denied(response) or response.status_code >= 400:
+                continue
+
+            discovered.append((url, response))
+            for candidate in self.extract_page_urls(url, response.text):
+                if candidate in seen:
+                    continue
+                if self.url_matches_keywords(candidate, keywords) or self.url_has_object_reference(candidate):
+                    queue.append(candidate)
+
+        self.logger.log("horizontal_resources_discovered", count=len(discovered), urls=[url for url, _ in discovered])
+        return discovered
+
+    def find_markers(self, text, markers):
+        lower = (text or "").lower()
+        matches = []
+        for marker in markers:
+            if marker and marker.lower() in lower:
+                matches.append(marker)
+        return unique_preserve_order(matches)
+
+    def find_keywords(self, text, keywords):
+        lower = (text or "").lower()
+        matches = []
+        for keyword in keywords:
+            if keyword.lower() in lower:
+                matches.append(keyword)
+        return unique_preserve_order(matches)
+
+    def extract_relevant_snippet(self, text, markers=None):
+        markers = markers or []
+        collapsed = collapse_whitespace(text)
+        lowered = collapsed.lower()
+        search_terms = [*markers, *self.access_cfg.get("sensitive_keywords", [])]
+
+        for term in search_terms:
+            position = lowered.find(term.lower())
+            if position == -1:
+                continue
+            start = max(0, position - 80)
+            end = min(len(collapsed), position + 140)
+            return collapsed[start:end]
+
+        return collapsed[:220]
+
+    def add_finding(self, findings, finding):
+        findings.append(finding)
+        self.logger.log("finding_recorded", **finding.to_dict())
+
+    def horizontal_privilege_test(self, findings):
+        summary = {
+            "status": "completed",
+            "tested": 0,
+            "vulnerable": 0,
+            "protected": 0,
+            "reason": "",
+        }
+
+        if not self.access_cfg["horizontal"].get("enabled", True):
+            summary["status"] = "skipped"
+            summary["reason"] = "Horizontal privilege escalation testing is disabled."
+            return summary
+
+        user_a = self.authenticate_account("user_a")
+        user_b = self.authenticate_account("user_b")
+        if not user_a.authenticated or not user_b.authenticated:
+            summary["status"] = "skipped"
+            summary["reason"] = "User A or User B could not be authenticated."
+            return summary
+
+        resources = self.discover_resource_urls(user_a)
+        if not resources:
+            summary["status"] = "skipped"
+            summary["reason"] = "No user-specific resource URLs were discovered from the crawler metadata."
+            return summary
+
+        for url, user_a_response in resources:
+            user_b_response = self.safe_request(user_b.session, "GET", url, "horizontal_access_check")
+            summary["tested"] += 1
+
+            if self.response_is_denied(user_b_response):
+                summary["protected"] += 1
+                self.logger.log(
+                    "horizontal_result",
+                    url=url,
+                    result="protected",
+                    status_code=user_b_response.status_code if user_b_response else None,
+                )
+                continue
+
+            if user_b_response is None:
+                continue
+
+            if 200 <= user_b_response.status_code < 300:
+                summary["vulnerable"] += 1
+                leaked_markers = self.find_markers(user_b_response.text, user_a.markers)
+                severity = "High" if leaked_markers or self.url_has_object_reference(url) else "Medium"
+                finding = Finding(
+                    category="Horizontal Privilege Escalation",
+                    severity=severity,
+                    endpoint=url,
+                    method="GET",
+                    description="User B was able to fetch a URL first collected under User A's authenticated session.",
+                    evidence=(
+                        f"User B received HTTP {user_b_response.status_code} for User A resource URL. "
+                        f"User A markers in User B response: {', '.join(leaked_markers) if leaked_markers else 'none detected'}."
+                    ),
+                    response_snippet=self.extract_relevant_snippet(
+                        user_b_response.text,
+                        leaked_markers or user_a.markers,
+                    ),
+                    remediation=REMEDIATION_SUGGESTIONS,
+                    status_code=user_b_response.status_code,
+                )
+                self.add_finding(findings, finding)
+                self.logger.log(
+                    "horizontal_result",
+                    url=url,
+                    result="vulnerable",
+                    status_code=user_b_response.status_code,
+                    user_a_status=user_a_response.status_code if user_a_response else None,
+                )
+                continue
+
+            self.logger.log(
+                "horizontal_result",
+                url=url,
+                result="unexpected_status",
+                status_code=user_b_response.status_code,
+            )
+
+        return summary
+
+    def build_admin_endpoints(self):
+        admin_urls = []
+        for raw_path in self.access_cfg["vertical"].get("admin_paths", []):
+            admin_urls.append(urljoin(self.config["target_url"], raw_path))
+
+        for url in self.metadata.get("urls", []):
+            if self.url_matches_keywords(url, self.access_cfg.get("admin_keywords", [])):
+                admin_urls.append(url)
+
+        return unique_preserve_order(admin_urls)
+
+    def vertical_privilege_test(self, findings):
+        summary = {
+            "status": "completed",
+            "tested": 0,
+            "vulnerable": 0,
+            "protected": 0,
+            "reason": "",
+        }
+
+        if not self.access_cfg["vertical"].get("enabled", True):
+            summary["status"] = "skipped"
+            summary["reason"] = "Vertical privilege escalation testing is disabled."
+            return summary
+
+        low_privilege = self.authenticate_account("low_privilege")
+        if not low_privilege.authenticated:
+            summary["status"] = "skipped"
+            summary["reason"] = "Low-privilege account could not be authenticated."
+            return summary
+
+        admin_urls = self.build_admin_endpoints()
+        if not admin_urls:
+            summary["status"] = "skipped"
+            summary["reason"] = "No admin endpoints were configured or discovered."
+            return summary
+
+        for url in admin_urls:
+            response = self.safe_request(low_privilege.session, "GET", url, "vertical_access_check")
+            summary["tested"] += 1
+
+            if self.response_is_denied(response):
+                summary["protected"] += 1
+                self.logger.log(
+                    "vertical_result",
+                    url=url,
+                    result="protected",
+                    status_code=response.status_code if response else None,
+                )
+                continue
+
+            if response is None:
+                continue
+
+            if 200 <= response.status_code < 300:
+                summary["vulnerable"] += 1
+                finding = Finding(
+                    category="Vertical Privilege Escalation",
+                    severity="High",
+                    endpoint=url,
+                    method="GET",
+                    description="A low-privilege user reached an endpoint that should be reserved for administrators.",
+                    evidence=f"Low-privilege session received HTTP {response.status_code} instead of a deny response.",
+                    response_snippet=self.extract_relevant_snippet(response.text, self.access_cfg.get("admin_keywords", [])),
+                    remediation=REMEDIATION_SUGGESTIONS,
+                    status_code=response.status_code,
+                )
+                self.add_finding(findings, finding)
+                self.logger.log(
+                    "vertical_result",
+                    url=url,
+                    result="vulnerable",
+                    status_code=response.status_code,
+                )
+                continue
+
+            self.logger.log(
+                "vertical_result",
+                url=url,
+                result="unexpected_status",
+                status_code=response.status_code,
+            )
+
+        return summary
+
+    def form_defaults(self, form):
+        defaults = {}
+        for input_field in form.get("inputs", []):
+            name = input_field.get("name")
+            if not name:
+                continue
+
+            input_type = (input_field.get("type") or "").lower()
+            if input_type in {"password", "file", "submit", "button", "image"}:
+                continue
+
+            value = input_field.get("value")
+            if value is None and input_type not in {"hidden"}:
+                continue
+
+            defaults[name] = value if value is not None else ""
+        return defaults
+
+    def build_query_candidate(self, url, param_name, static_params, source):
+        return {
+            "type": "query_param",
+            "method": "GET",
+            "url": url,
+            "param_name": param_name,
+            "static_params": static_params,
+            "display": f"{url} [{param_name}=<id>]",
+            "source": source,
+        }
+
+    def build_path_candidate(self, url_template, source):
+        return {
+            "type": "path_segment",
+            "method": "GET",
+            "url_template": url_template,
+            "display": url_template,
+            "source": source,
+        }
+
+    def build_post_candidate(self, url, method, param_name, base_data, source):
+        return {
+            "type": "body_param",
+            "method": method,
+            "url": url,
+            "param_name": param_name,
+            "base_data": base_data,
+            "display": f"{url} [{method} {param_name}=<id>]",
+            "source": source,
+        }
+
+    def parse_additional_idor_candidate(self, raw_url):
+        url = urljoin(self.config["target_url"], raw_url)
+        if "{id}" in url or "{idor}" in url:
+            placeholder = "{idor}" if "{idor}" in url else "{id}"
+            parsed = urlparse(url)
+            query = parse_qs(parsed.query, keep_blank_values=True)
+            for name, values in query.items():
+                if values and values[0] == placeholder:
+                    static_params = {
+                        key: current_values[0] if current_values else ""
+                        for key, current_values in query.items()
+                        if key != name
+                    }
+                    clean_url = urlunparse(parsed._replace(query=""))
+                    return self.build_query_candidate(clean_url, name, static_params, "manual_additional_url")
+            return self.build_path_candidate(url.replace(placeholder, "{idor}"), "manual_additional_url")
+
+        parsed = urlparse(url)
+        query = parse_qs(parsed.query, keep_blank_values=True)
+        for name, values in query.items():
+            if self.looks_like_object_reference_name(name) or any(value_looks_like_identifier(value) for value in values):
+                static_params = {
+                    key: current_values[0] if current_values else ""
+                    for key, current_values in query.items()
+                    if key != name
+                }
+                clean_url = urlunparse(parsed._replace(query=""))
+                return self.build_query_candidate(clean_url, name, static_params, "manual_additional_url")
+
+        return None
+
+    def discover_idor_candidates(self):
+        candidates = []
+        seen = set()
+
+        for url in self.metadata.get("urls", []):
+            parsed = urlparse(url)
+            query = parse_qs(parsed.query, keep_blank_values=True)
+            for name, values in query.items():
+                if not (self.looks_like_object_reference_name(name) or any(value_looks_like_identifier(value) for value in values)):
+                    continue
+                static_params = {
+                    key: current_values[0] if current_values else ""
+                    for key, current_values in query.items()
+                    if key != name
+                }
+                clean_url = urlunparse(parsed._replace(query=""))
+                candidate = self.build_query_candidate(clean_url, name, static_params, "metadata_url")
+                key = (candidate["type"], candidate["url"], candidate["param_name"], candidate["method"])
+                if key not in seen:
+                    seen.add(key)
+                    candidates.append(candidate)
+
+            segments = [segment for segment in parsed.path.split("/") if segment]
+            for index, segment in enumerate(segments):
+                if not value_looks_like_identifier(segment):
+                    continue
+                replaced_segments = segments[:]
+                replaced_segments[index] = "{idor}"
+                new_path = "/" + "/".join(replaced_segments)
+                template = urlunparse(parsed._replace(path=new_path))
+                candidate = self.build_path_candidate(template, "metadata_url")
+                key = (candidate["type"], candidate["display"])
+                if key not in seen:
+                    seen.add(key)
+                    candidates.append(candidate)
+
+        for form in self.metadata.get("forms", []):
+            method = (form.get("method") or "GET").upper()
+            action = form.get("action") or form.get("page")
+            defaults = self.form_defaults(form)
+            for input_field in form.get("inputs", []):
+                name = input_field.get("name")
+                if not name:
+                    continue
+                value = input_field.get("value")
+                if not (self.looks_like_object_reference_name(name) or value_looks_like_identifier(value)):
+                    continue
+
+                if method == "GET":
+                    static_params = {key: current for key, current in defaults.items() if key != name}
+                    candidate = self.build_query_candidate(action, name, static_params, "metadata_form")
+                else:
+                    base_data = {key: current for key, current in defaults.items() if key != name}
+                    candidate = self.build_post_candidate(action, method, name, base_data, "metadata_form")
+
+                key = (
+                    candidate["type"],
+                    candidate.get("url", candidate.get("display")),
+                    candidate.get("param_name"),
+                    candidate["method"],
+                )
+                if key not in seen:
+                    seen.add(key)
+                    candidates.append(candidate)
+
+        for raw_url in self.access_cfg["idor"].get("additional_urls", []):
+            candidate = self.parse_additional_idor_candidate(raw_url)
+            if candidate is None:
+                continue
+            key = (
+                candidate["type"],
+                candidate.get("url", candidate.get("display")),
+                candidate.get("param_name"),
+                candidate["method"],
+            )
+            if key not in seen:
+                seen.add(key)
+                candidates.append(candidate)
+
+        max_candidates = int(self.access_cfg["idor"].get("max_candidates", 25))
+        limited = candidates[:max_candidates]
+        self.logger.log(
+            "idor_candidates_discovered",
+            total_candidates=len(candidates),
+            selected_candidates=len(limited),
+            candidates=[candidate["display"] for candidate in limited],
+        )
+        return limited
+
+    def build_idor_request(self, candidate, object_id):
+        object_id = str(object_id)
+        if candidate["type"] == "query_param":
+            params = dict(candidate.get("static_params", {}))
+            params[candidate["param_name"]] = object_id
+            query = urlencode(params, doseq=True)
+            return {
+                "method": "GET",
+                "url": f"{candidate['url']}?{query}" if query else candidate["url"],
+                "data": None,
+            }
+
+        if candidate["type"] == "path_segment":
+            return {
+                "method": "GET",
+                "url": candidate["url_template"].replace("{idor}", object_id).replace("{id}", object_id),
+                "data": None,
+            }
+
+        data = dict(candidate.get("base_data", {}))
+        data[candidate["param_name"]] = object_id
+        return {
+            "method": candidate["method"],
+            "url": candidate["url"],
+            "data": data,
+        }
+
+    def idor_severity(self, foreign_markers, sensitive_markers):
+        if foreign_markers:
+            return "High"
+        if sensitive_markers:
+            return "High"
+        return "Medium"
+
+    def idor_parameter_tampering_test(self, findings):
+        summary = {
+            "status": "completed",
+            "tested_candidates": 0,
+            "requests_sent": 0,
+            "vulnerable": 0,
+            "reason": "",
+        }
+
+        if not self.access_cfg["idor"].get("enabled", True):
+            summary["status"] = "skipped"
+            summary["reason"] = "IDOR testing is disabled."
+            return summary
+
+        account_name = self.access_cfg["idor"].get("account", "user_a")
+        current_account = self.authenticate_account(account_name)
+        if not current_account.authenticated:
+            summary["status"] = "skipped"
+            summary["reason"] = f"IDOR account '{account_name}' could not be authenticated."
+            return summary
+
+        candidates = self.discover_idor_candidates()
+        if not candidates:
+            summary["status"] = "skipped"
+            summary["reason"] = "No IDOR candidates were discovered from metadata or config."
+            return summary
+
+        other_markers = []
+        for name, account_cfg in self.access_cfg.get("accounts", {}).items():
+            if name == current_account.account_name:
+                continue
+            other_markers.extend(self.build_identity_markers(account_cfg))
+        other_markers = unique_preserve_order(other_markers)
+
+        start_id = int(self.access_cfg["idor"].get("start_id", 1))
+        end_id = int(self.access_cfg["idor"].get("end_id", 10))
+        invalid_id = end_id + 10000
+
+        for candidate in candidates:
+            summary["tested_candidates"] += 1
+            baseline_request = self.build_idor_request(candidate, invalid_id)
+            invalid_response = self.safe_request(
+                current_account.session,
+                baseline_request["method"],
+                baseline_request["url"],
+                "idor_invalid_baseline",
+                data=baseline_request["data"],
+            )
+            summary["requests_sent"] += 1
+            invalid_text = invalid_response.text if invalid_response is not None else ""
+
+            # Each candidate is replayed across a numeric range to surface insecure direct object references.
+            for object_id in range(start_id, end_id + 1):
+                request_data = self.build_idor_request(candidate, object_id)
+                response = self.safe_request(
+                    current_account.session,
+                    request_data["method"],
+                    request_data["url"],
+                    "idor_tampering",
+                    data=request_data["data"],
+                )
+                summary["requests_sent"] += 1
+
+                if response is None or self.response_is_denied(response):
+                    self.logger.log(
+                        "idor_result",
+                        candidate=candidate["display"],
+                        object_id=object_id,
+                        result="protected",
+                        status_code=response.status_code if response else None,
+                    )
+                    continue
+
+                if not 200 <= response.status_code < 300:
+                    self.logger.log(
+                        "idor_result",
+                        candidate=candidate["display"],
+                        object_id=object_id,
+                        result="unexpected_status",
+                        status_code=response.status_code,
+                    )
+                    continue
+
+                current_markers = self.find_markers(response.text, current_account.markers)
+                foreign_markers = self.find_markers(response.text, other_markers)
+                sensitive_markers = self.find_keywords(response.text, self.access_cfg.get("sensitive_keywords", []))
+                length_delta = abs(len(collapse_whitespace(response.text)) - len(collapse_whitespace(invalid_text)))
+                similarity_to_invalid = similarity_score(response.text, invalid_text) if invalid_text else 0.0
+                clearly_different = not invalid_text or similarity_to_invalid < 0.90 or length_delta > 80
+
+                # We only flag responses that differ from the invalid baseline and do not look like the current user's own data.
+                likely_leak = bool(foreign_markers)
+                if not likely_leak and clearly_different and not current_markers and sensitive_markers:
+                    likely_leak = True
+
+                if not likely_leak:
+                    self.logger.log(
+                        "idor_result",
+                        candidate=candidate["display"],
+                        object_id=object_id,
+                        result="no_leak_detected",
+                        status_code=response.status_code,
+                        similarity_to_invalid=round(similarity_to_invalid, 3),
+                    )
+                    continue
+
+                summary["vulnerable"] += 1
+                tampered_reference = request_data["url"]
+                if request_data["data"]:
+                    tampered_reference = f"{request_data['url']} | body={request_data['data']}"
+
+                evidence_parts = [
+                    f"Tampered reference returned HTTP {response.status_code}.",
+                    f"Similarity to invalid baseline: {similarity_to_invalid:.2f}.",
+                ]
+                if foreign_markers:
+                    evidence_parts.append(f"Foreign user markers observed: {', '.join(foreign_markers)}.")
+                if sensitive_markers:
+                    evidence_parts.append(f"Sensitive keywords observed: {', '.join(sensitive_markers)}.")
+
+                finding = Finding(
+                    category="IDOR",
+                    severity=self.idor_severity(foreign_markers, sensitive_markers),
+                    endpoint=candidate["display"],
+                    method=request_data["method"],
+                    description="Object reference tampering exposed a non-denied response for a different identifier.",
+                    evidence=" ".join(evidence_parts),
+                    response_snippet=self.extract_relevant_snippet(
+                        response.text,
+                        foreign_markers or sensitive_markers or other_markers,
+                    ),
+                    remediation=REMEDIATION_SUGGESTIONS,
+                    status_code=response.status_code,
+                    tampered_reference=tampered_reference,
+                )
+                self.add_finding(findings, finding)
+                self.logger.log(
+                    "idor_result",
+                    candidate=candidate["display"],
+                    object_id=object_id,
+                    result="vulnerable",
+                    status_code=response.status_code,
+                )
+
+        return summary
+
+    def write_findings_report(self, summary):
+        report_path = self.access_cfg["report_file"]
+        ensure_parent_dir(report_path)
+        findings = summary["findings"]
+
+        lines = [
+            "Week 6 Access Control and IDOR Testing Findings",
+            f"Generated: {utc_now()}",
+            f"Target URL: {self.config['target_url']}",
+            f"Login URL: {self.config['login_url']}",
+            f"Metadata Source: {self.access_cfg.get('target_metadata_file')}",
+            "",
+            "Execution Summary:",
+            (
+                f"- Horizontal Privilege Escalation: tested={summary['horizontal']['tested']}, "
+                f"vulnerable={summary['horizontal']['vulnerable']}, protected={summary['horizontal']['protected']}, "
+                f"status={summary['horizontal']['status']}"
+            ),
+            (
+                f"- Vertical Privilege Escalation: tested={summary['vertical']['tested']}, "
+                f"vulnerable={summary['vertical']['vulnerable']}, protected={summary['vertical']['protected']}, "
+                f"status={summary['vertical']['status']}"
+            ),
+            (
+                f"- IDOR Parameter Tampering: candidates={summary['idor']['tested_candidates']}, "
+                f"requests={summary['idor']['requests_sent']}, vulnerable={summary['idor']['vulnerable']}, "
+                f"status={summary['idor']['status']}"
+            ),
+        ]
+
+        if summary.get("execution_notes"):
+            lines.extend(["", "Execution Notes:"])
+            for note in summary["execution_notes"]:
+                lines.append(f"- {note}")
+
+        lines.extend(["", "Findings:"])
+        if not findings:
+            lines.append("- No access control or IDOR issues were positively identified during this run.")
+        else:
+            for index, finding in enumerate(findings, start=1):
+                lines.extend(
+                    [
+                        f"{index}. {finding.category} | {finding.severity}",
+                        f"   Endpoint: {finding.endpoint}",
+                        f"   Method: {finding.method}",
+                        f"   Evidence: {finding.evidence}",
+                        f"   Status Code: {finding.status_code if finding.status_code is not None else 'N/A'}",
+                    ]
+                )
+                if finding.tampered_reference:
+                    lines.append(f"   Tampered Reference: {finding.tampered_reference}")
+                lines.append(f"   Response Snippet: {finding.response_snippet or 'N/A'}")
+                lines.append("   Remediation Suggestions:")
+                for remediation in finding.remediation:
+                    lines.append(f"   - {remediation}")
+                lines.append("")
+
+        with open(report_path, "w", encoding="utf-8") as handle:
+            handle.write("\n".join(lines).rstrip() + "\n")
+
+    def run(self):
+        findings = []
+        summary = {
+            "target_url": self.config["target_url"],
+            "login_url": self.config["login_url"],
+            "metadata_file": self.access_cfg.get("target_metadata_file"),
+            "execution_notes": [],
+        }
+
+        horizontal_summary = self.horizontal_privilege_test(findings)
+        vertical_summary = self.vertical_privilege_test(findings)
+        idor_summary = self.idor_parameter_tampering_test(findings)
+
+        summary["horizontal"] = horizontal_summary
+        summary["vertical"] = vertical_summary
+        summary["idor"] = idor_summary
+        summary["findings"] = [finding.to_dict() for finding in findings]
+
+        for label, section in [
+            ("Horizontal", horizontal_summary),
+            ("Vertical", vertical_summary),
+            ("IDOR", idor_summary),
+        ]:
+            if section.get("reason"):
+                summary["execution_notes"].append(f"{label}: {section['reason']}")
+
+        self.write_findings_report(
+            {
+                "horizontal": horizontal_summary,
+                "vertical": vertical_summary,
+                "idor": idor_summary,
+                "findings": findings,
+                "execution_notes": summary["execution_notes"],
+            }
+        )
+        self.logger.finalize(summary)
+        return summary
+
+
+def build_arg_parser():
+    parser = argparse.ArgumentParser(
+        description="Requests-based Week 6 access control and IDOR testing module for DVWA-style applications."
+    )
+    parser.add_argument("--config", default="config.json", help="Path to the JSON configuration file.")
+    parser.add_argument("--base-url", help="Override the application base URL.")
+    parser.add_argument("--login-url", help="Override the login URL.")
+    parser.add_argument("--protected-url", help="Override the protected probe URL.")
+    parser.add_argument("--metadata-file", help="Override the Week 2 crawler metadata JSON path.")
+    parser.add_argument("--report-file", help="Override the findings report output path.")
+    parser.add_argument("--json-log-file", help="Override the structured JSON log output path.")
+    parser.add_argument("--session-cookie-name", help="Override the session cookie name.")
+    parser.add_argument("--user-a-username", help="Override User A username.")
+    parser.add_argument("--user-a-password", help="Override User A password.")
+    parser.add_argument("--user-b-username", help="Override User B username.")
+    parser.add_argument("--user-b-password", help="Override User B password.")
+    parser.add_argument("--low-priv-username", help="Override low-privilege username.")
+    parser.add_argument("--low-priv-password", help="Override low-privilege password.")
+    parser.add_argument("--user-a-session-token", help="Provide a pre-captured session token for User A.")
+    parser.add_argument("--user-b-session-token", help="Provide a pre-captured session token for User B.")
+    parser.add_argument("--low-priv-session-token", help="Provide a pre-captured session token for the low-privilege user.")
+    parser.add_argument("--admin-path", action="append", help="Add an admin endpoint path to test. Can be used multiple times.")
+    parser.add_argument("--horizontal-path", action="append", help="Add a resource path for horizontal testing. Can be used multiple times.")
+    parser.add_argument("--idor-start-id", type=int, help="Set the starting numeric identifier for IDOR tampering.")
+    parser.add_argument("--idor-end-id", type=int, help="Set the ending numeric identifier for IDOR tampering.")
+    parser.add_argument("--idor-account", help="Choose which configured account performs the IDOR tampering.")
+    return parser
+
+
+def load_runtime_config(args):
+    config = copy.deepcopy(DEFAULT_CONFIG)
+    config_path = Path(args.config).expanduser()
+    config_base_dir = config_path.resolve().parent if config_path.exists() else Path.cwd()
+
+    if config_path.exists():
+        config = deep_merge(config, load_json(str(config_path)))
+
+    if args.base_url:
+        config["target_url"] = args.base_url
+    if args.login_url:
+        config["login_url"] = args.login_url
+    if args.protected_url:
+        config["protected_url"] = args.protected_url
+
+    access_cfg = config["access_control"]
+
+    if args.metadata_file:
+        access_cfg["target_metadata_file"] = args.metadata_file
+    if args.report_file:
+        access_cfg["report_file"] = args.report_file
+    if args.json_log_file:
+        access_cfg["json_log_file"] = args.json_log_file
+    if args.session_cookie_name:
+        config["session"]["cookie_name"] = args.session_cookie_name
+        access_cfg["session_tokens"]["cookie_name"] = args.session_cookie_name
+
+    account_overrides = {
+        ("user_a", "username"): args.user_a_username,
+        ("user_a", "password"): args.user_a_password,
+        ("user_b", "username"): args.user_b_username,
+        ("user_b", "password"): args.user_b_password,
+        ("low_privilege", "username"): args.low_priv_username,
+        ("low_privilege", "password"): args.low_priv_password,
+    }
+    for (account_name, field_name), value in account_overrides.items():
+        if value:
+            access_cfg["accounts"].setdefault(account_name, {})[field_name] = value
+
+    token_overrides = {
+        "user_a": args.user_a_session_token,
+        "user_b": args.user_b_session_token,
+        "low_privilege": args.low_priv_session_token,
+    }
+    for account_name, value in token_overrides.items():
+        if value:
+            access_cfg["session_tokens"].setdefault(account_name, {})["token"] = value
+
+    if args.admin_path:
+        access_cfg["vertical"]["admin_paths"] = unique_preserve_order(
+            [*access_cfg["vertical"].get("admin_paths", []), *args.admin_path]
+        )
+    if args.horizontal_path:
+        access_cfg["horizontal"]["resource_paths"] = unique_preserve_order(
+            [*access_cfg["horizontal"].get("resource_paths", []), *args.horizontal_path]
+        )
+    if args.idor_start_id is not None:
+        access_cfg["idor"]["start_id"] = args.idor_start_id
+    if args.idor_end_id is not None:
+        access_cfg["idor"]["end_id"] = args.idor_end_id
+    if args.idor_account:
+        access_cfg["idor"]["account"] = args.idor_account
+
+    access_cfg["target_metadata_file"] = resolve_path(access_cfg.get("target_metadata_file"), config_base_dir)
+    access_cfg["json_log_file"] = resolve_path(access_cfg.get("json_log_file"), config_base_dir)
+    access_cfg["report_file"] = resolve_path(access_cfg.get("report_file"), config_base_dir)
+    return config
+
+
+def main():
+    args = build_arg_parser().parse_args()
+    config = load_runtime_config(args)
+    logger = JsonRunLogger(
+        config["access_control"]["json_log_file"],
+        {
+            "target_url": config["target_url"],
+            "login_url": config["login_url"],
+            "metadata_file": config["access_control"]["target_metadata_file"],
+            "report_file": config["access_control"]["report_file"],
+        },
+    )
+
+    tester = AccessControlIDORTester(config, logger)
+    summary = tester.run()
+    print("Week 6 access control and IDOR testing completed.")
+    print(f"JSON log: {config['access_control']['json_log_file']}")
+    print(f"Findings report: {config['access_control']['report_file']}")
+    print(f"Findings recorded: {len(summary['findings'])}")
+
+
+if __name__ == "__main__":
+    main()

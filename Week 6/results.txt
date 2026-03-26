@@ -1,0 +1,1804 @@
+{
+  "started_at": "2026-03-16T13:53:35.601981+00:00",
+  "metadata": {
+    "target_url": "http://localhost/dvwa/",
+    "login_url": "http://localhost/dvwa/login.php",
+    "metadata_file": "D:\\web_security_scanner\\reports\\output.json",
+    "report_file": "D:\\web_security_scanner\\findings_week6.txt"
+  },
+  "events": [
+    {
+      "timestamp": "2026-03-16T13:53:35.656063+00:00",
+      "event_type": "metadata_loaded",
+      "target_metadata_file": "D:\\web_security_scanner\\reports\\output.json",
+      "url_count": 34,
+      "form_count": 17
+    },
+    {
+      "timestamp": "2026-03-16T13:53:35.682289+00:00",
+      "event_type": "http_request",
+      "purpose": "user_a_login_page",
+      "method": "GET",
+      "url": "http://localhost/dvwa/login.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/login.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:35.730570+00:00",
+      "event_type": "http_request",
+      "purpose": "user_a_login_submit",
+      "method": "POST",
+      "url": "http://localhost/dvwa/login.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/index.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:35.731855+00:00",
+      "event_type": "authentication_result",
+      "account_name": "user_a",
+      "auth_mode": "credentials",
+      "authenticated": true,
+      "reason": "Response body matched configured login success markers.",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/index.php",
+      "cookie_name": "PHPSESSID",
+      "cookie_preview": "jdcgjms2..."
+    },
+    {
+      "timestamp": "2026-03-16T13:53:35.786677+00:00",
+      "event_type": "http_request",
+      "purpose": "user_b_login_page",
+      "method": "GET",
+      "url": "http://localhost/dvwa/login.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/login.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:35.852645+00:00",
+      "event_type": "http_request",
+      "purpose": "user_b_login_submit",
+      "method": "POST",
+      "url": "http://localhost/dvwa/login.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/index.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:35.854453+00:00",
+      "event_type": "authentication_result",
+      "account_name": "user_b",
+      "auth_mode": "credentials",
+      "authenticated": true,
+      "reason": "Response body matched configured login success markers.",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/index.php",
+      "cookie_name": "PHPSESSID",
+      "cookie_preview": "3ecvhr0f..."
+    },
+    {
+      "timestamp": "2026-03-16T13:53:35.913253+00:00",
+      "event_type": "http_request",
+      "purpose": "horizontal_discovery",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/fi/?page=file1.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/fi/?page=file1.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:35.943646+00:00",
+      "event_type": "http_request",
+      "purpose": "horizontal_discovery",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/fi/?page=file2.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/fi/?page=file2.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:35.967401+00:00",
+      "event_type": "http_request",
+      "purpose": "horizontal_discovery",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/fi/?page=file3.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/fi/?page=file3.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:35.975180+00:00",
+      "event_type": "horizontal_resources_discovered",
+      "count": 3,
+      "urls": [
+        "http://localhost/dvwa/vulnerabilities/fi/?page=file1.php",
+        "http://localhost/dvwa/vulnerabilities/fi/?page=file2.php",
+        "http://localhost/dvwa/vulnerabilities/fi/?page=file3.php"
+      ]
+    },
+    {
+      "timestamp": "2026-03-16T13:53:35.999939+00:00",
+      "event_type": "http_request",
+      "purpose": "horizontal_access_check",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/fi/?page=file1.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/fi/?page=file1.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.001260+00:00",
+      "event_type": "finding_recorded",
+      "category": "Horizontal Privilege Escalation",
+      "severity": "Medium",
+      "endpoint": "http://localhost/dvwa/vulnerabilities/fi/?page=file1.php",
+      "method": "GET",
+      "description": "User B was able to fetch a URL first collected under User A's authenticated session.",
+      "evidence": "User B received HTTP 200 for User A resource URL. User A markers in User B response: none detected.",
+      "response_snippet": "nerable_code_area\"> <h3>File 1</h3> <hr /> Hello <em>gordonb</em><br /> Your IP address is: <em>::1</em><br /><br /> [<em><a href=\"?page=include.php\">back</a></em>] </div> <h2>More Information</h2> <ul> <li><a href=\"http",
+      "remediation": [
+        "Implement RBAC so users only receive the permissions required for their role.",
+        "Apply ABAC or ownership checks on every request instead of trusting client-side state.",
+        "Enforce authorization on the server for every object fetch, update, download, and admin route.",
+        "Avoid exposing direct object references; prefer indirect lookups or unguessable UUIDs."
+      ],
+      "status_code": 200,
+      "tampered_reference": null
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.001872+00:00",
+      "event_type": "horizontal_result",
+      "url": "http://localhost/dvwa/vulnerabilities/fi/?page=file1.php",
+      "result": "vulnerable",
+      "status_code": 200,
+      "user_a_status": 200
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.027333+00:00",
+      "event_type": "http_request",
+      "purpose": "horizontal_access_check",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/fi/?page=file2.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/fi/?page=file2.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.051075+00:00",
+      "event_type": "finding_recorded",
+      "category": "Horizontal Privilege Escalation",
+      "severity": "Medium",
+      "endpoint": "http://localhost/dvwa/vulnerabilities/fi/?page=file2.php",
+      "method": "GET",
+      "description": "User B was able to fetch a URL first collected under User A's authenticated session.",
+      "evidence": "User B received HTTP 200 for User A resource URL. User A markers in User B response: none detected.",
+      "response_snippet": "<!DOCTYPE html> <html lang=\"en-GB\"> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /> <title>Vulnerability: File Inclusion :: Damn Vulnerable Web Application (DVWA)</title> <link rel=\"styleshee",
+      "remediation": [
+        "Implement RBAC so users only receive the permissions required for their role.",
+        "Apply ABAC or ownership checks on every request instead of trusting client-side state.",
+        "Enforce authorization on the server for every object fetch, update, download, and admin route.",
+        "Avoid exposing direct object references; prefer indirect lookups or unguessable UUIDs."
+      ],
+      "status_code": 200,
+      "tampered_reference": null
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.053277+00:00",
+      "event_type": "horizontal_result",
+      "url": "http://localhost/dvwa/vulnerabilities/fi/?page=file2.php",
+      "result": "vulnerable",
+      "status_code": 200,
+      "user_a_status": 200
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.092631+00:00",
+      "event_type": "http_request",
+      "purpose": "horizontal_access_check",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/fi/?page=file3.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/fi/?page=file3.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.094375+00:00",
+      "event_type": "finding_recorded",
+      "category": "Horizontal Privilege Escalation",
+      "severity": "Medium",
+      "endpoint": "http://localhost/dvwa/vulnerabilities/fi/?page=file3.php",
+      "method": "GET",
+      "description": "User B was able to fetch a URL first collected under User A's authenticated session.",
+      "evidence": "User B received HTTP 200 for User A resource URL. User A markers in User B response: none detected.",
+      "response_snippet": "_code_area\"> <h3>File 3</h3> <hr /> Welcome back <em>gordonb</em><br /> Your IP address is: <em>::1</em><br />Your user-agent address is: <em>Mozilla/5.0 (AuthSessionTester/1.0)</em><br />I'm hosted at: <em>localhost</em",
+      "remediation": [
+        "Implement RBAC so users only receive the permissions required for their role.",
+        "Apply ABAC or ownership checks on every request instead of trusting client-side state.",
+        "Enforce authorization on the server for every object fetch, update, download, and admin route.",
+        "Avoid exposing direct object references; prefer indirect lookups or unguessable UUIDs."
+      ],
+      "status_code": 200,
+      "tampered_reference": null
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.095431+00:00",
+      "event_type": "horizontal_result",
+      "url": "http://localhost/dvwa/vulnerabilities/fi/?page=file3.php",
+      "result": "vulnerable",
+      "status_code": 200,
+      "user_a_status": 200
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.114538+00:00",
+      "event_type": "http_request",
+      "purpose": "low_privilege_login_page",
+      "method": "GET",
+      "url": "http://localhost/dvwa/login.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/login.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.150838+00:00",
+      "event_type": "http_request",
+      "purpose": "low_privilege_login_submit",
+      "method": "POST",
+      "url": "http://localhost/dvwa/login.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/index.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.152080+00:00",
+      "event_type": "authentication_result",
+      "account_name": "low_privilege",
+      "auth_mode": "credentials",
+      "authenticated": true,
+      "reason": "Response body matched configured login success markers.",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/index.php",
+      "cookie_name": "PHPSESSID",
+      "cookie_preview": "dro507r4..."
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.158878+00:00",
+      "event_type": "http_request",
+      "purpose": "vertical_access_check",
+      "method": "GET",
+      "url": "http://localhost/admin",
+      "status_code": 404,
+      "final_url": "http://localhost/admin"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.160241+00:00",
+      "event_type": "vertical_result",
+      "url": "http://localhost/admin",
+      "result": "unexpected_status",
+      "status_code": 404
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.245861+00:00",
+      "event_type": "http_request",
+      "purpose": "vertical_access_check",
+      "method": "GET",
+      "url": "http://localhost/dashboard",
+      "status_code": 200,
+      "final_url": "http://localhost/dashboard/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.247735+00:00",
+      "event_type": "finding_recorded",
+      "category": "Vertical Privilege Escalation",
+      "severity": "High",
+      "endpoint": "http://localhost/dashboard",
+      "method": "GET",
+      "description": "A low-privilege user reached an endpoint that should be reserved for administrators.",
+      "evidence": "Low-privilege session received HTTP 200 instead of a deny response.",
+      "response_snippet": "href=\"/dashboard/phpinfo.php\">PHPInfo</a></li> <li class=\"item \"><a href=\"/phpmyadmin/\">phpMyAdmin</a></li> </ul> </section> </nav> </header> <div class=\"wrapper\"> <div class=\"hero\"> <div class=\"row\"> <div class=\"large-1",
+      "remediation": [
+        "Implement RBAC so users only receive the permissions required for their role.",
+        "Apply ABAC or ownership checks on every request instead of trusting client-side state.",
+        "Enforce authorization on the server for every object fetch, update, download, and admin route.",
+        "Avoid exposing direct object references; prefer indirect lookups or unguessable UUIDs."
+      ],
+      "status_code": 200,
+      "tampered_reference": null
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.249065+00:00",
+      "event_type": "vertical_result",
+      "url": "http://localhost/dashboard",
+      "result": "vulnerable",
+      "status_code": 200
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.252539+00:00",
+      "event_type": "http_request",
+      "purpose": "vertical_access_check",
+      "method": "GET",
+      "url": "http://localhost/manage/users",
+      "status_code": 404,
+      "final_url": "http://localhost/manage/users"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.254036+00:00",
+      "event_type": "vertical_result",
+      "url": "http://localhost/manage/users",
+      "result": "unexpected_status",
+      "status_code": 404
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.266485+00:00",
+      "event_type": "http_request",
+      "purpose": "vertical_access_check",
+      "method": "GET",
+      "url": "http://localhost/dvwa/setup.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/setup.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.268122+00:00",
+      "event_type": "finding_recorded",
+      "category": "Vertical Privilege Escalation",
+      "severity": "High",
+      "endpoint": "http://localhost/dvwa/setup.php",
+      "method": "GET",
+      "description": "A low-privilege user reached an endpoint that should be reserved for administrators.",
+      "evidence": "Low-privilege session received HTTP 200 instead of a deny response.",
+      "response_snippet": "eared and the data will be reset</em>.<br /> You can also use this to reset the administrator credentials (\"<em>admin</em> // <em>password</em>\") at any stage.</p> <hr /> <br /> <h2>Setup Check</h2> <em>General</em><br /",
+      "remediation": [
+        "Implement RBAC so users only receive the permissions required for their role.",
+        "Apply ABAC or ownership checks on every request instead of trusting client-side state.",
+        "Enforce authorization on the server for every object fetch, update, download, and admin route.",
+        "Avoid exposing direct object references; prefer indirect lookups or unguessable UUIDs."
+      ],
+      "status_code": 200,
+      "tampered_reference": null
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.269359+00:00",
+      "event_type": "vertical_result",
+      "url": "http://localhost/dvwa/setup.php",
+      "result": "vulnerable",
+      "status_code": 200
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.287472+00:00",
+      "event_type": "http_request",
+      "purpose": "vertical_access_check",
+      "method": "GET",
+      "url": "http://localhost/dvwa/security.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/security.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.289212+00:00",
+      "event_type": "finding_recorded",
+      "category": "Vertical Privilege Escalation",
+      "severity": "High",
+      "endpoint": "http://localhost/dvwa/security.php",
+      "method": "GET",
+      "description": "A low-privilege user reached an endpoint that should be reserved for administrators.",
+      "evidence": "Low-privilege session received HTTP 200 instead of a deny response.",
+      "response_snippet": "r has tried but failed to secure an application. It also acts as a challenge to users to refine their exploitation techniques.</li> <li> High - This option is an extension to the medium difficulty, with a mixture of <em>",
+      "remediation": [
+        "Implement RBAC so users only receive the permissions required for their role.",
+        "Apply ABAC or ownership checks on every request instead of trusting client-side state.",
+        "Enforce authorization on the server for every object fetch, update, download, and admin route.",
+        "Avoid exposing direct object references; prefer indirect lookups or unguessable UUIDs."
+      ],
+      "status_code": 200,
+      "tampered_reference": null
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.290404+00:00",
+      "event_type": "vertical_result",
+      "url": "http://localhost/dvwa/security.php",
+      "result": "vulnerable",
+      "status_code": 200
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.314688+00:00",
+      "event_type": "http_request",
+      "purpose": "vertical_access_check",
+      "method": "GET",
+      "url": "http://localhost/dvwa/instructions.php?doc=changelog",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/instructions.php?doc=changelog"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.317076+00:00",
+      "event_type": "finding_recorded",
+      "category": "Vertical Privilege Escalation",
+      "severity": "High",
+      "endpoint": "http://localhost/dvwa/instructions.php?doc=changelog",
+      "method": "GET",
+      "description": "A low-privilege user reached an endpoint that should be reserved for administrators.",
+      "evidence": "Low-privilege session received HTTP 200 instead of a deny response.",
+      "response_snippet": "5/2009</li> <li>Updated login script to use database. 21/05/2009</li> <li>Added admin user to database. 21/05/2009</li> <li>Combined RFI + LFI to make 'File Inclusion'. 21/05/2009</li> <li>More realism to Local File Incl",
+      "remediation": [
+        "Implement RBAC so users only receive the permissions required for their role.",
+        "Apply ABAC or ownership checks on every request instead of trusting client-side state.",
+        "Enforce authorization on the server for every object fetch, update, download, and admin route.",
+        "Avoid exposing direct object references; prefer indirect lookups or unguessable UUIDs."
+      ],
+      "status_code": 200,
+      "tampered_reference": null
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.318587+00:00",
+      "event_type": "vertical_result",
+      "url": "http://localhost/dvwa/instructions.php?doc=changelog",
+      "result": "vulnerable",
+      "status_code": 200
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.326340+00:00",
+      "event_type": "http_request",
+      "purpose": "vertical_access_check",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/bac/log_viewer.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/bac/log_viewer.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.328012+00:00",
+      "event_type": "finding_recorded",
+      "category": "Vertical Privilege Escalation",
+      "severity": "High",
+      "endpoint": "http://localhost/dvwa/vulnerabilities/bac/log_viewer.php",
+      "method": "GET",
+      "description": "A low-privilege user reached an endpoint that should be reserved for administrators.",
+      "evidence": "Low-privilege session received HTTP 200 instead of a deny response.",
+      "response_snippet": "",
+      "remediation": [
+        "Implement RBAC so users only receive the permissions required for their role.",
+        "Apply ABAC or ownership checks on every request instead of trusting client-side state.",
+        "Enforce authorization on the server for every object fetch, update, download, and admin route.",
+        "Avoid exposing direct object references; prefer indirect lookups or unguessable UUIDs."
+      ],
+      "status_code": 200,
+      "tampered_reference": null
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.329460+00:00",
+      "event_type": "vertical_result",
+      "url": "http://localhost/dvwa/vulnerabilities/bac/log_viewer.php",
+      "result": "vulnerable",
+      "status_code": 200
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.382981+00:00",
+      "event_type": "http_request",
+      "purpose": "user_a_login_page",
+      "method": "GET",
+      "url": "http://localhost/dvwa/login.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/login.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.420052+00:00",
+      "event_type": "http_request",
+      "purpose": "user_a_login_submit",
+      "method": "POST",
+      "url": "http://localhost/dvwa/login.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/index.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.421599+00:00",
+      "event_type": "authentication_result",
+      "account_name": "user_a",
+      "auth_mode": "credentials",
+      "authenticated": true,
+      "reason": "Response body matched configured login success markers.",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/index.php",
+      "cookie_name": "PHPSESSID",
+      "cookie_preview": "4ptoo2od..."
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.423280+00:00",
+      "event_type": "idor_candidates_discovered",
+      "total_candidates": 6,
+      "selected_candidates": 6,
+      "candidates": [
+        "http://localhost/dvwa/setup.php [POST user_token=<id>]",
+        "http://localhost/dvwa/vulnerabilities/upload/ [POST MAX_FILE_SIZE=<id>]",
+        "http://localhost/dvwa/vulnerabilities/captcha/ [POST step=<id>]",
+        "http://localhost/dvwa/vulnerabilities/sqli/ [id=<id>]",
+        "http://localhost/dvwa/vulnerabilities/sqli_blind/ [id=<id>]",
+        "http://localhost/dvwa/security.php [POST user_token=<id>]"
+      ]
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.439312+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_invalid_baseline",
+      "method": "POST",
+      "url": "http://localhost/dvwa/setup.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/setup.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.474855+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/setup.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/setup.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.484963+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/setup.php [POST user_token=<id>]",
+      "object_id": 1,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.996
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.497284+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/setup.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/setup.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.506485+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/setup.php [POST user_token=<id>]",
+      "object_id": 2,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.996
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.518185+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/setup.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/setup.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.530085+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/setup.php [POST user_token=<id>]",
+      "object_id": 3,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.996
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.540075+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/setup.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/setup.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.550004+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/setup.php [POST user_token=<id>]",
+      "object_id": 4,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.996
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.560649+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/setup.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/setup.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.571987+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/setup.php [POST user_token=<id>]",
+      "object_id": 5,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.996
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.582342+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/setup.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/setup.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.594344+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/setup.php [POST user_token=<id>]",
+      "object_id": 6,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.995
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.621975+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/setup.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/setup.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.633840+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/setup.php [POST user_token=<id>]",
+      "object_id": 7,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.995
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.645112+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/setup.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/setup.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.657194+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/setup.php [POST user_token=<id>]",
+      "object_id": 8,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.996
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.666902+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/setup.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/setup.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.677029+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/setup.php [POST user_token=<id>]",
+      "object_id": 9,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.995
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.688032+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/setup.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/setup.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.700361+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/setup.php [POST user_token=<id>]",
+      "object_id": 10,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.996
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.717608+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_invalid_baseline",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/upload/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/upload/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.732225+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/upload/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/upload/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.739215+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/upload/ [POST MAX_FILE_SIZE=<id>]",
+      "object_id": 1,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.769341+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/upload/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/upload/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.775459+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/upload/ [POST MAX_FILE_SIZE=<id>]",
+      "object_id": 2,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.800986+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/upload/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/upload/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.807698+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/upload/ [POST MAX_FILE_SIZE=<id>]",
+      "object_id": 3,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.821631+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/upload/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/upload/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.828404+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/upload/ [POST MAX_FILE_SIZE=<id>]",
+      "object_id": 4,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.880680+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/upload/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/upload/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.891878+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/upload/ [POST MAX_FILE_SIZE=<id>]",
+      "object_id": 5,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.910147+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/upload/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/upload/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.917580+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/upload/ [POST MAX_FILE_SIZE=<id>]",
+      "object_id": 6,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.961413+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/upload/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/upload/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:36.973544+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/upload/ [POST MAX_FILE_SIZE=<id>]",
+      "object_id": 7,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.004201+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/upload/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/upload/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.013059+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/upload/ [POST MAX_FILE_SIZE=<id>]",
+      "object_id": 8,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.053041+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/upload/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/upload/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.063727+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/upload/ [POST MAX_FILE_SIZE=<id>]",
+      "object_id": 9,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.101735+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/upload/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/upload/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.108493+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/upload/ [POST MAX_FILE_SIZE=<id>]",
+      "object_id": 10,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.147056+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_invalid_baseline",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/captcha/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/captcha/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.162557+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/captcha/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/captcha/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.169813+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/captcha/ [POST step=<id>]",
+      "object_id": 1,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.224629+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/captcha/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/captcha/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.239671+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/captcha/ [POST step=<id>]",
+      "object_id": 2,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.256889+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/captcha/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/captcha/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.264143+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/captcha/ [POST step=<id>]",
+      "object_id": 3,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.300273+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/captcha/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/captcha/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.312830+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/captcha/ [POST step=<id>]",
+      "object_id": 4,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.335278+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/captcha/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/captcha/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.343150+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/captcha/ [POST step=<id>]",
+      "object_id": 5,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.360957+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/captcha/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/captcha/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.369192+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/captcha/ [POST step=<id>]",
+      "object_id": 6,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.384282+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/captcha/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/captcha/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.392636+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/captcha/ [POST step=<id>]",
+      "object_id": 7,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.426389+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/captcha/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/captcha/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.433778+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/captcha/ [POST step=<id>]",
+      "object_id": 8,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.470094+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/captcha/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/captcha/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.480776+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/captcha/ [POST step=<id>]",
+      "object_id": 9,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.497162+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/vulnerabilities/captcha/",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/captcha/"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.504718+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/captcha/ [POST step=<id>]",
+      "object_id": 10,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.526885+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_invalid_baseline",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli/?id=10010",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli/?id=10010"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.562888+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli/?id=1",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli/?id=1"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.570276+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli/ [id=<id>]",
+      "object_id": 1,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.584301+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli/?id=2",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli/?id=2"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.591446+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli/ [id=<id>]",
+      "object_id": 2,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.629321+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli/?id=3",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli/?id=3"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.641446+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli/ [id=<id>]",
+      "object_id": 3,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.675151+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli/?id=4",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli/?id=4"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.685103+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli/ [id=<id>]",
+      "object_id": 4,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.702550+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli/?id=5",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli/?id=5"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.711769+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli/ [id=<id>]",
+      "object_id": 5,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.765851+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli/?id=6",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli/?id=6"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.775328+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli/ [id=<id>]",
+      "object_id": 6,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.794582+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli/?id=7",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli/?id=7"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.802543+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli/ [id=<id>]",
+      "object_id": 7,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.828722+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli/?id=8",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli/?id=8"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.835841+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli/ [id=<id>]",
+      "object_id": 8,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.852006+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli/?id=9",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli/?id=9"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.860200+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli/ [id=<id>]",
+      "object_id": 9,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.889185+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli/?id=10",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli/?id=10"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.899408+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli/ [id=<id>]",
+      "object_id": 10,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.938342+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_invalid_baseline",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=10010",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=10010"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.953741+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=1",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=1"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:37.961589+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli_blind/ [id=<id>]",
+      "object_id": 1,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.016260+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=2",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=2"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.026769+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli_blind/ [id=<id>]",
+      "object_id": 2,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.059204+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=3",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=3"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.066981+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli_blind/ [id=<id>]",
+      "object_id": 3,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.081981+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=4",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=4"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.089896+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli_blind/ [id=<id>]",
+      "object_id": 4,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.106509+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=5",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=5"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.113705+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli_blind/ [id=<id>]",
+      "object_id": 5,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.130383+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=6",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=6"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.138152+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli_blind/ [id=<id>]",
+      "object_id": 6,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.171466+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=7",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=7"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.179655+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli_blind/ [id=<id>]",
+      "object_id": 7,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.218464+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=8",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=8"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.230892+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli_blind/ [id=<id>]",
+      "object_id": 8,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.261279+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=9",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=9"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.269057+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli_blind/ [id=<id>]",
+      "object_id": 9,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.304524+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "GET",
+      "url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=10",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/vulnerabilities/sqli_blind/?id=10"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.311866+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/vulnerabilities/sqli_blind/ [id=<id>]",
+      "object_id": 10,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 1.0
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.322329+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_invalid_baseline",
+      "method": "POST",
+      "url": "http://localhost/dvwa/security.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/security.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.346431+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/security.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/security.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.359176+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/security.php [POST user_token=<id>]",
+      "object_id": 1,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.995
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.374625+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/security.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/security.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.388179+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/security.php [POST user_token=<id>]",
+      "object_id": 2,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.995
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.401420+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/security.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/security.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.409441+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/security.php [POST user_token=<id>]",
+      "object_id": 3,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.994
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.420628+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/security.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/security.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.428932+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/security.php [POST user_token=<id>]",
+      "object_id": 4,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.994
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.440976+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/security.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/security.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.450546+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/security.php [POST user_token=<id>]",
+      "object_id": 5,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.995
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.463317+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/security.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/security.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.471239+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/security.php [POST user_token=<id>]",
+      "object_id": 6,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.995
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.484966+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/security.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/security.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.495756+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/security.php [POST user_token=<id>]",
+      "object_id": 7,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.994
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.507155+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/security.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/security.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.514938+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/security.php [POST user_token=<id>]",
+      "object_id": 8,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.995
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.529515+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/security.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/security.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.561219+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/security.php [POST user_token=<id>]",
+      "object_id": 9,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.995
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.573602+00:00",
+      "event_type": "http_request",
+      "purpose": "idor_tampering",
+      "method": "POST",
+      "url": "http://localhost/dvwa/security.php",
+      "status_code": 200,
+      "final_url": "http://localhost/dvwa/security.php"
+    },
+    {
+      "timestamp": "2026-03-16T13:53:38.583885+00:00",
+      "event_type": "idor_result",
+      "candidate": "http://localhost/dvwa/security.php [POST user_token=<id>]",
+      "object_id": 10,
+      "result": "no_leak_detected",
+      "status_code": 200,
+      "similarity_to_invalid": 0.995
+    }
+  ],
+  "finished_at": "2026-03-16T13:53:38.590879+00:00",
+  "summary": {
+    "target_url": "http://localhost/dvwa/",
+    "login_url": "http://localhost/dvwa/login.php",
+    "metadata_file": "D:\\web_security_scanner\\reports\\output.json",
+    "execution_notes": [],
+    "horizontal": {
+      "status": "completed",
+      "tested": 3,
+      "vulnerable": 3,
+      "protected": 0,
+      "reason": ""
+    },
+    "vertical": {
+      "status": "completed",
+      "tested": 7,
+      "vulnerable": 5,
+      "protected": 0,
+      "reason": ""
+    },
+    "idor": {
+      "status": "completed",
+      "tested_candidates": 6,
+      "requests_sent": 66,
+      "vulnerable": 0,
+      "reason": ""
+    },
+    "findings": [
+      {
+        "category": "Horizontal Privilege Escalation",
+        "severity": "Medium",
+        "endpoint": "http://localhost/dvwa/vulnerabilities/fi/?page=file1.php",
+        "method": "GET",
+        "description": "User B was able to fetch a URL first collected under User A's authenticated session.",
+        "evidence": "User B received HTTP 200 for User A resource URL. User A markers in User B response: none detected.",
+        "response_snippet": "nerable_code_area\"> <h3>File 1</h3> <hr /> Hello <em>gordonb</em><br /> Your IP address is: <em>::1</em><br /><br /> [<em><a href=\"?page=include.php\">back</a></em>] </div> <h2>More Information</h2> <ul> <li><a href=\"http",
+        "remediation": [
+          "Implement RBAC so users only receive the permissions required for their role.",
+          "Apply ABAC or ownership checks on every request instead of trusting client-side state.",
+          "Enforce authorization on the server for every object fetch, update, download, and admin route.",
+          "Avoid exposing direct object references; prefer indirect lookups or unguessable UUIDs."
+        ],
+        "status_code": 200,
+        "tampered_reference": null
+      },
+      {
+        "category": "Horizontal Privilege Escalation",
+        "severity": "Medium",
+        "endpoint": "http://localhost/dvwa/vulnerabilities/fi/?page=file2.php",
+        "method": "GET",
+        "description": "User B was able to fetch a URL first collected under User A's authenticated session.",
+        "evidence": "User B received HTTP 200 for User A resource URL. User A markers in User B response: none detected.",
+        "response_snippet": "<!DOCTYPE html> <html lang=\"en-GB\"> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /> <title>Vulnerability: File Inclusion :: Damn Vulnerable Web Application (DVWA)</title> <link rel=\"styleshee",
+        "remediation": [
+          "Implement RBAC so users only receive the permissions required for their role.",
+          "Apply ABAC or ownership checks on every request instead of trusting client-side state.",
+          "Enforce authorization on the server for every object fetch, update, download, and admin route.",
+          "Avoid exposing direct object references; prefer indirect lookups or unguessable UUIDs."
+        ],
+        "status_code": 200,
+        "tampered_reference": null
+      },
+      {
+        "category": "Horizontal Privilege Escalation",
+        "severity": "Medium",
+        "endpoint": "http://localhost/dvwa/vulnerabilities/fi/?page=file3.php",
+        "method": "GET",
+        "description": "User B was able to fetch a URL first collected under User A's authenticated session.",
+        "evidence": "User B received HTTP 200 for User A resource URL. User A markers in User B response: none detected.",
+        "response_snippet": "_code_area\"> <h3>File 3</h3> <hr /> Welcome back <em>gordonb</em><br /> Your IP address is: <em>::1</em><br />Your user-agent address is: <em>Mozilla/5.0 (AuthSessionTester/1.0)</em><br />I'm hosted at: <em>localhost</em",
+        "remediation": [
+          "Implement RBAC so users only receive the permissions required for their role.",
+          "Apply ABAC or ownership checks on every request instead of trusting client-side state.",
+          "Enforce authorization on the server for every object fetch, update, download, and admin route.",
+          "Avoid exposing direct object references; prefer indirect lookups or unguessable UUIDs."
+        ],
+        "status_code": 200,
+        "tampered_reference": null
+      },
+      {
+        "category": "Vertical Privilege Escalation",
+        "severity": "High",
+        "endpoint": "http://localhost/dashboard",
+        "method": "GET",
+        "description": "A low-privilege user reached an endpoint that should be reserved for administrators.",
+        "evidence": "Low-privilege session received HTTP 200 instead of a deny response.",
+        "response_snippet": "href=\"/dashboard/phpinfo.php\">PHPInfo</a></li> <li class=\"item \"><a href=\"/phpmyadmin/\">phpMyAdmin</a></li> </ul> </section> </nav> </header> <div class=\"wrapper\"> <div class=\"hero\"> <div class=\"row\"> <div class=\"large-1",
+        "remediation": [
+          "Implement RBAC so users only receive the permissions required for their role.",
+          "Apply ABAC or ownership checks on every request instead of trusting client-side state.",
+          "Enforce authorization on the server for every object fetch, update, download, and admin route.",
+          "Avoid exposing direct object references; prefer indirect lookups or unguessable UUIDs."
+        ],
+        "status_code": 200,
+        "tampered_reference": null
+      },
+      {
+        "category": "Vertical Privilege Escalation",
+        "severity": "High",
+        "endpoint": "http://localhost/dvwa/setup.php",
+        "method": "GET",
+        "description": "A low-privilege user reached an endpoint that should be reserved for administrators.",
+        "evidence": "Low-privilege session received HTTP 200 instead of a deny response.",
+        "response_snippet": "eared and the data will be reset</em>.<br /> You can also use this to reset the administrator credentials (\"<em>admin</em> // <em>password</em>\") at any stage.</p> <hr /> <br /> <h2>Setup Check</h2> <em>General</em><br /",
+        "remediation": [
+          "Implement RBAC so users only receive the permissions required for their role.",
+          "Apply ABAC or ownership checks on every request instead of trusting client-side state.",
+          "Enforce authorization on the server for every object fetch, update, download, and admin route.",
+          "Avoid exposing direct object references; prefer indirect lookups or unguessable UUIDs."
+        ],
+        "status_code": 200,
+        "tampered_reference": null
+      },
+      {
+        "category": "Vertical Privilege Escalation",
+        "severity": "High",
+        "endpoint": "http://localhost/dvwa/security.php",
+        "method": "GET",
+        "description": "A low-privilege user reached an endpoint that should be reserved for administrators.",
+        "evidence": "Low-privilege session received HTTP 200 instead of a deny response.",
+        "response_snippet": "r has tried but failed to secure an application. It also acts as a challenge to users to refine their exploitation techniques.</li> <li> High - This option is an extension to the medium difficulty, with a mixture of <em>",
+        "remediation": [
+          "Implement RBAC so users only receive the permissions required for their role.",
+          "Apply ABAC or ownership checks on every request instead of trusting client-side state.",
+          "Enforce authorization on the server for every object fetch, update, download, and admin route.",
+          "Avoid exposing direct object references; prefer indirect lookups or unguessable UUIDs."
+        ],
+        "status_code": 200,
+        "tampered_reference": null
+      },
+      {
+        "category": "Vertical Privilege Escalation",
+        "severity": "High",
+        "endpoint": "http://localhost/dvwa/instructions.php?doc=changelog",
+        "method": "GET",
+        "description": "A low-privilege user reached an endpoint that should be reserved for administrators.",
+        "evidence": "Low-privilege session received HTTP 200 instead of a deny response.",
+        "response_snippet": "5/2009</li> <li>Updated login script to use database. 21/05/2009</li> <li>Added admin user to database. 21/05/2009</li> <li>Combined RFI + LFI to make 'File Inclusion'. 21/05/2009</li> <li>More realism to Local File Incl",
+        "remediation": [
+          "Implement RBAC so users only receive the permissions required for their role.",
+          "Apply ABAC or ownership checks on every request instead of trusting client-side state.",
+          "Enforce authorization on the server for every object fetch, update, download, and admin route.",
+          "Avoid exposing direct object references; prefer indirect lookups or unguessable UUIDs."
+        ],
+        "status_code": 200,
+        "tampered_reference": null
+      },
+      {
+        "category": "Vertical Privilege Escalation",
+        "severity": "High",
+        "endpoint": "http://localhost/dvwa/vulnerabilities/bac/log_viewer.php",
+        "method": "GET",
+        "description": "A low-privilege user reached an endpoint that should be reserved for administrators.",
+        "evidence": "Low-privilege session received HTTP 200 instead of a deny response.",
+        "response_snippet": "",
+        "remediation": [
+          "Implement RBAC so users only receive the permissions required for their role.",
+          "Apply ABAC or ownership checks on every request instead of trusting client-side state.",
+          "Enforce authorization on the server for every object fetch, update, download, and admin route.",
+          "Avoid exposing direct object references; prefer indirect lookups or unguessable UUIDs."
+        ],
+        "status_code": 200,
+        "tampered_reference": null
+      }
+    ]
+  }
+}
