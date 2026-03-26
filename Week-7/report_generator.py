@@ -4,8 +4,14 @@ import webbrowser
 import html
 from datetime import datetime
 
+# Setup base directory for file pathing
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+# --- CONFIGURATION ---
+TARGET_URL = "http://localhost/dvwa" 
+scan_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+# File paths mapped to project milestones
 FILES = [
     os.path.join(BASE_DIR, "..", "Week-3", "sqli_results.json"),
     os.path.join(BASE_DIR, "..", "Week-4", "xss_results.json"),
@@ -13,287 +19,243 @@ FILES = [
     os.path.join(BASE_DIR, "..", "Week-6", "idor_results.json"),
 ]
 
+# Mapping for Dynamic Impact and OWASP Categories
+VULN_INTEL = {
+    "SQL Injection": {
+        "owasp": "A03:2021-Injection",
+        "impact": "High. Attackers can bypass authentication, read sensitive database records, modify data, or gain administrative control over the database server."
+    },
+    "XSS": {
+        "owasp": "A03:2021-Injection",
+        "impact": "Medium-High. Attackers can execute malicious scripts in the victim's browser to steal session cookies, deface websites, or redirect users to phishing sites."
+    },
+    "Cross-Site Scripting (XSS)": {
+        "owasp": "A03:2021-Injection",
+        "impact": "Medium-High. Attackers can execute malicious scripts in the victim's browser to steal session cookies, deface websites, or redirect users to phishing sites."
+    },
+    "Broken Authentication": {
+        "owasp": "A07:2021-Identification and Authentication Failures",
+        "impact": "Critical. Compromised accounts allow attackers to impersonate users, access private data, and perform unauthorized actions as an authenticated user."
+    },
+    "IDOR": {
+        "owasp": "A01:2021-Broken Access Control",
+        "impact": "High. Attackers can manipulate parameters (like IDs) to access or modify data belonging to other users without authorization."
+    },
+    "Insecure Direct Object References (IDOR)": {
+        "owasp": "A01:2021-Broken Access Control",
+        "impact": "High. Attackers can manipulate parameters to access or modify data belonging to other users."
+    }
+}
+
 results = []
 
-# ---------------- LOAD RESULTS ---------------- #
+# ---------------- 1. LOAD RESULTS ---------------- #
 for file in FILES:
     if not os.path.exists(file):
         continue
     try:
         with open(file, "r", encoding="utf-8") as f:
             data = json.load(f)
-            if isinstance(data, dict) and "vulnerabilities" in data:
-                results.extend(data["vulnerabilities"])
-            elif isinstance(data, list):
-                results.extend(data)
-            elif isinstance(data, dict):
-                results.append(data)
+            extracted = data.get("vulnerabilities", data) if isinstance(data, dict) else data
+            if extracted:
+                results.extend(extracted if isinstance(extracted, list) else [extracted])
     except:
         continue
 
-# ---------------- REMOVE DUPLICATES ---------------- #
+# ---------------- 2. REMOVE DUPLICATES ---------------- #
 unique = {}
 filtered_results = []
-
 for r in results:
     vuln = r.get("type", "Unknown")
-    url = r.get("url", "N/A")
-
-    key = ("IDOR", "global") if vuln == "IDOR Vulnerability" else (vuln, url)
-
+    url = r.get("url", r.get("endpoint", "Not Required"))
+    key = (vuln, url)
     if key not in unique:
         unique[key] = True
         filtered_results.append(r)
-
 results = filtered_results
 
-# ---------------- SEVERITY ---------------- #
-high = sum(1 for r in results if r.get("severity") == "High")
-medium = sum(1 for r in results if r.get("severity") == "Medium")
-low = sum(1 for r in results if r.get("severity") == "Low")
+# ---------------- 3. SEVERITY DETECTION ---------------- #
+high = sum(1 for r in results if str(r.get("severity", "")).strip().capitalize() == "High")
+medium = sum(1 for r in results if str(r.get("severity", "")).strip().capitalize() == "Medium")
+low = sum(1 for r in results if str(r.get("severity", "")).strip().capitalize() == "Low")
 
-# ---------------- SCORE ---------------- #
-score = max(0, 100 - (high * 10 + medium * 5 + low * 2))
+# ---------------- 4. RISK CALCULATION ---------------- #
+weighted_sum = (high * 10) + (medium * 5) + (low * 2)
+criticality_score = min(100, round((weighted_sum / (len(results) * 10)) * 100)) if results else 0
+threat = "CRITICAL" if high > 0 else "ELEVATED" if medium > 0 else "SECURE"
+status_color = "#ff0055" if high > 0 else "#00f3ff"
 
-# ---------------- THREAT LEVEL ---------------- #
-if high > 5:
-    threat = "CRITICAL"
-elif high > 0:
-    threat = "ELEVATED"
-else:
-    threat = "LOW"
-
-# ---------------- OWASP ---------------- #
-OWASP_MAP = {
-    "SQL Injection": "A03: Injection",
-    "XSS": "A03: Injection",
-    "Weak Credentials": "A07: Auth Failures",
-    "Session Hijacking Risk": "A07: Auth Failures",
-    "Cookie Security": "A05: Misconfiguration",
-    "IDOR Vulnerability": "A01: Broken Access Control"
-}
-
-# ---------------- BUILD CONTENT ---------------- #
+# ---------------- 5. BUILD CONTENT ---------------- #
 rows = ""
-details = ""
-
+summary_cards = ""
 for i, r in enumerate(results, 1):
-    vuln = r.get("type", "Unknown")
-    severity = r.get("severity", "Low")
-    owasp = OWASP_MAP.get(vuln, "Unknown")
+    type_key = r.get("type", "Unknown")
+    intel = VULN_INTEL.get(type_key, {"owasp": "General Security", "impact": "Potential system compromise."})
+    
+    vuln = html.escape(str(type_key))
+    sev = str(r.get("severity", "Low")).strip().capitalize()
+    url = html.escape(str(r.get("url") or r.get("endpoint") or "System Wide"))
+    payload = html.escape(str(r.get("payload") or "Not Required "))
+    mitigation = html.escape(str(r.get("recommendation") or r.get("mitigation") or "Apply secure coding practices"))
 
     rows += f"""
-<tr>
-<td>{html.escape(vuln)}</td>
-<td><span class="badge {severity.lower()}">{severity}</span></td>
-<td>{owasp}</td>
-</tr>
-"""
+    <tr>
+        <td><b>{vuln}</b></td>
+        <td class="text-{sev.lower()}">{sev}</td>
+        <td><code>{url}</code></td>
+        <td>{mitigation}</td>
+    </tr>"""
 
-    details += f"""
-<div class="finding">
-<h3>{i}. {html.escape(vuln)}</h3>
-<p><b>Severity:</b> {severity}</p>
-<p><b>OWASP:</b> {owasp}</p>
-<p><b>URL:</b> {html.escape(r.get("url","N/A"))}</p>
-<p><b>Payload:</b> {html.escape(str(r.get("payload","N/A")))}</p>
+    summary_cards += f"""
+    <div class="cyber-card {sev.lower()}">
+        <div class="card-header"><span>FINDING_0{i}</span> {vuln}</div>
+        <div class="card-content">
+            <p><b>OWASP:</b> {intel['owasp']}</p>
+            <p><b>ENDPOINT:</b> {url}</p>
+            <p><b>PAYLOAD:</b> <code>{payload}</code></p>
+            <p><b>IMPACT:</b> {intel['impact']}</p>
+            <p><b>SUGGESTED MITIGATION:</b> {mitigation}</p>
+        </div>
+    </div>"""
 
-<p><b>Impact:</b><br>
-Attackers may exploit this vulnerability to gain unauthorized access or manipulate data.
-</p>
-
-<p><b>Recommendation:</b><br>
-{html.escape(r.get("recommendation","Apply secure coding practices"))}
-</p>
-</div>
-"""
-
-scan_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-# ---------------- HTML ---------------- #
+# ---------------- 6. UI TEMPLATE ---------------- #
 html_page = f"""
+<!DOCTYPE html>
 <html>
 <head>
-<title>WebScanPro Report</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <title>WebScanPro Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono&display=swap');
+        
+        :root {{ --cyan: #00f3ff; --magenta: #ff0055; --bg: #050505; --card: #111; }}
 
-<style>
-body {{
-background: radial-gradient(circle,#020617,#000);
-color:#e2e8f0;
-font-family:Courier New;
-padding:40px;
-}}
+        body {{ background: var(--bg); color: #FFFFFF; font-family: 'JetBrains Mono', monospace; margin: 0; padding: 0; display: flex; }}
 
-h1 {{
-    text-align: center;
-    color: #00f7ff;
-    font-size: 48px;              /* 🔥 Bigger size */
-    letter-spacing: 2px;          /* cyber spacing */
-    margin-bottom: 20px;
+        .hud-sidebar {{ width: 320px; height: 100vh; background: #0a0a0a; border-right: 1px solid #333; position: fixed; padding: 40px 20px; box-sizing: border-box; text-align: center; }}
+        .logo {{ font-family: 'Orbitron', sans-serif; color: var(--cyan); letter-spacing: 5px; border-bottom: 2px solid var(--cyan); padding-bottom: 10px; margin-bottom: 30px; }}
+        .risk-gauge {{ width: 150px; height: 150px; border-radius: 50%; border: 4px double {status_color}; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; flex-direction: column; box-shadow: 0 0 20px {status_color}33; }}
+        .risk-gauge b {{ font-size: 32px; color: {status_color}; }}
+        .stat-block {{ background: #151515; border: 1px solid #333; padding: 15px; margin-bottom: 10px; border-radius: 4px; }}
+        .stat-block span {{ color: var(--cyan); font-weight: bold; font-size: 20px; }}
 
-    text-shadow: 0 0 4px rgba(0,247,255,0.8),
-                 0 0 8px rgba(0,247,255,0.4);
-}}
+        .terminal-content {{ margin-left: 320px; padding: 60px; width: 100%; box-sizing: border-box; }}
+        h1, h2 {{ font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 3px; color: var(--cyan); }}
+        .meta-line {{ border-left: 3px solid var(--magenta); padding-left: 20px; margin-bottom: 50px; color: #888; }}
 
+        table {{ width: 100%; border-collapse: collapse; margin-top: 20px; }}
+        th {{ text-align: left; padding: 15px; border-bottom: 2px solid #333; color: var(--cyan); font-size: 12px; }}
+        td {{ padding: 15px; border-bottom: 1px solid #222; font-size: 13px; }}
+        .text-high {{ color: var(--magenta); }} .text-medium {{ color: orange; }} .text-low {{ color: #00ffaa; }}
 
-p, td, th {{
-text-shadow: none;
-}}
+        .cyber-card {{ background: var(--card); border: 1px solid #222; margin-top: 20px; border-radius: 0 15px 0 15px; }}
+        .card-header {{ background: #1a1a1a; padding: 15px; font-weight: bold; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #333; }}
+        .card-header span {{ background: var(--magenta); color: #fff; padding: 2px 8px; font-size: 10px; }}
+        .card-content {{ padding: 20px; line-height: 1.6; font-size: 14px; }}
+        code {{ background: #222; color: var(--cyan); padding: 2px 6px; }}
 
-.cards {{
-display:flex;
-gap:20px;
-margin:40px 0;
-}}
+        .btn-gen {{ width: 100%; padding: 15px; background: transparent; border: 1px solid var(--cyan); color: var(--cyan); font-family: 'Orbitron'; cursor: pointer; transition: 0.3s; margin-top: 20px; }}
+        .btn-gen:hover {{ background: var(--cyan); color: #000; box-shadow: 0 0 20px var(--cyan); }}
 
-.card {{
-flex:1;
-background:rgba(255,255,255,0.05);
-padding:20px;
-border-radius:12px;
-text-align:center;
-border:1px solid rgba(0,255,255,0.2);
-box-shadow: 0 0 10px rgba(0,255,255,0.1);
-}}
-
-.card span {{
-font-size:30px;
-color:#00f7ff;
-}}
-
-.chart-box {{
-width:250px;
-margin:40px auto;
-}}
-
-.badge {{
-padding:5px 10px;
-border-radius:6px;
-font-weight:bold;
-}}
-
-.high {{background:#ff0033}}
-.medium {{background:#ff9800}}
-.low {{background:#00ff9c}}
-
-table {{
-width:100%;
-border-collapse:collapse;
-}}
-
-td,th {{
-padding:10px;
-border-bottom:1px solid #1e293b;
-}}
-
-.finding {{
-background:rgba(255,255,255,0.05);
-padding:20px;
-margin-top:20px;
-border-left:4px solid #00f7ff;
-}}
-
-.score {{
-font-size:40px;
-text-align:center;
-color:#00ff9c;
-text-shadow: 0 0 6px rgba(0,255,156,0.6),
-             0 0 12px rgba(0,255,156,0.3);
-}}
-</style>
+        @media print {{
+            @page {{ size: A4; margin: 5mm; }}
+            html, body {{ zoom: 86%; background: #fff !important; color: #000 !important; width: 210mm; height: 297mm; }}
+            .hud-sidebar, .btn-gen {{ display: none !important; }}
+            .terminal-content {{ margin: 0 !important; padding: 10mm !important; width: 100% !important; }}
+            .cyber-card, table {{ border: 1px solid #000 !important; background: #fff !important; color: #000 !important; page-break-inside: avoid; }}
+            .card-header {{ background: #eee !important; color: #000 !important; border-bottom: 2px solid #000 !important; }}
+            h1, h2, th {{ color: #000 !important; }}
+            .text-high, .text-medium, .text-low {{ color: #000 !important; font-weight: bold; text-decoration: underline; }}
+            .meta-line {{ border-left: 3px solid #000 !important; color: #000 !important; }}
+        }}
+    </style>
 </head>
-
 <body>
 
-<h1>⚡ WEBSCANPRO SECURITY TESTING TOOL REPORT ⚡</h1>
-
-<p style="text-align:center;">Target: http://localhost/dvwa</p>
-<p style="text-align:center;">Scan Time: {scan_date}</p>
-
-<h2 class="score">Security Posture Score: {score}/100</h2>
-<h2>Threat Level: <span style="color:red;">{threat}</span></h2>
-
-<div class="cards">
-<div class="card">Total<br><span>{len(results)}</span></div>
-<div class="card">High<br><span>{high}</span></div>
-<div class="card">Medium<br><span>{medium}</span></div>
-<div class="card">Low<br><span>{low}</span></div>
+<div class="hud-sidebar">
+    <div class="logo">WebScanPro</div>
+    <div class="risk-gauge">
+        <small style="color:#FFFFFF; font-size:12px;">THREAT_LEVEL</small>
+        <b>{criticality_score}%</b>
+    </div>
+    <div style="margin-bottom:30px; color:{status_color}; font-weight:bold;">{threat}_MODE</div>
+    <div class="stat-block"><span>{len(results)}</span><br><small>TOTAL VULNERABILITY</small></div>
+    <div class="stat-block"><span>{high}</span><br><small>HIGH VULNERABILITY</small></div>
+    <div class="stat-block"><span>{medium}</span><br><small>MEDIUM VULNERABILITY</small></div>
+    <div class="stat-block"><span>{low}</span><br><small>LOW VULNERABILITY</small></div>
+    
+    <div style="margin:20px auto; max-width:180px; position: relative;">
+        <canvas id="pieChart"></canvas>
+    </div>
+    
+    <button class="btn-gen" onclick="window.print()">GENERATE_PDF</button>
 </div>
 
-<div class="chart-box">
-<canvas id="chart"></canvas>
-</div>
+<div class="terminal-content">
+    <h1>WEBSCANPRO WEB SECURITY TESTING TOOL REPORT</h1>
+    <div class="meta-line">
+        TARGET URL: {TARGET_URL}<br>
+        TIMESTAMP: {scan_date}<br>
+        AUDIT_STATUS: ANALYSIS_COMPLETE
+    </div>
 
-<h2>Attack Surface Overview</h2>
+    <h2>VULNERABILITY REPORT</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>VULNERABILITY</th>
+                <th>SEVERITY</th>
+                <th>ENDPOINT</th>
+                <th>MITIGATION</th>
+            </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+    </table>
 
-<table>
-<tr><th>Type</th><th>Severity</th><th>OWASP</th></tr>
-{rows}
-</table>
-
-<h2>Threat Vectors</h2>
-{details}
-
-<h2>Attack Timeline</h2>
-<div class="finding">
-<p>[+] Scan Started</p>
-<p>[!] Vulnerabilities Detected</p>
-<p>[!] Exploitable Inputs Found</p>
-<p>[+] Scan Completed</p>
-</div>
-
-<h2>Risk Analysis</h2>
-<div class="finding">
-Application contains security flaws that could expose sensitive data.
-Immediate fixes recommended.
-</div>
-
-<h2>Security Recommendations</h2>
-<div class="finding">
-<ul>
-<li>Use prepared statements</li>
-<li>Validate user input</li>
-<li>Use strong authentication</li>
-<li>Apply access control checks</li>
-<li>Secure cookies</li>
-</ul>
-</div>
-
-<h2>Severity Legend</h2>
-<div class="finding">
-<p><span class="badge high">High</span> → Critical</p>
-<p><span class="badge medium">Medium</span> → Moderate</p>
-<p><span class="badge low">Low</span> → Low Risk</p>
+    <h2 style="margin-top:60px;">VULNERABILITY SUMMARY</h2>
+    {summary_cards}
 </div>
 
 <script>
-new Chart(document.getElementById('chart'), {{
-type:'doughnut',
-data:{{
-labels:['High','Medium','Low'],
-datasets:[{{
-data:[{high},{medium},{low}],
-backgroundColor:['#ff0033','#ff9800','#00ff9c']
-}}]
-}},
-options:{{
-plugins:{{
-legend:{{labels:{{color:'#fff'}}}}
-}}
-}}
-}});
+    const ctx = document.getElementById('pieChart').getContext('2d');
+    
+    new Chart(ctx, {{
+        type: 'pie',
+        data: {{
+            labels: ['High Risk', 'Medium Risk', 'Low Risk'],
+            datasets: [{{
+                data: [{high}, {medium}, {low}],
+                backgroundColor: ['#ff0055', '#ffaa00', '#00ffaa'],
+                hoverOffset: 15,
+                borderWidth: 2,
+                borderColor: '#050505'
+            }}]
+        }},
+        options: {{
+            plugins: {{
+                legend: {{ display: false }},
+                tooltip: {{
+                    enabled: true,
+                    backgroundColor: 'rgba(10, 10, 10, 0.9)',
+                    borderColor: '#00f3ff',
+                    borderWidth: 1,
+                    titleFont: {{ family: 'Orbitron' }}
+                }}
+            }}
+        }}
+    }});
 </script>
-
 </body>
 </html>
 """
 
-# ---------------- SAVE ---------------- #
+# Save and Launch 
 file_path = os.path.join(BASE_DIR, "security_report.html")
-
 with open(file_path, "w", encoding="utf-8") as f:
     f.write(html_page)
 
-print("🔥 Report Ready:", file_path)
+print(f"🔥 Security report Generated : {file_path}")
 webbrowser.open("file://" + os.path.realpath(file_path))
+
+
