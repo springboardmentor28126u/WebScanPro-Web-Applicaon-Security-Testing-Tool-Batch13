@@ -362,6 +362,7 @@ This module focuses on **practical vulnerability identification and security ver
 | Localhost Testing Environment | Isolated lab environment |
 
 ---
+## code
 
 ## 🧪 SQL Injection Payload Used
 ```sql
@@ -1066,8 +1067,113 @@ This experiment highlights the importance of **secure access control mechanisms*
 ---
 
 ## 📁 Module Info
+# 📘 Week 7 – Security Report Generation Module
 
-- **Module:** Week 6 — Access Control and IDOR Testing  
+---
+
+## 📌 Introduction
+
+In Week 7, a **Security Report Generation Module** was developed to convert vulnerability scan results into a **structured and professional report**.
+
+This module plays a crucial role in cybersecurity projects, as it helps developers, testers, and stakeholders clearly understand:
+
+- What vulnerabilities exist
+- Where they are located
+- How severe they are
+- How to fix them
+
+The report is generated in **HTML and PDF formats** for easy viewing and sharing.
+
+---
+
+## 🎯 Objectives
+
+- Compile vulnerability scan results into a structured format  
+- Categorize vulnerabilities based on severity  
+- Identify affected endpoints  
+- Provide mitigation recommendations  
+- Generate reports in **HTML and PDF formats**  
+- Visualize vulnerability distribution  
+
+---
+
+## 🛠️ Tools Used
+
+| Tool | Purpose |
+|------|--------|
+| Python | Core programming language |
+| JSON | Store scan results |
+| HTML/CSS | Design report layout |
+| pdfkit | Convert HTML to PDF |
+| wkhtmltopdf | PDF rendering engine |
+
+---
+
+## ⚙️ Implementation
+
+The **Report Generator Module** processes scan results and generates a structured report.
+
+### 🔹 Key Features
+
+1. **Reads Scan Results**
+   - Loads data from `scan_results.json`
+
+2. **Extracts Vulnerability Details**
+   - Vulnerability type  
+   - Endpoint  
+   - Severity level  
+   - Suggested mitigation  
+
+3. **Categorizes Severity**
+   - 🔴 High  
+   - 🟠 Medium  
+   - 🟢 Low  
+
+4. **Generates HTML Report**
+   - Structured layout  
+   - Tables for vulnerabilities  
+   - Summary section  
+
+5. **Converts HTML to PDF**
+   - Uses `pdfkit` and `wkhtmltopdf`
+
+---
+
+## 📄 Sample Report Structure
+
+| Vulnerability | Endpoint | Severity | Mitigation |
+|--------------|---------|----------|------------|
+| SQL Injection | /login | High | Use prepared statements |
+| XSS | /search | Medium | Input sanitization |
+| IDOR | /user?id=1 | High | Authorization checks |
+
+---
+
+## 📊 Visualizations
+
+The report includes:
+
+- Total vulnerabilities count  
+- Severity distribution (Low / Medium / High)  
+- Affected endpoints summary  
+
+---
+
+## 📁 Output Files
+
+- `security_report.html` → View in browser  
+- `security_report.pdf` → Downloadable report  
+
+---
+<img width="1330" height="633" alt="image" src="https://github.com/user-attachments/assets/64d74f55-7afd-490a-a71f-2105e5b90a75" />
+
+
+## 🚀 How to Run
+
+```bash
+python reportgenerator.py
+
+- **Module:** Week 7-  Security Report Generation Module
 - **Platform:** DVWA (Damn Vulnerable Web Application)  
 - **Environment:** Localhost  
 - **Vulnerability Tested:** Insecure Direct Object Reference (IDOR)  
