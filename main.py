@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 
 from scanner.crawler import login_dvwa, crawl
 from scanner.extractor import extract_forms
+from scanner.report_generator import generate_html_report
 from scanner.sqli_tester import test_sqli
 from scanner.xss_tester import test_xss, test_xss_url_params
 
@@ -162,11 +163,18 @@ def main():
 
     save_report(all_results, "data/vulnerabilities.json")
 
+    from scanner.report_generator import generate_html_report, generate_pdf
+
+    generate_html_report("data/vulnerabilities.json")
+    generate_pdf()
+
     # ==============================
     # FINAL SUMMARY
     # ==============================
     if not sqli_results and not all_xss_results and not auth_all and not access_results:
         print("\nNo vulnerabilities detected.")
+
+
 
 
 if __name__ == "__main__":

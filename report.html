@@ -1,0 +1,240 @@
+
+    <html>
+    <head>
+        <title>WebScanPro Report</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f5f7fa;
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                width: 90%;
+                margin: auto;
+                padding: 20px;
+            }
+
+            h1 {
+                text-align: center;
+                color: #2c3e50;
+            }
+
+            .card {
+                background: white;
+                padding: 20px;
+                margin-top: 20px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            th, td {
+                padding: 12px;
+                border-bottom: 1px solid #ddd;
+                text-align: left;
+            }
+
+            th {
+                background-color: #2c3e50;
+                color: white;
+            }
+
+            .High {
+                color: #e74c3c;
+                font-weight: bold;
+            }
+
+            .Medium {
+                color: #f39c12;
+                font-weight: bold;
+            }
+
+            .Low {
+                color: #27ae60;
+                font-weight: bold;
+            }
+
+            .summary {
+                display: flex;
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+
+            .box {
+                flex: 1;
+                min-width: 150px;
+                background: #3498db;
+                color: white;
+                padding: 15px;
+                border-radius: 8px;
+                text-align: center;
+            }
+        </style>
+    </head>
+
+    <body>
+    <div class="container">
+
+    <h1>WebScanPro Security Report</h1>
+    <p><b>Date:</b> 2026-03-24 20:06:45.758926</p>
+    <div class='card'><h2>Summary</h2><div class='summary'><div class='box'>SQLI<br><b>2</b></div><div class='box'>XSS<br><b>3</b></div><div class='box'>AUTHENTICATION<br><b>12</b></div><div class='box'>ACCESS_CONTROL<br><b>0</b></div><div class='box'>TOTAL<br><b>17</b></div></div></div>
+    <div class='card'>
+    <h2>Detailed Findings</h2>
+    <table>
+        <tr>
+            <th>Type</th>
+            <th>URL</th>
+            <th>Parameter</th>
+            <th>Severity</th>
+            <th>Mitigation</th>
+        </tr>
+    
+            <tr>
+                <td>Error-Based SQLi</td>
+                <td>http://localhost/dvwa/vulnerabilities/brute/</td>
+                <td>username</td>
+                <td class="High">High</td>
+                <td>Use parameterized queries (prepared statements).<br>Avoid concatenating raw user input into SQL queries.<br>Validate and sanitize all user inputs.<br>Apply least-privilege access to database users.<br>Disable detailed SQL error messages in production.</td>
+            </tr>
+            
+            <tr>
+                <td>Error-Based SQLi</td>
+                <td>http://localhost/dvwa/vulnerabilities/sqli/</td>
+                <td>id</td>
+                <td class="High">High</td>
+                <td>Use parameterized queries (prepared statements).<br>Avoid concatenating raw user input into SQL queries.<br>Validate and sanitize all user inputs.<br>Apply least-privilege access to database users.<br>Disable detailed SQL error messages in production.</td>
+            </tr>
+            
+            <tr>
+                <td>Reflected XSS</td>
+                <td>http://localhost/dvwa/vulnerabilities/xss_r/</td>
+                <td>name</td>
+                <td class="High">High</td>
+                <td>Escape user input before rendering in HTML.<br>Enable template auto-escaping.<br>Implement strict Content Security Policy.<br>Apply strict input validation.<br>Avoid using innerHTML with user input.</td>
+            </tr>
+            
+            <tr>
+                <td>Reflected XSS</td>
+                <td>http://localhost/dvwa/vulnerabilities/xss_s/</td>
+                <td>txtName</td>
+                <td class="High">High</td>
+                <td>Escape user input before rendering in HTML.<br>Enable template auto-escaping.<br>Implement strict Content Security Policy.<br>Apply strict input validation.<br>Avoid using innerHTML with user input.</td>
+            </tr>
+            
+            <tr>
+                <td>Reflected XSS</td>
+                <td>http://localhost/dvwa/vulnerabilities/csp/</td>
+                <td>include</td>
+                <td class="High">High</td>
+                <td>Escape user input before rendering in HTML.<br>Enable template auto-escaping.<br>Implement strict Content Security Policy.<br>Apply strict input validation.<br>Avoid using innerHTML with user input.</td>
+            </tr>
+            
+            <tr>
+                <td>Weak Credentials</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="Medium">Medium</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td>Weak Credentials</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="Medium">Medium</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td>Weak Credentials</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="Medium">Medium</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td>Brute Force Success</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="High">High</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td>Brute Force Success</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="High">High</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td>Brute Force Success</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="High">High</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td>Brute Force Success</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="High">High</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td>Insecure Cookie</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="Low">Low</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td>Insecure Cookie</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="Low">Low</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td>Insecure Cookie</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="Low">Low</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td>Insecure Cookie</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="Low">Low</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td>Session Fixation</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="Medium">Medium</td>
+                <td></td>
+            </tr>
+            
+    </table>
+    </div>
+
+    </div>
+    </body>
+    </html>
+    
