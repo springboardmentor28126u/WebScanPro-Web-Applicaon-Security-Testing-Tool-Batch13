@@ -160,19 +160,19 @@ def _chart_heatmap(sqli_results, xss_results, brute_force_results,
     """Heatmap — module × severity."""
 
     def sev_counts(results, sev_index=2):
-        c = {"Low": 0, "Medium": 0, "High": 0, "Critical": 0}
+        c = {"Low": 0, "Medium": 0, "High": 0, "Very High": 0}
         for r in results:
             s = r[sev_index]
             if s in c: c[s] += 1
         return c
 
     modules    = ["SQL Injection", "XSS", "Brute Force", "IDOR (H)", "Session", "Vertical Esc."]
-    severities = ["Low", "Medium", "High", "Critical"]
+    severities = ["Low", "Medium", "High", "Very High"]
 
     sqli_c = sev_counts(sqli_results)
     xss_c  = sev_counts(xss_results)
-    brute_c = {"Low":0,"Medium":0,"High":1,"Critical":1} if brute_force_results \
-              else {"Low":0,"Medium":0,"High":0,"Critical":0}
+    brute_c = {"Low":0,"Medium":0,"High":1,"Very High":1} if brute_force_results \
+              else {"Low":0,"Medium":0,"High":0,"Very High":0}
     idor_c  = sev_counts(privilege_results)
     sess_c  = sev_counts(session_results)
     vert_c  = sev_counts(vertical_results)
@@ -288,7 +288,7 @@ def generate_report(brute_force_all, brute_force_results, sqli_results, xss_resu
 
     def ai_box(analysis):
         formatted = analysis.replace("\n", "<br/>").replace("**", "").replace("* ", "• ")
-        return Paragraph(f"<b>Gemini AI Analysis:</b><br/><br/>{formatted}", ai_style)
+        return Paragraph(f"<b>OpenRouter API Analysis:</b><br/><br/>{formatted}", ai_style)
 
     def make_table(headers, rows, col_widths):
         data = [headers] + rows
@@ -328,35 +328,42 @@ def generate_report(brute_force_all, brute_force_results, sqli_results, xss_resu
         return t
 
     # ── GET AI ANALYSIS ────────────────────────────────────────────
-    print("\n🤖 Getting AI analysis from Gemini...")
+    print("\n🤖 Getting AI analysis from Openrouter API ...")
 
     full_ai  = analyze_full_report(sqli_results, xss_results,
                                    brute_force_results, privilege_results)
     sqli_ai  = analyze_vulnerability(
         "SQL Injection",
         "' UNION SELECT username,password FROM users --",
-        "Vulnerable", "High", "/dvwa/vulnerabilities/sqli/"
+        "Vulnerable", "High", "/dvwa/vulnerabilities/sqli/",
+       # max_tokens=150
     )
     xss_ai   = analyze_vulnerability(
         "Cross Site Scripting",
         "<script>alert(document.cookie)</script>",
-        "Reflected", "High", "/dvwa/vulnerabilities/xss_r/"
+        "Reflected", "High", "/dvwa/vulnerabilities/xss_r/",
+        #max_tokens=150
     )
     brute_ai = analyze_vulnerability(
         "Brute Force", "admin:password",
-        "Vulnerable", "High", "/dvwa/vulnerabilities/brute/"
+        "Vulnerable", "High", "/dvwa/vulnerabilities/brute/",
+        #max_tokens=150
     )
     idor_ai  = analyze_vulnerability(
         "IDOR", "id=1",
-        "Accessible", "Medium", "/dvwa/vulnerabilities/idor/"   # ← FIXED
+        "Accessible", "Medium", "/dvwa/vulnerabilities/idor/",   # ← FIXED
+        #max_tokens=150
     )
     session_ai = analyze_vulnerability(
         "Session Management", "PHPSESSID cookie",
-        "Vulnerable", "High", "/dvwa/login.php"
+        "Vulnerable", "High", "/dvwa/login.php",
+        #max_tokens=150
+
     )
     vert_ai  = analyze_vulnerability(
         "Vertical Privilege Escalation", "Low-priv session accessing admin pages",
-        "Accessible", "High", "/dvwa/security.php"
+        "Accessible", "High", "/dvwa/security.php",
+        #max_tokens=150
     )
 
     print("✅ AI analysis complete!")
@@ -433,7 +440,7 @@ def generate_report(brute_force_all, brute_force_results, sqli_results, xss_resu
     content.append(sp(10))
 
     # Overall AI
-    content.append(section("Gemini AI — Overall Risk Assessment"))
+    content.append(section("OpenRouter API — Overall Risk Assessment"))
     content.append(sp(4))
     content.append(ai_box(full_ai))
     content.append(sp(10))
@@ -668,7 +675,7 @@ def generate_report(brute_force_all, brute_force_results, sqli_results, xss_resu
     ))
     content.append(sp(10))
     content.append(Paragraph(
-        "For educational purposes only — WebScanPro v1.0 | Target: DVWA",
+        "This report provides a comprehensive overview of the security assessment performed on the target web application. ",
         ParagraphStyle('Footer', parent=styles['Normal'],
                        fontSize=8, textColor=colors.grey, alignment=1)
     ))
