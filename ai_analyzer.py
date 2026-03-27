@@ -1,12 +1,9 @@
 import requests
 import time
 
-API_KEY = "AIzaSyBxEOwFQpsrJOFDQmumSnCOVT90Bi-e5lk"
+API_KEY = "MY_API_KEY"
 
-GEMINI_URL = (
-    "https://generativelanguage.googleapis.com/v1beta/models/"
-    "gemini-2.5-flash:generateContent?key=" + API_KEY
-)
+OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 
 def fallback_analysis(vuln_type):
@@ -69,73 +66,61 @@ def fallback_analysis(vuln_type):
     )
 
 
-def ask_gemini(prompt, vuln_type="General"):
-    """Send prompt to Gemini and return response."""
+def ask_gemini(prompt, vuln_type="General", max_tokens=150):
     try:
-        headers = {"Content-Type": "application/json"}
-        payload = {
-            "contents": [
-                {"role": "user", "parts": [{"text": prompt}]}
-            ],
-            "generationConfig": {
-                "temperature": 0.3,
-                "maxOutputTokens": 1024
-            }
+        headers = {
+            "Authorization": f"Bearer {API_KEY}",
+            "Content-Type": "application/json"
         }
 
-        # Wait 5 seconds between calls to avoid rate limit
-        time.sleep(5)
+        payload = {
+            "model": "openai/gpt-4o-mini",
+            "messages": [
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.3,
+            "max_tokens": max_tokens
+        }
 
         response = requests.post(
-            GEMINI_URL,
+            OPENROUTER_URL,
             headers=headers,
             json=payload,
             timeout=30
         )
 
-        if response.status_code == 429:
-            print(f"Rate limit hit — using fallback for {vuln_type}")
-            return fallback_analysis(vuln_type)
+        print("\n------ AI RESPONSE ------")
+        print(response.text)
+        print("-------------------------")
 
         if response.status_code != 200:
-            print(f"Gemini error {response.status_code} — using fallback for {vuln_type}")
             return fallback_analysis(vuln_type)
 
         data = response.json()
 
-        if "candidates" not in data:
-            print(f"No candidates — using fallback for {vuln_type}")
-            return fallback_analysis(vuln_type)
+        return data["choices"][0]["message"]["content"]
 
-        return data["candidates"][0]["content"]["parts"][0]["text"].strip()
-
-    except requests.exceptions.Timeout:
-        print(f"Timeout — using fallback for {vuln_type}")
-        return fallback_analysis(vuln_type)
-    except requests.exceptions.ConnectionError:
-        print(f"No internet — using fallback for {vuln_type}")
-        return fallback_analysis(vuln_type)
     except Exception as e:
-        print(f"Error — using fallback for {vuln_type}: {e}")
+        print("AI error:", e)
         return fallback_analysis(vuln_type)
-
-
-def analyze_vulnerability(vuln_type, payload, status, severity, endpoint):
-    """Get AI analysis for a single vulnerability."""
+def analyze_vulnerability(vuln_type, payload, status, severity, endpoint, max_tokens=120):
+    """Get AI mitigation only for vulnerability."""
+    
     prompt = (
-        f"You are a cybersecurity expert. Analyze this web vulnerability carefully.\n\n"
+        f"You are a cybersecurity expert.\n\n"
         f"Vulnerability Type: {vuln_type}\n"
-        f"Payload Tested: {payload}\n"
         f"Endpoint: {endpoint}\n"
-        f"Status: {status}\n"
         f"Severity: {severity}\n\n"
-        f"Give me exactly these 3 points — each on a new line:\n"
-        f"1. What this vulnerability means — explain clearly in 2 sentences\n"
-        f"2. What specific damage an attacker can do — give a real example\n"
-        f"3. Exact fix recommendation for the developer — be specific\n\n"
-        f"Be detailed and write each numbered point on a new line."
+        f"Give ONLY mitigation steps.\n"
+        f"Do not explain the vulnerability.\n"
+        f"Do not give attacker impact.\n\n"
+        f"Return exactly:\n"
+        f"- 3 bullet point mitigation steps\n"
+        f"- short and direct\n"
+        f"- for developer\n"
     )
-    return ask_gemini(prompt, vuln_type)
+
+    return ask_gemini(prompt, vuln_type, max_tokens)
 
 
 def analyze_full_report(sqli_results, xss_results, brute_force_results, privilege_results):
@@ -159,6 +144,6 @@ def analyze_full_report(sqli_results, xss_results, brute_force_results, privileg
         f"3. Top 3 most dangerous findings with one line explanation each\n"
         f"4. Top 3 recommended fixes with specific steps\n"
         f"5. One sentence overall summary\n\n"
-        f"Be detailed. Write each point on a new line."
+        f"Explain this vulnerability in 3–4 lines for a report."
     )
     return ask_gemini(prompt, "Full Report")
