@@ -1172,15 +1172,27 @@ idor_results.json
 
 ![Security Report Dashboard](Week-7/screenshots/security_report_dashboard.png)
 
-*Fig 7.2: WebScanPro HTML security report dashboard displaying scan information and security score.*
-
+**Fig 7.2:** Dashboard overview displaying:
+- Threat Level: **93% (Critical Mode)**
+- Total Vulnerabilities: **7**
+- High Severity: **6**
+- Medium Severity: **1**
+- Low Severity: **0**
 ---
 
-### 📋 Vulnerability Summary Table
+### 📋 Vulnerability Report Table
 
 ![Vulnerability Summary](Week-7/screenshots/vulnerability_summary_table.png)
 
-*Fig 7.3: Vulnerability summary table listing detected issues and their severity levels.*
+**Fig 7.3:** Summary table of detected vulnerabilities:
+- SQL Injection (Normal & Blind)
+- Cross-Site Scripting (XSS)
+- Weak Credentials
+- Cookie Security Issues
+- Session Hijacking Risk
+- IDOR Vulnerability  
+
+Each entry includes severity level, affected endpoint, and mitigation recommendations.
 
 ---
 
@@ -1188,7 +1200,12 @@ idor_results.json
 
 ![Detailed Findings](Week-7/screenshots/detailed_findings.png)
 
-*Fig 7.4: Detailed findings section showing vulnerability type, affected URL, payload, and remediation recommendations.*
+**Fig 7.4:** Detailed analysis of vulnerabilities including:
+- OWASP Category (e.g., A03:2021 - Injection)
+- Affected Endpoint URLs
+- Example Payloads used for testing
+- Impact Assessment
+- Suggested Mitigation Techniques
 
 ---
 
