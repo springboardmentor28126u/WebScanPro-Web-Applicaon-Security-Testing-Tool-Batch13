@@ -22,11 +22,19 @@ def test_default_credentials(login_url):
         if "Login failed" not in response.text:
             findings.append({
                 "type": "Weak Credentials",
+                "url": login_url,
                 "username": username,
-                "password": password
+                "password": password,
+                "severity": "Medium",
+                "remediation": {
+                    "password_policy": "Enforce strong password policies.",
+                    "mfa": "Enable multi-factor authentication.",
+                    "block_defaults": "Disable default credentials.",
+                    "password_storage": "Store passwords securely using hashing."
+                }
             })
 
-    return findings
+    return findings   # ✅ THIS WAS MISSING
 COMMON_PASSWORDS = [
     "1234",
     "password",
@@ -50,9 +58,17 @@ def test_bruteforce(login_url):
 
         if "Login failed" not in response.text:
             findings.append({
-                "type": "Brute Force Success",
-                "password": password
-            })
+    "type": "Brute Force Success",
+    "url": login_url,
+    "password": password,
+    "severity": "High",
+    "remediation": {
+        "rate_limit": "Implement rate limiting.",
+        "account_lock": "Lock account after failed attempts.",
+        "captcha": "Use CAPTCHA after multiple failures.",
+        "monitoring": "Monitor login attempts and alert suspicious activity."
+    }
+})
 
     return findings
 def test_session_security(session, url):
@@ -67,17 +83,30 @@ def test_session_security(session, url):
 
         if not cookie.secure:
             findings.append({
-                "type": "Insecure Cookie",
-                "cookie": cookie.name,
-                "issue": "Missing Secure flag"
-            })
+    "type": "Insecure Cookie",
+    "url": url,
+    "cookie": cookie.name,
+    "issue": "Missing Secure flag",
+    "severity": "Low",
+    "remediation": {
+        "secure_flag": "Set Secure flag on cookies.",
+        "https": "Use HTTPS for all communications.",
+        "cookie_scope": "Limit cookie scope and exposure."
+    }
+})
 
         if not cookie.has_nonstandard_attr('HttpOnly'):
             findings.append({
-                "type": "Insecure Cookie",
-                "cookie": cookie.name,
-                "issue": "Missing HttpOnly flag"
-            })
+    "type": "Insecure Cookie",
+    "cookie": cookie.name,
+    "issue": "Missing HttpOnly flag",
+    "severity": "Low",
+    "remediation": {
+        "httponly": "Set HttpOnly flag on cookies.",
+        "xss_protection": "Prevent access via JavaScript.",
+        "secure_cookies": "Use secure cookie attributes."
+    }
+})
 
     return findings
 
@@ -103,8 +132,15 @@ def test_session_fixation(session, login_url):
 
     if before == after:
         findings.append({
-            "type": "Session Fixation",
-            "issue": "Session ID did not change after login"
-        })
+    "type": "Session Fixation",
+    "url": login_url,
+    "issue": "Session ID did not change after login",
+    "severity": "Medium",
+    "remediation": {
+        "session_regen": "Regenerate session ID after login.",
+        "invalidate_old": "Invalidate old session identifiers.",
+        "secure_session": "Use secure session handling mechanisms."
+    }
+})
 
     return findings
