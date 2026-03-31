@@ -1,9 +1,6 @@
 # 🚀 WebScan-Pro
 ### Automated Web Application Security Testing Tool
-# 🚀 WebScan-Pro
-### Automated Web Application Security Testing Tool
 
-WebScan-Pro is a modular automated web vulnerability scanner developed as part of an internship project to understand how security testing tools operate internally.
 WebScan-Pro is a modular automated web vulnerability scanner developed as part of an internship project to understand how security testing tools operate internally.
 
 The tool authenticates into a target web application, crawls all pages and forms, injects attack payloads, analyzes server responses, and generates a structured HTML security report — all with a single command.
@@ -83,9 +80,7 @@ Milestone 1 focused on establishing the testing environment and developing the f
 ---
 
 ### 📅 Week 1 – Project Initialization & Environment Setup
-### 📅 Week 1 – Project Initialization & Environment Setup
 
-#### 🎯 Objectives
 #### 🎯 Objectives
 
 - Understand web application security fundamentals and the HTTP request-response lifecycle
@@ -105,29 +100,7 @@ Milestone 1 focused on establishing the testing environment and developing the f
 | Docker Desktop | Containerized DVWA deployment |
 
 #### 🐳 DVWA Deployment
-- Understand web application security fundamentals and the HTTP request-response lifecycle
-- Explore how vulnerabilities appear in web forms and URL parameters
-- Perform manual testing on DVWA before automating detection
-- Design a modular, scalable scanner architecture
 
-#### 🛠 Environment Setup
-
-| Tool | Purpose |
-|---|---|
-| Python 3 | Core programming language |
-| venv | Dependency isolation |
-| requests | HTTP communication |
-| BeautifulSoup4 | HTML parsing |
-| Selenium | Browser automation (future use) |
-| Docker Desktop | Containerized DVWA deployment |
-
-#### 🐳 DVWA Deployment
-
-DVWA was deployed using Docker to provide an isolated, safe environment with no manual Apache/PHP/MySQL configuration required.
-
-#### 🔎 Manual Testing Conducted
-
-Before automation, the following vulnerabilities were manually tested on DVWA to understand their behavior:
 DVWA was deployed using Docker to provide an isolated, safe environment with no manual Apache/PHP/MySQL configuration required.
 
 #### 🔎 Manual Testing Conducted
@@ -175,30 +148,15 @@ This JSON file acts as the **target map** — every scanner module reads from it
 ---
 
 ## 📌 Milestone 2 – Vulnerability Detection Engine (SQLi & XSS)
-- Fully configured testing environment with DVWA deployed via Docker
-- Automated crawler discovering 31 pages and mapping all forms
-- Structured `results.json` target map ready for all scanner modules
 
----
-
-## 📌 Milestone 2 – Vulnerability Detection Engine (SQLi & XSS)
-
-Milestone 2 transformed the passive discovery engine into an active security testing tool by building automated modules to detect SQL Injection and XSS vulnerabilities.
 Milestone 2 transformed the passive discovery engine into an active security testing tool by building automated modules to detect SQL Injection and XSS vulnerabilities.
 
 ---
 
 ### 📅 Week 3 – SQL Injection Testing Module
-### 📅 Week 3 – SQL Injection Testing Module
 
 #### 🎯 Objectives
-#### 🎯 Objectives
 
-- Inject crafted SQL payloads into all discovered input fields
-- Analyze server responses for database-specific error patterns
-- Identify vulnerable endpoints and suggest mitigations
-
-#### 🛠 Scanner Implementation (`sqli_scanner.py`)
 - Inject crafted SQL payloads into all discovered input fields
 - Analyze server responses for database-specific error patterns
 - Identify vulnerable endpoints and suggest mitigations
@@ -225,7 +183,7 @@ Milestone 2 transformed the passive discovery engine into an active security tes
 | DVWA ignored requests missing `Submit` param | Auto-inject `Submit=Submit` in every payload |
 | Was checking MySQL errors but DVWA uses MariaDB | Added `mariadb server version` to error signatures |
 
-**Result:** 14 HIGH severity SQL Injection vulnerabilities found across `brute/` and `sqli/` endpoints.
+**Result:** 2 HIGH severity SQL Injection vulnerabilities found across `brute/` and `sqli/` endpoints.
 
 ---
 
@@ -249,97 +207,35 @@ Milestone 2 transformed the passive discovery engine into an active security tes
 
 **Payloads include:** basic `<script>` tag, `onerror` image bypass, SVG `onload`, attribute escape, body `onload`, and mixed-case bypass.
 
-**Result:** 4 HIGH severity XSS vulnerabilities found across `xss_r/`, `xss_s/`, `sqli/`, and `csp/` pages.
-**Detection Strategy — Error Based:**
-
-1. Reads payloads from `payloads/sql_payloads.txt` (8 payloads)
-2. Injects each payload into every input field found in `results.json`
-3. Checks the response for known database error signatures:
-   - `you have an error in your sql syntax`
-   - `mariadb server version` ← critical for DVWA (uses MariaDB not MySQL)
-   - `warning: mysql`
-4. Skips non-injectable fields like `user_token` and `Submit`
-5. Saves confirmed findings to `results.json`
-
-**4 Critical Bugs Fixed:**
-
-| Bug | Fix |
-|---|---|
-| URLs ending with `#` broke all requests | Built `clean_url()` to strip hash before every request |
-| `None` inputs crashed the scanner | Added filter: `[i for i in inputs if i is not None]` |
-| DVWA ignored requests missing `Submit` param | Auto-inject `Submit=Submit` in every payload |
-| Was checking MySQL errors but DVWA uses MariaDB | Added `mariadb server version` to error signatures |
-
-**Result:** 14 HIGH severity SQL Injection vulnerabilities found across `brute/` and `sqli/` endpoints.
-
----
-
-### 📅 Week 4 – XSS Testing Module
-
-#### 🎯 Objectives
-
-- Inject JavaScript payloads into all discovered input fields
-- Detect reflected XSS through response analysis
-- Handle both GET and POST forms correctly
-
-#### 🕷 Scanner Implementation (`xss_scanner.py`)
-
-**Detection Strategy — Reflection Based:**
-
-1. Reads payloads from `payloads/xss_payloads.txt` (6 payloads)
-2. Detects the form method from crawler data and uses `session.get()` or `session.post()` accordingly
-3. Injects payload into each input field
-4. Checks if the exact payload string appears in the HTML response without encoding
-5. If yes → browser would execute it → XSS confirmed
-
-**Payloads include:** basic `<script>` tag, `onerror` image bypass, SVG `onload`, attribute escape, body `onload`, and mixed-case bypass.
-
-**Result:** 4 HIGH severity XSS vulnerabilities found across `xss_r/`, `xss_s/`, `sqli/`, and `csp/` pages.
+**Result:** 5 HIGH severity XSS vulnerabilities found across `xss_r/`, `xss_s/`, `sqli/`, and `csp/` pages.
 
 ---
 
 ### ✅ Milestone 2 Outcome
-### ✅ Milestone 2 Outcome
 
-- SQL Injection scanner detecting 14 HIGH severity vulnerabilities using error-based signature matching
-- XSS scanner detecting 4 HIGH severity vulnerabilities using reflection analysis
-- Both scanners handle GET and POST forms correctly
-- All findings saved to `reports/results.json` for report generation
-- SQL Injection scanner detecting 14 HIGH severity vulnerabilities using error-based signature matching
-- XSS scanner detecting 4 HIGH severity vulnerabilities using reflection analysis
+- SQL Injection scanner detecting 2 HIGH severity vulnerabilities using error-based signature matching
+- XSS scanner detecting 5 HIGH severity vulnerabilities using reflection analysis
 - Both scanners handle GET and POST forms correctly
 - All findings saved to `reports/results.json` for report generation
 
 ---
 
 ## 📌 Milestone 3 – Authentication, Session & Access Control Testing
-## 📌 Milestone 3 – Authentication, Session & Access Control Testing
 
-Milestone 3 extended WebScan-Pro into authentication weaknesses and access control flaws — testing whether the login can be broken, whether session cookies are secure, and whether users can access data they should not.
 Milestone 3 extended WebScan-Pro into authentication weaknesses and access control flaws — testing whether the login can be broken, whether session cookies are secure, and whether users can access data they should not.
 
 ---
 
 ### 📅 Week 5 – Authentication & Session Testing Module
-### 📅 Week 5 – Authentication & Session Testing Module
 
-#### 🎯 Objectives
 #### 🎯 Objectives
 
 - Test the login page for weak or default credentials using brute force
 - Inspect session cookies for missing security flags
 - Log findings with suggested security best practices
-- Log findings with suggested security best practices
 
 #### 🛠 Implementation (`auth_tester.py`)
-#### 🛠 Implementation (`auth_tester.py`)
 
-**Brute Force (`brute_force`):**
-
-1. Reads passwords from `payloads/passwords.txt`
-2. For each password — creates a fresh session, grabs CSRF token, sends POST request
-3. If the failure phrase `Username and/or password incorrect` is absent from the response → login succeeded
-4. Saves finding as HIGH severity and stops
 **Brute Force (`brute_force`):**
 
 1. Reads passwords from `payloads/passwords.txt`
@@ -359,20 +255,7 @@ Milestone 3 extended WebScan-Pro into authentication weaknesses and access contr
 ---
 
 ### 📅 Week 6 – Access Control & IDOR Testing Module
-**Cookie Security Check (`check_cookie_security`):**
 
-1. Inspects the session cookie sent by the server after login
-2. Checks `Secure` flag — if missing, cookie travels over plain HTTP and can be intercepted
-3. Checks `HttpOnly` flag — if missing, JavaScript can read and steal the cookie via XSS
-4. Missing flags saved as MEDIUM severity findings
-
-**Result:** Weak credential `admin:password` found (HIGH). Both `Secure` and `HttpOnly` flags missing on DVWA session cookie (MEDIUM).
-
----
-
-### 📅 Week 6 – Access Control & IDOR Testing Module
-
-#### 🎯 Objectives
 #### 🎯 Objectives
 
 - Test whether users can access other users' data by changing ID values in the URL
@@ -380,7 +263,6 @@ Milestone 3 extended WebScan-Pro into authentication weaknesses and access contr
 - Log findings and suggest access control improvements
 
 #### 🛠 Implementation (`idor_scanner.py`)
-#### 🛠 Implementation (`idor_scanner.py`)
 
 **IDOR Test (`test_idor`):**
 
@@ -402,32 +284,7 @@ Tries 4 payloads to escape the web folder and reach `/etc/passwd`:
 
 Detects success by checking if `root:` appears in response — this string is always at the start of a real `/etc/passwd` file.
 
-**Result:** Multiple IDOR findings and path traversal confirmed — all HIGH severity.
-
----
-
-### ✅ Milestone 3 Outcome
-**IDOR Test (`test_idor`):**
-
-1. Sends a baseline request using the authorized user's own ID
-2. Loops through IDs 1 to 10
-3. If response is 200, has real content, and differs from baseline → unauthorized data accessed
-4. Saves as HIGH severity with the exact ID that worked
-
-**Path Traversal Test (`test_path_traversal`):**
-
-Tries 4 payloads to escape the web folder and reach `/etc/passwd`:
-
-| Payload | Purpose |
-|---|---|
-| `../../etc/passwd` | Go up 2 directory levels |
-| `../../../etc/passwd` | Go up 3 directory levels |
-| `....//....//etc/passwd` | Bypass simple `../` string filters |
-| `%2e%2e%2fetc%2fpasswd` | URL-encoded bypass |
-
-Detects success by checking if `root:` appears in response — this string is always at the start of a real `/etc/passwd` file.
-
-**Result:** Multiple IDOR findings and path traversal confirmed — all HIGH severity.
+**Result:** Multiple IDOR findings and path traversal confirmed 
 
 ---
 
@@ -517,7 +374,9 @@ python report_generator.py
 
 ## 📊 Final Scan Results Summary
 
-![alt text](image.png)
+<img width="1356" height="893" alt="image" src="https://github.com/user-attachments/assets/81f14e62-ad83-4d00-b7c0-a18c5a904e3d" />
+
+---
 
 ## 🔮 Future Scope
 
