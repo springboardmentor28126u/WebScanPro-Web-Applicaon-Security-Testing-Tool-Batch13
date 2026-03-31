@@ -14,6 +14,8 @@ The tool authenticates into a target web application, crawls all pages and forms
 ```
 WebScanPro/
 ├── main.py                  # Entry point — runs all scan phases in order
+├── report_generator.py      # Reads results.json and generates HTML report
+├── requirements.txt
 ├── payloads/
 │   ├── sql_payloads.txt     # SQL Injection payload list
 │   ├── xss_payloads.txt     # XSS payload list
@@ -26,7 +28,6 @@ WebScanPro/
 │   ├── xss_scanner.py       # XSS detection module
 │   ├── auth_tester.py       # Brute force and cookie security module
 │   └── idor_scanner.py      # IDOR and path traversal module
-    |- report_generator.py  
 └── reports/
     ├── results.json         # All vulnerability findings (auto-generated)
     └── security_report.html # Final HTML security report (auto-generated)
