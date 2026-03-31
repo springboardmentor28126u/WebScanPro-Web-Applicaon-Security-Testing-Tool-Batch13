@@ -1274,6 +1274,98 @@ The final system now provides:
 With all modules integrated, **WebScanPro becomes a fully functional AI-assisted web application security testing tool capable of detecting multiple OWASP Top 10 vulnerabilities automatically.**
 
 ---
+# 📂 Project Structure  
+
+```bash
+WebScanPro-Web-Application-Security-Testing-Tool/
+│
+├── Week-1/
+│   ├── screenshots/
+│   │   ├── dvwa-bruteforce-page.png
+│   │   ├── dvwa-dashboard.png
+│   │   ├── dvwa-sql-injection-page.png
+│   │   ├── dvwa-xss-reflected-page.png
+│   │   ├── manual-sql-injection-test.png
+│   │   └── xampp-running.png
+│   ├── application-structure.md
+│   ├── dvwa-setup.md
+│   ├── goals.md
+│   ├── plan.md
+│   └── tools-selection.md
+│
+├── Week-2/
+│   ├── screenshots/
+│   │   ├── py_version.png
+│   │   └── scanner_run.png
+│   ├── output.json
+│   ├── output.txt
+│   └── scanner.py
+│
+├── Week-3/
+│   ├── ai/
+│   │   ├── __pycache__/
+│   │   ├── ai_engine.py
+│   │   ├── feature_extractor.py
+│   │   └── model.pkl
+│   ├── screenshots/
+│   │   ├── dvwa-login-automation.png
+│   │   ├── full-scan-execution.png
+│   │   ├── manual-sqli-error-proof.png
+│   │   ├── sqli-detection-output.png
+│   │   └── sqli-json-result.png
+│   ├── sqli_results.json
+│   └── sqli_tester.py
+│
+├── Week-4/
+│   ├── ai/
+│   │   ├── __pycache__/
+│   │   ├── ai_xss_engine.py
+│   │   ├── feature_extractor.py
+│   │   └── model.pkl
+│   ├── screenshots/
+│   │   ├── 01_dvwa_xss_page.png
+│   │   ├── 02_xss_payload_execution.png
+│   │   ├── 03_ai_xss_detection_terminal.png
+│   │   └── 04_xss_results_json.png
+│   ├── xss_results.json
+│   └── xss_tester.py
+│
+├── Week-5/
+│   ├── screenshots/
+│   │   ├── auth_module_running.png
+│   │   ├── session_cookie_detection.png
+│   │   ├── session_fixation_detected.png
+│   │   ├── session_hijacking_simulation.png
+│   │   └── weak_credentials_detected.png
+│   ├── auth_results.json
+│   ├── auth_session_tester.py
+│   └── credentials.txt
+│
+├── Week-6/
+│   ├── screenshots/
+│   │   ├── idor_module_running.png
+│   │   └── idor_vulnerability_detected.png
+│   ├── idor_results.json
+│   └── idor_tester.py
+│
+├── Week-7/
+│   ├── __pycache__/
+│   ├── screenshots/
+│   │   ├── detailed_findings.png
+│   │   ├── report_generator_execution.png
+│   │   ├── security_report_dashboard.png
+│   │   └── vulnerability_summary_table.png
+│   ├── report_generator.py
+│   └── security_report.html
+│
+├── main.py
+├── requirements.txt
+├── README.md
+├── LICENSE
+└── .gitignore
+```
+
+---
 ## 🧠 WebScanPro System Architecture (AI-Enhanced)
 
 ```
