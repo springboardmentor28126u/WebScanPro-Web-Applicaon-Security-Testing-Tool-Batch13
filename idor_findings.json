@@ -1,0 +1,132 @@
+[
+    {
+        "test": "Horizontal Privilege Escalation",
+        "user_id": "1",
+        "url": "http://localhost:8080/vulnerabilities/sqli/?id=1&Submit=Submit",
+        "evidence": "Accessed user ID 1 data without verifying ownership -- any logged-in user can see any other user's data",
+        "severity": "High",
+        "recommendation": "Always verify that the logged-in user owns the requested resource before returning data."
+    },
+    {
+        "test": "Horizontal Privilege Escalation",
+        "user_id": "2",
+        "url": "http://localhost:8080/vulnerabilities/sqli/?id=2&Submit=Submit",
+        "evidence": "Accessed user ID 2 data without verifying ownership -- any logged-in user can see any other user's data",
+        "severity": "High",
+        "recommendation": "Always verify that the logged-in user owns the requested resource before returning data."
+    },
+    {
+        "test": "Horizontal Privilege Escalation",
+        "user_id": "3",
+        "url": "http://localhost:8080/vulnerabilities/sqli/?id=3&Submit=Submit",
+        "evidence": "Accessed user ID 3 data without verifying ownership -- any logged-in user can see any other user's data",
+        "severity": "High",
+        "recommendation": "Always verify that the logged-in user owns the requested resource before returning data."
+    },
+    {
+        "test": "Horizontal Privilege Escalation",
+        "user_id": "4",
+        "url": "http://localhost:8080/vulnerabilities/sqli/?id=4&Submit=Submit",
+        "evidence": "Accessed user ID 4 data without verifying ownership -- any logged-in user can see any other user's data",
+        "severity": "High",
+        "recommendation": "Always verify that the logged-in user owns the requested resource before returning data."
+    },
+    {
+        "test": "Horizontal Privilege Escalation",
+        "user_id": "5",
+        "url": "http://localhost:8080/vulnerabilities/sqli/?id=5&Submit=Submit",
+        "evidence": "Accessed user ID 5 data without verifying ownership -- any logged-in user can see any other user's data",
+        "severity": "High",
+        "recommendation": "Always verify that the logged-in user owns the requested resource before returning data."
+    },
+    {
+        "test": "Vertical Privilege Escalation",
+        "page": "/security.php",
+        "url": "http://localhost:8080/security.php",
+        "status_code": 200,
+        "evidence": "Page /security.php returned HTTP 200 -- no strict admin role enforcement found",
+        "severity": "High",
+        "recommendation": "Implement role-based access control (RBAC). Verify user role before serving restricted pages."
+    },
+    {
+        "test": "Vertical Privilege Escalation",
+        "page": "/setup.php",
+        "url": "http://localhost:8080/setup.php",
+        "status_code": 200,
+        "evidence": "Page /setup.php returned HTTP 200 -- no strict admin role enforcement found",
+        "severity": "High",
+        "recommendation": "Implement role-based access control (RBAC). Verify user role before serving restricted pages."
+    },
+    {
+        "test": "Vertical Privilege Escalation",
+        "page": "/phpinfo.php",
+        "url": "http://localhost:8080/phpinfo.php",
+        "status_code": 200,
+        "evidence": "Page /phpinfo.php returned HTTP 200 -- no strict admin role enforcement found",
+        "severity": "High",
+        "recommendation": "Implement role-based access control (RBAC). Verify user role before serving restricted pages."
+    },
+    {
+        "test": "Vertical Privilege Escalation",
+        "page": "/vulnerabilities/",
+        "url": "http://localhost:8080/vulnerabilities/",
+        "status_code": 200,
+        "evidence": "Page /vulnerabilities/ returned HTTP 200 -- no strict admin role enforcement found",
+        "severity": "High",
+        "recommendation": "Implement role-based access control (RBAC). Verify user role before serving restricted pages."
+    },
+    {
+        "test": "IDOR",
+        "parameter": "id",
+        "value_tested": "1",
+        "url": "http://localhost:8080/vulnerabilities/sqli/?id=1&Submit=Submit",
+        "evidence": "Changing id=1 in URL returned another user's data without authorization check",
+        "severity": "High",
+        "recommendation": "Never use direct object references in URLs. Use indirect references or validate ownership server-side."
+    },
+    {
+        "test": "IDOR",
+        "parameter": "id",
+        "value_tested": "2",
+        "url": "http://localhost:8080/vulnerabilities/sqli/?id=2&Submit=Submit",
+        "evidence": "Changing id=2 in URL returned another user's data without authorization check",
+        "severity": "High",
+        "recommendation": "Never use direct object references in URLs. Use indirect references or validate ownership server-side."
+    },
+    {
+        "test": "IDOR",
+        "parameter": "id",
+        "value_tested": "3",
+        "url": "http://localhost:8080/vulnerabilities/sqli/?id=3&Submit=Submit",
+        "evidence": "Changing id=3 in URL returned another user's data without authorization check",
+        "severity": "High",
+        "recommendation": "Never use direct object references in URLs. Use indirect references or validate ownership server-side."
+    },
+    {
+        "test": "IDOR",
+        "parameter": "id",
+        "value_tested": "4",
+        "url": "http://localhost:8080/vulnerabilities/sqli/?id=4&Submit=Submit",
+        "evidence": "Changing id=4 in URL returned another user's data without authorization check",
+        "severity": "High",
+        "recommendation": "Never use direct object references in URLs. Use indirect references or validate ownership server-side."
+    },
+    {
+        "test": "IDOR",
+        "parameter": "id",
+        "value_tested": "5",
+        "url": "http://localhost:8080/vulnerabilities/sqli/?id=5&Submit=Submit",
+        "evidence": "Changing id=5 in URL returned another user's data without authorization check",
+        "severity": "High",
+        "recommendation": "Never use direct object references in URLs. Use indirect references or validate ownership server-side."
+    },
+    {
+        "test": "IDOR",
+        "parameter": "security",
+        "value_tested": "low",
+        "url": "http://localhost:8080/security.php",
+        "evidence": "Security level changed to 'low' by directly modifying the POST parameter",
+        "severity": "Medium",
+        "recommendation": "Validate and authorize all parameter changes server-side. Don't trust client input."
+    }
+]

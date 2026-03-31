@@ -1,0 +1,82 @@
+[
+    {
+        "test": "Weak Credentials",
+        "username": "admin",
+        "password": "password",
+        "evidence": "Login succeeded with admin / password",
+        "severity": "Critical",
+        "recommendation": "Change all default credentials immediately. Enforce a strong password policy."
+    },
+    {
+        "test": "Brute Force",
+        "username": "admin",
+        "password": "password",
+        "attempts": 25,
+        "evidence": "Password cracked after 25 attempts -- site never blocked the requests",
+        "severity": "Critical",
+        "recommendation": "Add rate limiting. Lock account after 5 failed attempts. Add CAPTCHA."
+    },
+    {
+        "test": "Insecure Cookie",
+        "cookie": "PHPSESSID",
+        "issue": "Missing HttpOnly flag",
+        "evidence": "Cookie 'PHPSESSID' missing HttpOnly -- JavaScript can read and steal it via XSS",
+        "severity": "High",
+        "recommendation": "Set HttpOnly flag on all session cookies to block JavaScript access."
+    },
+    {
+        "test": "Insecure Cookie",
+        "cookie": "PHPSESSID",
+        "issue": "Missing Secure flag",
+        "evidence": "Cookie 'PHPSESSID' missing Secure flag -- can be sent over plain HTTP and intercepted",
+        "severity": "High",
+        "recommendation": "Set Secure flag on all session cookies and enforce HTTPS."
+    },
+    {
+        "test": "Insecure Cookie",
+        "cookie": "PHPSESSID",
+        "issue": "Missing SameSite attribute",
+        "evidence": "Cookie 'PHPSESSID' missing SameSite attribute -- vulnerable to CSRF attacks",
+        "severity": "Medium",
+        "recommendation": "Set SameSite=Strict or SameSite=Lax on all session cookies."
+    },
+    {
+        "test": "Insecure Cookie",
+        "cookie": "security",
+        "issue": "Missing HttpOnly flag",
+        "evidence": "Cookie 'security' missing HttpOnly -- JavaScript can read and steal it via XSS",
+        "severity": "High",
+        "recommendation": "Set HttpOnly flag on all session cookies to block JavaScript access."
+    },
+    {
+        "test": "Insecure Cookie",
+        "cookie": "security",
+        "issue": "Missing Secure flag",
+        "evidence": "Cookie 'security' missing Secure flag -- can be sent over plain HTTP and intercepted",
+        "severity": "High",
+        "recommendation": "Set Secure flag on all session cookies and enforce HTTPS."
+    },
+    {
+        "test": "Insecure Cookie",
+        "cookie": "security",
+        "issue": "Missing SameSite attribute",
+        "evidence": "Cookie 'security' missing SameSite attribute -- vulnerable to CSRF attacks",
+        "severity": "Medium",
+        "recommendation": "Set SameSite=Strict or SameSite=Lax on all session cookies."
+    },
+    {
+        "test": "Session Fixation",
+        "session_before": "ih2gj23pqco6ak41m3egjad763",
+        "session_after": "ih2gj23pqco6ak41m3egjad763",
+        "evidence": "Session ID is identical before and after login -- session fixation possible",
+        "severity": "High",
+        "recommendation": "Regenerate a brand new session ID immediately after every successful login."
+    },
+    {
+        "test": "Session Hijacking",
+        "stolen_cookie": "05vqbjpjukf77roraj4b4qkbl7",
+        "evidence": "Attacker accessed a protected page using only a stolen PHPSESSID -- no login required",
+        "severity": "Critical",
+        "recommendation": "Use HTTPS to prevent cookie theft. Set short session timeouts. Regenerate session on login."
+    }
+]

@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebScanPro — Security Report</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0A0E2A;
+            color: #D8DCF0;
+            font-family: 'Segoe UI', Calibri, sans-serif;
+            padding: 40px;
+            line-height: 1.6;
+        }
+        .header {
+            text-align: center;
+            padding: 40px 0 30px 0;
+            border-bottom: 2px solid #4F5FD5;
+            margin-bottom: 40px;
+        }
+        .header h1 { font-size: 42px; color: #FFFFFF; letter-spacing: 2px; }
+        .header .subtitle { color: #6B7AE8; font-size: 18px; margin-top: 8px; }
+        .header .meta { color: #7B84B8; font-size: 13px; margin-top: 6px; }
+        .stats-row {
+            display: flex; gap: 16px; justify-content: center;
+            margin-bottom: 40px; flex-wrap: wrap;
+        }
+        .stat-card {
+            background: #111536; border: 1.5px solid; border-radius: 8px;
+            padding: 20px 30px; text-align: center; min-width: 130px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .stat-num { font-size: 42px; font-weight: bold; }
+        .stat-label { font-size: 13px; color: #7B84B8; margin-top: 4px; }
+        .chart-section {
+            background: #111536; border: 1px solid #1E245A; border-radius: 8px;
+            padding: 30px; margin-bottom: 40px; text-align: center;
+        }
+        .chart-title { font-size: 18px; font-weight: bold; color: #FFFFFF; margin-bottom: 24px; }
+        .chart { display: flex; align-items: flex-end; justify-content: center; gap: 30px; height: 160px; }
+        .bar-wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+        .bar { width: 55px; border-radius: 4px 4px 0 0; }
+        .bar-label { font-size: 12px; color: #7B84B8; }
+        .bar-label-top { font-size: 14px; font-weight: bold; color: #D8DCF0; }
+        .section {
+            background: #111536; border: 1px solid #1E245A; border-radius: 8px;
+            margin-bottom: 30px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .section-header {
+            background: #161B45; padding: 14px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #1E245A;
+        }
+        .section-title { font-size: 16px; font-weight: bold; color: #FFFFFF; }
+        .section-count {
+            background: #4F5FD520; color: #6B7AE8; border: 1px solid #4F5FD5;
+            padding: 3px 12px; border-radius: 20px; font-size: 12px;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        thead tr { background: #0D1230; }
+        th {
+            padding: 10px 16px; text-align: left; font-size: 12px;
+            color: #6B7AE8; text-transform: uppercase; letter-spacing: 1px;
+            border-bottom: 1px solid #1E245A;
+        }
+        td { padding: 10px 16px; font-size: 13px; color: #D8DCF0; vertical-align: top; }
+        .badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; }
+        .miti-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 20px; padding: 20px;
+        }
+        .miti-card {
+            background: #0D1230; border: 1px solid #1E245A;
+            border-radius: 6px; padding: 16px 20px;
+        }
+        .miti-title { font-size: 14px; font-weight: bold; margin-bottom: 10px; }
+        .miti-card ul { padding-left: 18px; }
+        .miti-card li { font-size: 12px; color: #D8DCF0; margin-bottom: 5px; }
+        .note-banner {
+            background: rgba(107, 122, 232, 0.1); border: 1px solid #4F5FD5;
+            border-radius: 8px; padding: 14px 20px; margin-bottom: 30px;
+            font-size: 13px; color: #D8DCF0;
+        }
+        .note-banner strong { color: #6B7AE8; }
+        .footer {
+            text-align: center; padding: 30px 0 10px 0; color: #7B84B8;
+            font-size: 12px; border-top: 1px solid #1E245A; margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>&#128272; WebScanPro</h1>
+        <div class="subtitle">Security Vulnerability Report</div>
+        <div class="meta">Target: DVWA (localhost:8080) &nbsp;·&nbsp; Generated: March 24, 2026  03:09 &nbsp;·&nbsp; Security Level: Low</div>
+    </div>
+
+    <div class="note-banner">
+        <strong>Note:</strong> All vulnerability payloads are HTML-encoded for safe display.
+        Characters like &lt; and &gt; are escaped so they appear as plain text and do not execute in the browser.
+        This is exactly the mitigation recommended for XSS vulnerabilities.
+    </div>
+
+    <div class="stats-row">
+        
+    <div class="stat-card" style="border-color:#6B7AE8">
+        <div class="stat-num" style="color:#6B7AE8">61</div>
+        <div class="stat-label">Total Issues</div>
+    </div>
+    <div class="stat-card" style="border-color:#E85D75">
+        <div class="stat-num" style="color:#E85D75">9</div>
+        <div class="stat-label">Critical</div>
+    </div>
+    <div class="stat-card" style="border-color:#F4A261">
+        <div class="stat-num" style="color:#F4A261">43</div>
+        <div class="stat-label">High</div>
+    </div>
+    <div class="stat-card" style="border-color:#FFD166">
+        <div class="stat-num" style="color:#FFD166">9</div>
+        <div class="stat-label">Medium</div>
+    </div>
+    <div class="stat-card" style="border-color:#3DDC84">
+        <div class="stat-num" style="color:#3DDC84">0</div>
+        <div class="stat-label">Low / Info</div>
+    </div>
+    </div>
+
+    <div class="chart-section">
+        <div class="chart-title">Vulnerability Severity Distribution</div>
+        <div class="chart">
+            
+        <div class="bar-wrap">
+            <div class="bar-label-top">9</div>
+            <div class="bar" style="height:25px; background:#E85D75;"></div>
+            <div class="bar-label">Critical</div>
+        </div>
+        <div class="bar-wrap">
+            <div class="bar-label-top">43</div>
+            <div class="bar" style="height:120px; background:#F4A261;"></div>
+            <div class="bar-label">High</div>
+        </div>
+        <div class="bar-wrap">
+            <div class="bar-label-top">9</div>
+            <div class="bar" style="height:25px; background:#FFD166;"></div>
+            <div class="bar-label">Medium</div>
+        </div>
+        </div>
+    </div>
+
+    
+        <div class="section">
+            <div class="section-header">
+                <span class="section-title">SQL Injection</span>
+                <span class="section-count">16 issue(s)</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:40px">#</th>
+                        <th>Test / Type</th>
+                        <th>Endpoint / Page</th>
+                        <th style="width:100px">Severity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>1</td>
+                <td>SQL Injection</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/brute/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> SQL error signature matched: &#39;you have an error in your sql syntax&#39;
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Use parameterized queries. Hide SQL errors from users — never expose raw database error messages.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &#39;
+                </td>
+            </tr>
+            <tr style="background:rgba(255, 209, 102, 0.15); border-left: 3px solid #FFD166;">
+                <td>2</td>
+                <td>SQL Injection</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/exec/</td>
+                <td><span class="badge" style="background:#FFD16620; color:#FFD166; border:1px solid #FFD166;">Medium</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Response length changed by 118 bytes vs baseline
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Use parameterized queries. Validate and whitelist all user inputs. Use an ORM like SQLAlchemy.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: 1&#39; OR &#39;1&#39;=&#39;1&#39; -- 
+                </td>
+            </tr>
+            <tr style="background:rgba(255, 209, 102, 0.15); border-left: 3px solid #FFD166;">
+                <td>3</td>
+                <td>SQL Injection</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/exec/</td>
+                <td><span class="badge" style="background:#FFD16620; color:#FFD166; border:1px solid #FFD166;">Medium</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Response length changed by 118 bytes vs baseline
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Use parameterized queries. Validate and whitelist all user inputs. Use an ORM like SQLAlchemy.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: 1&#39; OR &#39;1&#39;=&#39;2&#39; -- 
+                </td>
+            </tr>
+            <tr style="background:rgba(255, 209, 102, 0.15); border-left: 3px solid #FFD166;">
+                <td>4</td>
+                <td>SQL Injection</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/exec/</td>
+                <td><span class="badge" style="background:#FFD16620; color:#FFD166; border:1px solid #FFD166;">Medium</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Response length changed by 118 bytes vs baseline
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Use parameterized queries. Validate and whitelist all user inputs. Use an ORM like SQLAlchemy.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: 1&#39; AND 1=1 -- 
+                </td>
+            </tr>
+            <tr style="background:rgba(255, 209, 102, 0.15); border-left: 3px solid #FFD166;">
+                <td>5</td>
+                <td>SQL Injection</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/exec/</td>
+                <td><span class="badge" style="background:#FFD16620; color:#FFD166; border:1px solid #FFD166;">Medium</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Response length changed by 118 bytes vs baseline
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Use parameterized queries. Validate and whitelist all user inputs. Use an ORM like SQLAlchemy.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: 1&#39; AND 1=2 -- 
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>6</td>
+                <td>SQL Injection</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/sqli/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> SQL error signature matched: &#39;you have an error in your sql syntax&#39;
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Use parameterized queries. Hide SQL errors from users — never expose raw database error messages.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &#39;
+                </td>
+            </tr>
+            <tr style="background:rgba(255, 209, 102, 0.15); border-left: 3px solid #FFD166;">
+                <td>7</td>
+                <td>SQL Injection</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/sqli/</td>
+                <td><span class="badge" style="background:#FFD16620; color:#FFD166; border:1px solid #FFD166;">Medium</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Response length changed by 313 bytes vs baseline
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Use parameterized queries. Validate and whitelist all user inputs. Use an ORM like SQLAlchemy.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: 1&#39; OR &#39;1&#39;=&#39;1&#39; -- 
+                </td>
+            </tr>
+            <tr style="background:rgba(255, 209, 102, 0.15); border-left: 3px solid #FFD166;">
+                <td>8</td>
+                <td>SQL Injection</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/sqli/</td>
+                <td><span class="badge" style="background:#FFD16620; color:#FFD166; border:1px solid #FFD166;">Medium</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Response length changed by 59 bytes vs baseline
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Use parameterized queries. Validate and whitelist all user inputs. Use an ORM like SQLAlchemy.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: 1&#39; AND 1=2 -- 
+                </td>
+            </tr>
+            <tr style="background:rgba(232, 93, 117, 0.15); border-left: 3px solid #E85D75;">
+                <td>9</td>
+                <td>SQL Injection</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/sqli/</td>
+                <td><span class="badge" style="background:#E85D7520; color:#E85D75; border:1px solid #E85D75;">Critical</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Response grew by 105 bytes — possible data leak
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Use parameterized queries / prepared statements. Apply least-privilege to database accounts to limit what data can be fetched.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: 1&#39; UNION SELECT null,null -- 
+                </td>
+            </tr>
+            <tr style="background:rgba(232, 93, 117, 0.15); border-left: 3px solid #E85D75;">
+                <td>10</td>
+                <td>SQL Injection</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/sqli/</td>
+                <td><span class="badge" style="background:#E85D7520; color:#E85D75; border:1px solid #E85D75;">Critical</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Response grew by 138 bytes — possible data leak
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Use parameterized queries / prepared statements. Apply least-privilege to database accounts to limit what data can be fetched.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: 1&#39; UNION SELECT user(),database() -- 
+                </td>
+            </tr>
+            <tr style="background:rgba(232, 93, 117, 0.15); border-left: 3px solid #E85D75;">
+                <td>11</td>
+                <td>SQL Injection</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/sqli/</td>
+                <td><span class="badge" style="background:#E85D7520; color:#E85D75; border:1px solid #E85D75;">Critical</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Response grew by 10440 bytes — possible data leak
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Use parameterized queries / prepared statements. Apply least-privilege to database accounts to limit what data can be fetched.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: 1&#39; UNION SELECT table_name,NULL FROM information_schema.tables -- 
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>12</td>
+                <td>SQL Injection</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/sqli/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Response delayed 3.01s — time-based blind SQLi
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Use parameterized queries. Add query timeouts. Monitor for unusually slow database responses.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: 1&#39; AND SLEEP(3) -- 
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>13</td>
+                <td>SQL Injection</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/sqli_blind/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Response delayed 3.01s — time-based blind SQLi
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Use parameterized queries. Add query timeouts. Monitor for unusually slow database responses.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: 1&#39; AND SLEEP(3) -- 
+                </td>
+            </tr>
+            <tr style="background:rgba(232, 93, 117, 0.15); border-left: 3px solid #E85D75;">
+                <td>14</td>
+                <td>SQL Injection</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_r/</td>
+                <td><span class="badge" style="background:#E85D7520; color:#E85D75; border:1px solid #E85D75;">Critical</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Response grew by 65 bytes — possible data leak
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Use parameterized queries / prepared statements. Apply least-privilege to database accounts to limit what data can be fetched.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: 1&#39; UNION SELECT table_name,NULL FROM information_schema.tables -- 
+                </td>
+            </tr>
+            <tr style="background:rgba(232, 93, 117, 0.15); border-left: 3px solid #E85D75;">
+                <td>15</td>
+                <td>SQL Injection</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_s/</td>
+                <td><span class="badge" style="background:#E85D7520; color:#E85D75; border:1px solid #E85D75;">Critical</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Response grew by 64 bytes — possible data leak
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Use parameterized queries / prepared statements. Apply least-privilege to database accounts to limit what data can be fetched.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: 1&#39; UNION SELECT table_name,NULL FROM information_schema.tables -- 
+                </td>
+            </tr>
+            <tr style="background:rgba(232, 93, 117, 0.15); border-left: 3px solid #E85D75;">
+                <td>16</td>
+                <td>SQL Injection</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/csp/</td>
+                <td><span class="badge" style="background:#E85D7520; color:#E85D75; border:1px solid #E85D75;">Critical</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Response grew by 65 bytes — possible data leak
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Use parameterized queries / prepared statements. Apply least-privilege to database accounts to limit what data can be fetched.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: 1&#39; UNION SELECT table_name,NULL FROM information_schema.tables -- 
+                </td>
+            </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="section">
+            <div class="section-header">
+                <span class="section-title">XSS</span>
+                <span class="section-count">20 issue(s)</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:40px">#</th>
+                        <th>Test / Type</th>
+                        <th>Endpoint / Page</th>
+                        <th style="width:100px">Severity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>1</td>
+                <td>DOM-Based XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_d/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> DOM sink found: &#39;document\.write\s*\(&#39;
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Avoid dangerous JS sinks like document.write(), innerHTML, and eval(). Use textContent instead of innerHTML. Validate URL hash values.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: #&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>2</td>
+                <td>DOM-Based XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_d/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> DOM sink found: &#39;document\.write\s*\(&#39;
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Avoid dangerous JS sinks like document.write(), innerHTML, and eval(). Use textContent instead of innerHTML. Validate URL hash values.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: #&lt;img src=x onerror=alert(&#39;XSS&#39;)&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>3</td>
+                <td>Reflected XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_r/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Payload found unmodified in response -- script would execute in browser
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Encode all output before rendering in HTML. Set Content-Security-Policy headers. Never insert user input directly into the page.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>4</td>
+                <td>Reflected XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_r/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Payload found unmodified in response -- script would execute in browser
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Encode all output before rendering in HTML. Set Content-Security-Policy headers. Never insert user input directly into the page.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &lt;img src=x onerror=alert(&#39;XSS&#39;)&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>5</td>
+                <td>Reflected XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_r/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Payload found unmodified in response -- script would execute in browser
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Encode all output before rendering in HTML. Set Content-Security-Policy headers. Never insert user input directly into the page.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &lt;svg onload=alert(&#39;XSS&#39;)&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>6</td>
+                <td>Reflected XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_r/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Payload found unmodified in response -- script would execute in browser
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Encode all output before rendering in HTML. Set Content-Security-Policy headers. Never insert user input directly into the page.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &quot;&gt;&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>7</td>
+                <td>Reflected XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_r/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Payload found unmodified in response -- script would execute in browser
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Encode all output before rendering in HTML. Set Content-Security-Policy headers. Never insert user input directly into the page.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &#39;&gt;&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>8</td>
+                <td>Reflected XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_r/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Payload found unmodified in response -- script would execute in browser
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Encode all output before rendering in HTML. Set Content-Security-Policy headers. Never insert user input directly into the page.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &lt;ScRiPt&gt;alert(&#39;XSS&#39;)&lt;/ScRiPt&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>9</td>
+                <td>Reflected XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_r/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Payload found unmodified in response -- script would execute in browser
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Encode all output before rendering in HTML. Set Content-Security-Policy headers. Never insert user input directly into the page.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &lt;img src=x onerror=alert`XSS`&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>10</td>
+                <td>Reflected XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_r/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Payload found unmodified in response -- script would execute in browser
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Encode all output before rendering in HTML. Set Content-Security-Policy headers. Never insert user input directly into the page.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &lt;body onload=alert(&#39;XSS&#39;)&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>11</td>
+                <td>Reflected XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_r/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Payload found unmodified in response -- script would execute in browser
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Encode all output before rendering in HTML. Set Content-Security-Policy headers. Never insert user input directly into the page.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &lt;iframe src=javascript:alert(&#39;XSS&#39;)&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>12</td>
+                <td>Stored XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_s/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Payload found unmodified in response -- script would execute in browser
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Sanitize and encode all stored user input before rendering. Use a whitelist of allowed HTML tags. Set HttpOnly cookies.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>13</td>
+                <td>Stored XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_s/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Payload found unmodified in response -- script would execute in browser
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Sanitize and encode all stored user input before rendering. Use a whitelist of allowed HTML tags. Set HttpOnly cookies.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &lt;img src=x onerror=alert(&#39;XSS&#39;)&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>14</td>
+                <td>Stored XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_s/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Payload found unmodified in response -- script would execute in browser
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Sanitize and encode all stored user input before rendering. Use a whitelist of allowed HTML tags. Set HttpOnly cookies.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &lt;svg onload=alert(&#39;XSS&#39;)&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>15</td>
+                <td>Stored XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_s/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Payload found unmodified in response -- script would execute in browser
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Sanitize and encode all stored user input before rendering. Use a whitelist of allowed HTML tags. Set HttpOnly cookies.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &quot;&gt;&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>16</td>
+                <td>Stored XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_s/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Payload found unmodified in response -- script would execute in browser
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Sanitize and encode all stored user input before rendering. Use a whitelist of allowed HTML tags. Set HttpOnly cookies.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &#39;&gt;&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>17</td>
+                <td>Stored XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_s/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Payload found unmodified in response -- script would execute in browser
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Sanitize and encode all stored user input before rendering. Use a whitelist of allowed HTML tags. Set HttpOnly cookies.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &lt;ScRiPt&gt;alert(&#39;XSS&#39;)&lt;/ScRiPt&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>18</td>
+                <td>Stored XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_s/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Payload found unmodified in response -- script would execute in browser
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Sanitize and encode all stored user input before rendering. Use a whitelist of allowed HTML tags. Set HttpOnly cookies.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &lt;img src=x onerror=alert`XSS`&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>19</td>
+                <td>Stored XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_s/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Payload found unmodified in response -- script would execute in browser
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Sanitize and encode all stored user input before rendering. Use a whitelist of allowed HTML tags. Set HttpOnly cookies.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &lt;body onload=alert(&#39;XSS&#39;)&gt;
+                </td>
+            </tr>
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>20</td>
+                <td>Stored XSS</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/xss_s/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Payload found unmodified in response -- script would execute in browser
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Sanitize and encode all stored user input before rendering. Use a whitelist of allowed HTML tags. Set HttpOnly cookies.
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4" style="padding:4px 16px 10px 16px; color:#7B84B8; font-size:12px; font-family:monospace; background:#0A0E2A;">
+                    Payload: &lt;iframe src=javascript:alert(&#39;XSS&#39;)&gt;
+                </td>
+            </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="section">
+            <div class="section-header">
+                <span class="section-title">Authentication</span>
+                <span class="section-count">10 issue(s)</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:40px">#</th>
+                        <th>Test / Type</th>
+                        <th>Endpoint / Page</th>
+                        <th style="width:100px">Severity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr style="background:rgba(232, 93, 117, 0.15); border-left: 3px solid #E85D75;">
+                <td>1</td>
+                <td>Weak Credentials</td>
+                <td style="font-family:monospace; font-size:12px;">—</td>
+                <td><span class="badge" style="background:#E85D7520; color:#E85D75; border:1px solid #E85D75;">Critical</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Login succeeded with admin / password
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Change all default credentials immediately. Enforce a strong password policy.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(232, 93, 117, 0.15); border-left: 3px solid #E85D75;">
+                <td>2</td>
+                <td>Brute Force</td>
+                <td style="font-family:monospace; font-size:12px;">—</td>
+                <td><span class="badge" style="background:#E85D7520; color:#E85D75; border:1px solid #E85D75;">Critical</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Password cracked after 25 attempts -- site never blocked the requests
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Add rate limiting. Lock account after 5 failed attempts. Add CAPTCHA.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>3</td>
+                <td>Insecure Cookie</td>
+                <td style="font-family:monospace; font-size:12px;">—</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Cookie &#39;PHPSESSID&#39; missing HttpOnly -- JavaScript can read and steal it via XSS
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Set HttpOnly flag on all session cookies to block JavaScript access.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>4</td>
+                <td>Insecure Cookie</td>
+                <td style="font-family:monospace; font-size:12px;">—</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Cookie &#39;PHPSESSID&#39; missing Secure flag -- can be sent over plain HTTP and intercepted
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Set Secure flag on all session cookies and enforce HTTPS.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(255, 209, 102, 0.15); border-left: 3px solid #FFD166;">
+                <td>5</td>
+                <td>Insecure Cookie</td>
+                <td style="font-family:monospace; font-size:12px;">—</td>
+                <td><span class="badge" style="background:#FFD16620; color:#FFD166; border:1px solid #FFD166;">Medium</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Cookie &#39;PHPSESSID&#39; missing SameSite attribute -- vulnerable to CSRF attacks
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Set SameSite=Strict or SameSite=Lax on all session cookies.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>6</td>
+                <td>Insecure Cookie</td>
+                <td style="font-family:monospace; font-size:12px;">—</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Cookie &#39;security&#39; missing HttpOnly -- JavaScript can read and steal it via XSS
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Set HttpOnly flag on all session cookies to block JavaScript access.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>7</td>
+                <td>Insecure Cookie</td>
+                <td style="font-family:monospace; font-size:12px;">—</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Cookie &#39;security&#39; missing Secure flag -- can be sent over plain HTTP and intercepted
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Set Secure flag on all session cookies and enforce HTTPS.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(255, 209, 102, 0.15); border-left: 3px solid #FFD166;">
+                <td>8</td>
+                <td>Insecure Cookie</td>
+                <td style="font-family:monospace; font-size:12px;">—</td>
+                <td><span class="badge" style="background:#FFD16620; color:#FFD166; border:1px solid #FFD166;">Medium</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Cookie &#39;security&#39; missing SameSite attribute -- vulnerable to CSRF attacks
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Set SameSite=Strict or SameSite=Lax on all session cookies.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>9</td>
+                <td>Session Fixation</td>
+                <td style="font-family:monospace; font-size:12px;">—</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Session ID is identical before and after login -- session fixation possible
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Regenerate a brand new session ID immediately after every successful login.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(232, 93, 117, 0.15); border-left: 3px solid #E85D75;">
+                <td>10</td>
+                <td>Session Hijacking</td>
+                <td style="font-family:monospace; font-size:12px;">—</td>
+                <td><span class="badge" style="background:#E85D7520; color:#E85D75; border:1px solid #E85D75;">Critical</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Attacker accessed a protected page using only a stolen PHPSESSID -- no login required
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Use HTTPS to prevent cookie theft. Set short session timeouts. Regenerate session on login.
+                </td>
+            </tr>
+            
+                </tbody>
+            </table>
+        </div>
+        <div class="section">
+            <div class="section-header">
+                <span class="section-title">Access Control</span>
+                <span class="section-count">15 issue(s)</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:40px">#</th>
+                        <th>Test / Type</th>
+                        <th>Endpoint / Page</th>
+                        <th style="width:100px">Severity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>1</td>
+                <td>Horizontal Privilege Escalation</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/sqli/?id=1&amp;Submit=Submit</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Accessed user ID 1 data without verifying ownership -- any logged-in user can see any other user&#39;s data
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Always verify that the logged-in user owns the requested resource before returning data.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>2</td>
+                <td>Horizontal Privilege Escalation</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/sqli/?id=2&amp;Submit=Submit</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Accessed user ID 2 data without verifying ownership -- any logged-in user can see any other user&#39;s data
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Always verify that the logged-in user owns the requested resource before returning data.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>3</td>
+                <td>Horizontal Privilege Escalation</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/sqli/?id=3&amp;Submit=Submit</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Accessed user ID 3 data without verifying ownership -- any logged-in user can see any other user&#39;s data
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Always verify that the logged-in user owns the requested resource before returning data.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>4</td>
+                <td>Horizontal Privilege Escalation</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/sqli/?id=4&amp;Submit=Submit</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Accessed user ID 4 data without verifying ownership -- any logged-in user can see any other user&#39;s data
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Always verify that the logged-in user owns the requested resource before returning data.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>5</td>
+                <td>Horizontal Privilege Escalation</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/sqli/?id=5&amp;Submit=Submit</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Accessed user ID 5 data without verifying ownership -- any logged-in user can see any other user&#39;s data
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Always verify that the logged-in user owns the requested resource before returning data.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>6</td>
+                <td>Vertical Privilege Escalation</td>
+                <td style="font-family:monospace; font-size:12px;">/security.php</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Page /security.php returned HTTP 200 -- no strict admin role enforcement found
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Implement role-based access control (RBAC). Verify user role before serving restricted pages.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>7</td>
+                <td>Vertical Privilege Escalation</td>
+                <td style="font-family:monospace; font-size:12px;">/setup.php</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Page /setup.php returned HTTP 200 -- no strict admin role enforcement found
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Implement role-based access control (RBAC). Verify user role before serving restricted pages.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>8</td>
+                <td>Vertical Privilege Escalation</td>
+                <td style="font-family:monospace; font-size:12px;">/phpinfo.php</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Page /phpinfo.php returned HTTP 200 -- no strict admin role enforcement found
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Implement role-based access control (RBAC). Verify user role before serving restricted pages.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>9</td>
+                <td>Vertical Privilege Escalation</td>
+                <td style="font-family:monospace; font-size:12px;">/vulnerabilities/</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Page /vulnerabilities/ returned HTTP 200 -- no strict admin role enforcement found
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Implement role-based access control (RBAC). Verify user role before serving restricted pages.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>10</td>
+                <td>IDOR</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/sqli/?id=1&amp;Submit=Submit</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Changing id=1 in URL returned another user&#39;s data without authorization check
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Never use direct object references in URLs. Use indirect references or validate ownership server-side.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>11</td>
+                <td>IDOR</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/sqli/?id=2&amp;Submit=Submit</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Changing id=2 in URL returned another user&#39;s data without authorization check
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Never use direct object references in URLs. Use indirect references or validate ownership server-side.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>12</td>
+                <td>IDOR</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/sqli/?id=3&amp;Submit=Submit</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Changing id=3 in URL returned another user&#39;s data without authorization check
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Never use direct object references in URLs. Use indirect references or validate ownership server-side.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>13</td>
+                <td>IDOR</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/sqli/?id=4&amp;Submit=Submit</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Changing id=4 in URL returned another user&#39;s data without authorization check
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Never use direct object references in URLs. Use indirect references or validate ownership server-side.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(244, 162, 97, 0.15); border-left: 3px solid #F4A261;">
+                <td>14</td>
+                <td>IDOR</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/vulnerabilities/sqli/?id=5&amp;Submit=Submit</td>
+                <td><span class="badge" style="background:#F4A26120; color:#F4A261; border:1px solid #F4A261;">High</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Changing id=5 in URL returned another user&#39;s data without authorization check
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Never use direct object references in URLs. Use indirect references or validate ownership server-side.
+                </td>
+            </tr>
+            
+            <tr style="background:rgba(255, 209, 102, 0.15); border-left: 3px solid #FFD166;">
+                <td>15</td>
+                <td>IDOR</td>
+                <td style="font-family:monospace; font-size:12px;">http://localhost:8080/security.php</td>
+                <td><span class="badge" style="background:#FFD16620; color:#FFD166; border:1px solid #FFD166;">Medium</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:6px 16px; color:#D8DCF0; font-size:13px;">
+                    <strong style="color:#6B7AE8;">Evidence:</strong> Security level changed to &#39;low&#39; by directly modifying the POST parameter
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="padding:4px 16px 12px 16px; color:#D8DCF0; font-size:13px; border-bottom:1px solid #1E245A;">
+                    <strong style="color:#3DDC84;">Fix:</strong> Validate and authorize all parameter changes server-side. Don&#39;t trust client input.
+                </td>
+            </tr>
+            
+                </tbody>
+            </table>
+        </div>
+
+    
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">Security Best Practices</span>
+        </div>
+        <div class="miti-grid">
+            <div class="miti-card">
+                <div class="miti-title" style="color:#E85D75;">SQL Injection</div>
+                <ul>
+                    <li>Use parameterized queries / prepared statements</li>
+                    <li>Validate and whitelist all user inputs</li>
+                    <li>Never expose raw SQL errors to users</li>
+                    <li>Use least-privilege database accounts</li>
+                    <li>Consider using an ORM (SQLAlchemy, Django ORM)</li>
+                </ul>
+            </div>
+            <div class="miti-card">
+                <div class="miti-title" style="color:#F4A261;">XSS</div>
+                <ul>
+                    <li>Encode all output — convert &lt; &gt; to HTML entities</li>
+                    <li>Set Content-Security-Policy headers</li>
+                    <li>Never use innerHTML or document.write() with user data</li>
+                    <li>Set HttpOnly and Secure flags on cookies</li>
+                    <li>Use frameworks that auto-escape output (React, Angular)</li>
+                </ul>
+            </div>
+            <div class="miti-card">
+                <div class="miti-title" style="color:#FFD166;">Authentication</div>
+                <ul>
+                    <li>Change all default credentials immediately</li>
+                    <li>Add rate limiting and account lockout after 5 attempts</li>
+                    <li>Set HttpOnly, Secure, SameSite flags on session cookies</li>
+                    <li>Regenerate session ID after every login</li>
+                    <li>Use HTTPS everywhere</li>
+                </ul>
+            </div>
+            <div class="miti-card">
+                <div class="miti-title" style="color:#3DDC84;">Access Control</div>
+                <ul>
+                    <li>Implement Role-Based Access Control (RBAC)</li>
+                    <li>Never use direct object IDs in URLs — use tokens</li>
+                    <li>Always verify ownership server-side</li>
+                    <li>Apply least privilege principle</li>
+                    <li>Deny access by default — whitelist allowed actions</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        WebScanPro &nbsp;·&nbsp; Automated Web Application Security Testing Tool &nbsp;·&nbsp; DVWA Target &nbsp;·&nbsp; March 24, 2026  03:09
+    </div>
+
+</body>
+</html>
