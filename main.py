@@ -52,7 +52,7 @@ def main():
 
     # 4. Auth & Session Testing (Week 5)
     print("\n[*] Starting Brute Force Test...")
-    BRUTE_URL = "http://localhost:8081/vulnerabilities/brute/"
+    BRUTE_URL = "http://localhost:8080/vulnerabilities/brute/"
     brute_findings = brute_force(BRUTE_URL, "admin")
     all_findings.extend(brute_findings)
 

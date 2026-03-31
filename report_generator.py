@@ -145,7 +145,7 @@ def generate_html(findings):
     <h1 style="font-size:36px;margin:8px 0 4px;">WebScan-Pro</h1>
     <div style="font-size:18px;opacity:0.85;">Automated Web Application Security Report</div>
     <div style="margin-top:16px;font-size:13px;opacity:0.7;">
-      Generated: {timestamp} &nbsp;|&nbsp; Target: http://localhost:8081 &nbsp;|&nbsp; Tool: WebScan-Pro
+      Generated: {timestamp} &nbsp;|&nbsp; Target: http://localhost:8080 &nbsp;|&nbsp; Tool: WebScan-Pro
     </div>
   </div>
 </div>

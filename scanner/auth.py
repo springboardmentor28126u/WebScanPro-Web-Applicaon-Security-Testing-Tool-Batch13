@@ -25,7 +25,7 @@ def get_session(login_url=LOGIN_URL, username=USERNAME, password=PASSWORD):
     session.cookies.set("security", "low")
 
     # Step 4: Verify login by accessing a protected page
-    check = session.get("http://localhost:8081/vulnerabilities/")
+    check = session.get("http://localhost:8080/vulnerabilities/")
 
     if "login.php" in check.url:
         print("  [ERROR] Login failed! Check config.py credentials")
