@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Web Security Report</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 40px;
+            background: #f5f5f5;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .summary {
+            background: #00a8cc;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid orange;
+            border-radius: 8px;
+        }
+        .high { color: red; font-weight: bold; }
+        .medium { color: orange; font-weight: bold; }
+        .low { color: green; font-weight: bold; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        th {
+            background: #333;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Web Application Vulnerability Scanner Report</h1>
+
+<p><b>Target:</b> DVWA<br>
+<b>Date:</b> 2026</p>
+
+<div class="summary">
+    <h2>Summary</h2>
+    <p>SQL Injection: 2</p>
+    <p>XSS: 3</p>
+    <p>Authentication Issues: 12</p>
+    <p>Brute Force: 2</p>
+    <p>Access Control: 1</p>
+    <p>Crawler Inputs Found: 10+</p>
+    <h3>Total: 20+</h3>
+</div>
+
+<h2>Target Scanning (Crawler Results)</h2>
+
+<div class="card">
+    <h3>Discovered Endpoints</h3>
+    <p>/login</p>
+    <p>/search</p>
+    <p>/profile</p>
+    <p>/vulnerabilities/sqli</p>
+</div>
+
+<div class="card">
+    <h3>Discovered Input Fields</h3>
+    <p>username</p>
+    <p>password</p>
+    <p>search</p>
+    <p>id</p>
+</div>
+
+<div class="card">
+    <h3>Observation</h3>
+    <p>Crawler successfully identified multiple attack surfaces for further vulnerability testing.</p>
+</div>
+
+<h2>Detailed Findings</h2>
+
+<div class="card">
+    <h3>1. SQL Injection</h3>
+    <p><b>URL:</b> /sqli</p>
+    <p><b>Payload:</b> ' OR '1'='1</p>
+    <p><b>Severity:</b> <span class="high">High</span></p>
+    <p><b>Impact:</b> Authentication bypass and database access</p>
+    <p><b>Fix:</b> Use prepared statements</p>
+</div>
+
+<div class="card">
+    <h3>2. Reflected XSS</h3>
+    <p><b>URL:</b> /xss_r</p>
+    <p><b>Payload:</b> &lt;script&gt;alert('XSS')&lt;/script&gt;</p>
+    <p><b>Severity:</b> <span class="medium">Medium</span></p>
+    <p><b>Impact:</b> Session hijacking</p>
+    <p><b>Fix:</b> Output encoding</p>
+</div>
+
+<div class="card">
+    <h3>3. Stored XSS</h3>
+    <p><b>Payload:</b> &lt;script&gt;alert('Stored XSS')&lt;/script&gt;</p>
+    <p><b>Severity:</b> <span class="high">High</span></p>
+    <p><b>Impact:</b> Persistent attack affecting multiple users</p>
+    <p><b>Fix:</b> Input sanitization</p>
+</div>
+
+<div class="card">
+    <h3>4. Brute Force Vulnerability</h3>
+    <p><b>URL:</b> /login</p>
+    <p><b>Issue:</b> Unlimited login attempts</p>
+    <p><b>Severity:</b> <span class="high">High</span></p>
+    <p><b>Impact:</b> Password guessing attacks</p>
+    <p><b>Fix:</b> Rate limiting, CAPTCHA, account lockout</p>
+</div>
+
+<div class="card">
+    <h3>5. Weak Credentials</h3>
+    <p><b>Tested:</b> admin/admin</p>
+    <p><b>Severity:</b> <span class="high">High</span></p>
+    <p><b>Impact:</b> Unauthorized access</p>
+    <p><b>Fix:</b> Strong password policies</p>
+</div>
+
+<div class="card">
+    <h3>6. IDOR</h3>
+    <p><b>URL:</b> /fi</p>
+    <p><b>Payload:</b> ../../etc/passwd</p>
+    <p><b>Severity:</b> <span class="high">High</span></p>
+    <p><b>Impact:</b> Unauthorized file access</p>
+    <p><b>Fix:</b> Access control validation</p>
+</div>
+
+<h2>Vulnerability Table</h2>
+
+<table>
+<tr>
+    <th>Type</th>
+    <th>Endpoint</th>
+    <th>Severity</th>
+    <th>Mitigation</th>
+</tr>
+<tr>
+    <td>SQL Injection</td>
+    <td>/sqli</td>
+    <td class="high">High</td>
+    <td>Prepared Statements</td>
+</tr>
+<tr>
+    <td>XSS</td>
+    <td>/xss</td>
+    <td class="medium">Medium</td>
+    <td>Encoding</td>
+</tr>
+<tr>
+    <td>Brute Force</td>
+    <td>/login</td>
+    <td class="high">High</td>
+    <td>Rate limiting, CAPTCHA</td>
+</tr>
+<tr>
+    <td>IDOR</td>
+    <td>/fi</td>
+    <td class="high">High</td>
+    <td>Access Control</td>
+</tr>
+
+</table>
+
+</body>
+</html>

