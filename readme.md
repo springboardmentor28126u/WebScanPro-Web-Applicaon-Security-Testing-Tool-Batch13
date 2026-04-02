@@ -16,59 +16,33 @@ BeautifulSoup
 SQLite / MySQL
 HTML, CSS (for dashboard)
 
-📅 Week 1: Project Initialization and Setup
-🎯 Project Goals
+## Week 1 – Project Setup
 
-Understand web application security basics
+### 📖 Overview
+In Week 1, we focused on setting up the foundation required for building the report generation system and understanding how security reports should be structured.
 
-Set up a local vulnerable testing environment
+### 🛠️ Work Done
+- Initialized the project repository using Git and GitHub.
+- Set up Python development environment.
+- Installed required libraries for future report generation (like HTML handling, file writing).
+- Installed DVWA (Damn Vulnerable Web Application) for testing.
+- Studied sample vulnerability reports to understand structure and format.
+- Identified key components required in a report:
+  - Vulnerability Name
+  - Affected URL
+  - Description
+  - Severity Level
+  - Suggested Fix
 
-Explore application structure and vulnerabilities
+### 🎯 Outcome
+- Environment successfully set up for development.
+- Clear understanding of how security reports should be designed.
+- Defined structure for report generation module.
 
-Prepare environment for automated scanning
+---
 
-⚙ Environment Setup
-1️⃣ Install Local Server
+## Week 2 – Target Scanning Module
 
-Set up a local server using:
-
-XAMPP
-
-Start:
-
-Apache
-
-MySQL
-
-2️⃣ Install Target Application
-
-Download and configure one of the following:
-
-DVWA
-
-Place the application inside the server directory (htdocs if using XAMPP).
-
-3️⃣ Explore Target Application
-
-Analyze:
-
-Website structure
-
-Navigation links
-
-Login forms
-
-Input fields
-
-Common vulnerabilities (SQL Injection, XSS, etc.)
-
-✅ Week 1 Outcome
-
-✔ Local vulnerable application successfully installed
-✔ Application running on http://localhost/
-✔ Initial understanding of web vulnerabilities
-
-📅 Week 2: Target Scanning Module
 🎯 Objective
 
 Develop an automated crawler to scan the target application and extract important testing data.
@@ -141,7 +115,8 @@ WebScanPro/
 └── requirements.txt
 
 
-# Week 3 – SQL Injection Testing Module
+
+## Week 3 – SQL Injection Testing Module
 
 ## Overview
 In Week 3, we implemented a SQL Injection vulnerability scanner using Python. 
@@ -184,7 +159,7 @@ The scanner prints the detected SQL Injection vulnerability in the terminal and 
 - Automating vulnerability scanning using Python
 - Working with HTTP requests and responses
 
-# Week 4 – Cross-Site Scripting (XSS) Testing Module
+## Week 4 – Cross-Site Scripting (XSS) Testing Module
 
 ## Project
 
@@ -234,7 +209,7 @@ The terminal will display whether a possible XSS vulnerability is detected and s
 This module successfully demonstrates how automated tools can detect Cross-Site Scripting vulnerabilities in web applications.
 
 
-# Week 5 – Authentication and Brute Force Testing
+## Week 5 – Authentication and Brute Force Testing
 
 ## Objective
 
@@ -275,7 +250,7 @@ The brute force testing script was able to identify possible valid login credent
 This week's work helped in understanding authentication vulnerabilities and how brute force attacks can compromise user accounts if proper security controls are not implemented.
 
 
-# Week 6 – Access Control and IDOR Testing
+## Week 6 – Access Control and IDOR Testing
 
 ## Objective
 
@@ -318,7 +293,7 @@ By modifying the `id` parameter, different user records were accessed without pr
 This week's testing helped identify access control weaknesses in the application and demonstrated how improper authorization can lead to unauthorized data access.
 
 
-# Week 7 – Integration and Final Scanner Execution
+## Week 7 – Integration and Final Scanner Execution
 
 ## Objective
 
