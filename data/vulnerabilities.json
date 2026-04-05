@@ -83,6 +83,7 @@
             "url": "http://localhost/dvwa/login.php",
             "username": "admin",
             "password": "admin",
+            "evidence": "Login successful with default credentials",
             "severity": "Medium",
             "remediation": {
                 "password_policy": "Enforce strong password policies.",
@@ -96,6 +97,7 @@
             "url": "http://localhost/dvwa/login.php",
             "username": "admin",
             "password": "password",
+            "evidence": "Login successful with default credentials",
             "severity": "Medium",
             "remediation": {
                 "password_policy": "Enforce strong password policies.",
@@ -109,6 +111,7 @@
             "url": "http://localhost/dvwa/login.php",
             "username": "test",
             "password": "test",
+            "evidence": "Login successful with default credentials",
             "severity": "Medium",
             "remediation": {
                 "password_policy": "Enforce strong password policies.",
@@ -121,6 +124,7 @@
             "type": "Brute Force Success",
             "url": "http://localhost/dvwa/login.php",
             "password": "1234",
+            "evidence": "Login succeeded without rate limiting",
             "severity": "High",
             "remediation": {
                 "rate_limit": "Implement rate limiting.",
@@ -133,6 +137,7 @@
             "type": "Brute Force Success",
             "url": "http://localhost/dvwa/login.php",
             "password": "password",
+            "evidence": "Login succeeded without rate limiting",
             "severity": "High",
             "remediation": {
                 "rate_limit": "Implement rate limiting.",
@@ -145,6 +150,7 @@
             "type": "Brute Force Success",
             "url": "http://localhost/dvwa/login.php",
             "password": "admin",
+            "evidence": "Login succeeded without rate limiting",
             "severity": "High",
             "remediation": {
                 "rate_limit": "Implement rate limiting.",
@@ -157,6 +163,7 @@
             "type": "Brute Force Success",
             "url": "http://localhost/dvwa/login.php",
             "password": "root",
+            "evidence": "Login succeeded without rate limiting",
             "severity": "High",
             "remediation": {
                 "rate_limit": "Implement rate limiting.",
@@ -170,6 +177,7 @@
             "url": "http://localhost/dvwa/",
             "cookie": "security",
             "issue": "Missing Secure flag",
+            "evidence": "Cookie 'security' sent over HTTP",
             "severity": "Low",
             "remediation": {
                 "secure_flag": "Set Secure flag on cookies.",
@@ -179,8 +187,49 @@
         },
         {
             "type": "Insecure Cookie",
+            "url": "http://localhost/dvwa/",
             "cookie": "security",
             "issue": "Missing HttpOnly flag",
+            "evidence": "Cookie 'security' accessible via JavaScript",
+            "severity": "Low",
+            "remediation": {
+                "httponly": "Set HttpOnly flag on cookies.",
+                "xss_protection": "Prevent access via JavaScript.",
+                "secure_cookies": "Use secure cookie attributes."
+            }
+        },
+        {
+            "type": "Insecure Cookie",
+            "url": "http://localhost/dvwa/",
+            "cookie": "security",
+            "issue": "Missing SameSite attribute",
+            "evidence": "Cookie 'security' vulnerable to CSRF",
+            "severity": "Medium",
+            "remediation": {
+                "samesite": "Set SameSite=Strict or Lax.",
+                "csrf": "Implement CSRF protection tokens.",
+                "secure_design": "Restrict cross-site cookie usage."
+            }
+        },
+        {
+            "type": "Insecure Cookie",
+            "url": "http://localhost/dvwa/",
+            "cookie": "PHPSESSID",
+            "issue": "Missing Secure flag",
+            "evidence": "Cookie 'PHPSESSID' sent over HTTP",
+            "severity": "Low",
+            "remediation": {
+                "secure_flag": "Set Secure flag on cookies.",
+                "https": "Use HTTPS for all communications.",
+                "cookie_scope": "Limit cookie scope and exposure."
+            }
+        },
+        {
+            "type": "Insecure Cookie",
+            "url": "http://localhost/dvwa/",
+            "cookie": "PHPSESSID",
+            "issue": "Missing HttpOnly flag",
+            "evidence": "Cookie 'PHPSESSID' accessible via JavaScript",
             "severity": "Low",
             "remediation": {
                 "httponly": "Set HttpOnly flag on cookies.",
@@ -192,29 +241,20 @@
             "type": "Insecure Cookie",
             "url": "http://localhost/dvwa/",
             "cookie": "PHPSESSID",
-            "issue": "Missing Secure flag",
-            "severity": "Low",
+            "issue": "Missing SameSite attribute",
+            "evidence": "Cookie 'PHPSESSID' vulnerable to CSRF",
+            "severity": "Medium",
             "remediation": {
-                "secure_flag": "Set Secure flag on cookies.",
-                "https": "Use HTTPS for all communications.",
-                "cookie_scope": "Limit cookie scope and exposure."
-            }
-        },
-        {
-            "type": "Insecure Cookie",
-            "cookie": "PHPSESSID",
-            "issue": "Missing HttpOnly flag",
-            "severity": "Low",
-            "remediation": {
-                "httponly": "Set HttpOnly flag on cookies.",
-                "xss_protection": "Prevent access via JavaScript.",
-                "secure_cookies": "Use secure cookie attributes."
+                "samesite": "Set SameSite=Strict or Lax.",
+                "csrf": "Implement CSRF protection tokens.",
+                "secure_design": "Restrict cross-site cookie usage."
             }
         },
         {
             "type": "Session Fixation",
             "url": "http://localhost/dvwa/login.php",
             "issue": "Session ID did not change after login",
+            "evidence": "Before: {'security': 'low', 'PHPSESSID': '7kkj78rvb4fmcmi8tl188djf71'} | After: {'security': 'low', 'PHPSESSID': '7kkj78rvb4fmcmi8tl188djf71'}",
             "severity": "Medium",
             "remediation": {
                 "session_regen": "Regenerate session ID after login.",

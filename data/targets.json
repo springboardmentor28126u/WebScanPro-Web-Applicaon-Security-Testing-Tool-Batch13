@@ -1,7 +1,5 @@
 [
     "http://localhost/dvwa/",
-    "http://localhost/dvwa/",
-    "http://localhost/dvwa/",
     "http://localhost/dvwa/instructions.php",
     "http://localhost/dvwa/setup.php",
     "http://localhost/dvwa/vulnerabilities/brute/",
@@ -24,5 +22,9 @@
     "http://localhost/dvwa/vulnerabilities/api/",
     "http://localhost/dvwa/security.php",
     "http://localhost/dvwa/phpinfo.php",
-    "http://localhost/dvwa/about.php"
+    "http://localhost/dvwa/about.php",
+    "http://localhost/dvwa/instructions.php?doc=readme",
+    "http://localhost/dvwa/instructions.php?doc=PDF",
+    "http://localhost/dvwa/instructions.php?doc=changelog",
+    "http://localhost/dvwa/instructions.php?doc=copying"
 ]

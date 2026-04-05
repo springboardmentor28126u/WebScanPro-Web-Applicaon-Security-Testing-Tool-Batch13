@@ -82,8 +82,8 @@
     <div class="container">
 
     <h1>WebScanPro Security Report</h1>
-    <p><b>Date:</b> 2026-03-31 17:50:20.962623</p>
-    <div class='card'><h2>Summary</h2><div class='summary'><div class='box'>SQLI<br><b>2</b></div><div class='box'>XSS<br><b>3</b></div><div class='box'>AUTHENTICATION<br><b>12</b></div><div class='box'>ACCESS_CONTROL<br><b>0</b></div><div class='box'>TOTAL<br><b>17</b></div></div></div>
+    <p><b>Date:</b> 2026-04-05 13:34:48.638257</p>
+    <div class='card'><h2>Summary</h2><div class='summary'><div class='box'>SQLI<br><b>2</b></div><div class='box'>XSS<br><b>3</b></div><div class='box'>AUTHENTICATION<br><b>14</b></div><div class='box'>ACCESS_CONTROL<br><b>0</b></div><div class='box'>TOTAL<br><b>19</b></div></div></div>
     <div class='card'>
     <h2>Detailed Findings</h2>
     <table>
@@ -91,6 +91,7 @@
             <th>Type</th>
             <th>URL</th>
             <th>Parameter</th>
+            <th>Payload / Evidence</th>
             <th>Severity</th>
             <th>Mitigation</th>
         </tr>
@@ -99,6 +100,7 @@
                 <td>Error-Based SQLi</td>
                 <td>http://localhost/dvwa/vulnerabilities/brute/</td>
                 <td>username</td>
+                <td>'</td>
                 <td class="High">High</td>
                 <td>Use parameterized queries (prepared statements).<br>Avoid concatenating raw user input into SQL queries.<br>Validate and sanitize all user inputs.<br>Apply least-privilege access to database users.<br>Disable detailed SQL error messages in production.</td>
             </tr>
@@ -107,6 +109,7 @@
                 <td>Error-Based SQLi</td>
                 <td>http://localhost/dvwa/vulnerabilities/sqli/</td>
                 <td>id</td>
+                <td>'</td>
                 <td class="High">High</td>
                 <td>Use parameterized queries (prepared statements).<br>Avoid concatenating raw user input into SQL queries.<br>Validate and sanitize all user inputs.<br>Apply least-privilege access to database users.<br>Disable detailed SQL error messages in production.</td>
             </tr>
@@ -115,6 +118,7 @@
                 <td>Reflected XSS</td>
                 <td>http://localhost/dvwa/vulnerabilities/xss_r/</td>
                 <td>name</td>
+                <td><script>alert(1337)</script></td>
                 <td class="High">High</td>
                 <td>Escape user input before rendering in HTML.<br>Enable template auto-escaping.<br>Implement strict Content Security Policy.<br>Apply strict input validation.<br>Avoid using innerHTML with user input.</td>
             </tr>
@@ -123,6 +127,7 @@
                 <td>Reflected XSS</td>
                 <td>http://localhost/dvwa/vulnerabilities/xss_s/</td>
                 <td>txtName</td>
+                <td><script>alert(1337)</script></td>
                 <td class="High">High</td>
                 <td>Escape user input before rendering in HTML.<br>Enable template auto-escaping.<br>Implement strict Content Security Policy.<br>Apply strict input validation.<br>Avoid using innerHTML with user input.</td>
             </tr>
@@ -131,6 +136,7 @@
                 <td>Reflected XSS</td>
                 <td>http://localhost/dvwa/vulnerabilities/csp/</td>
                 <td>include</td>
+                <td><script>alert(1337)</script></td>
                 <td class="High">High</td>
                 <td>Escape user input before rendering in HTML.<br>Enable template auto-escaping.<br>Implement strict Content Security Policy.<br>Apply strict input validation.<br>Avoid using innerHTML with user input.</td>
             </tr>
@@ -139,13 +145,6 @@
                 <td>Weak Credentials</td>
                 <td>http://localhost/dvwa/login.php</td>
                 <td>-</td>
-                <td class="Medium">Medium</td>
-                <td>Enforce strong password policies.<br>Enable multi-factor authentication.<br>Disable default credentials.<br>Store passwords securely using hashing.</td>
-            </tr>
-            
-            <tr>
-                <td>Weak Credentials</td>
-                <td>http://localhost/dvwa/login.php</td>
                 <td>-</td>
                 <td class="Medium">Medium</td>
                 <td>Enforce strong password policies.<br>Enable multi-factor authentication.<br>Disable default credentials.<br>Store passwords securely using hashing.</td>
@@ -155,6 +154,16 @@
                 <td>Weak Credentials</td>
                 <td>http://localhost/dvwa/login.php</td>
                 <td>-</td>
+                <td>-</td>
+                <td class="Medium">Medium</td>
+                <td>Enforce strong password policies.<br>Enable multi-factor authentication.<br>Disable default credentials.<br>Store passwords securely using hashing.</td>
+            </tr>
+            
+            <tr>
+                <td>Weak Credentials</td>
+                <td>http://localhost/dvwa/login.php</td>
+                <td>-</td>
+                <td>-</td>
                 <td class="Medium">Medium</td>
                 <td>Enforce strong password policies.<br>Enable multi-factor authentication.<br>Disable default credentials.<br>Store passwords securely using hashing.</td>
             </tr>
@@ -163,13 +172,6 @@
                 <td>Brute Force Success</td>
                 <td>http://localhost/dvwa/login.php</td>
                 <td>-</td>
-                <td class="High">High</td>
-                <td>Implement rate limiting.<br>Lock account after failed attempts.<br>Use CAPTCHA after multiple failures.<br>Monitor login attempts and alert suspicious activity.</td>
-            </tr>
-            
-            <tr>
-                <td>Brute Force Success</td>
-                <td>http://localhost/dvwa/login.php</td>
                 <td>-</td>
                 <td class="High">High</td>
                 <td>Implement rate limiting.<br>Lock account after failed attempts.<br>Use CAPTCHA after multiple failures.<br>Monitor login attempts and alert suspicious activity.</td>
@@ -179,6 +181,7 @@
                 <td>Brute Force Success</td>
                 <td>http://localhost/dvwa/login.php</td>
                 <td>-</td>
+                <td>-</td>
                 <td class="High">High</td>
                 <td>Implement rate limiting.<br>Lock account after failed attempts.<br>Use CAPTCHA after multiple failures.<br>Monitor login attempts and alert suspicious activity.</td>
             </tr>
@@ -186,6 +189,16 @@
             <tr>
                 <td>Brute Force Success</td>
                 <td>http://localhost/dvwa/login.php</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="High">High</td>
+                <td>Implement rate limiting.<br>Lock account after failed attempts.<br>Use CAPTCHA after multiple failures.<br>Monitor login attempts and alert suspicious activity.</td>
+            </tr>
+            
+            <tr>
+                <td>Brute Force Success</td>
+                <td>http://localhost/dvwa/login.php</td>
+                <td>-</td>
                 <td>-</td>
                 <td class="High">High</td>
                 <td>Implement rate limiting.<br>Lock account after failed attempts.<br>Use CAPTCHA after multiple failures.<br>Monitor login attempts and alert suspicious activity.</td>
@@ -195,12 +208,14 @@
                 <td>Insecure Cookie</td>
                 <td>http://localhost/dvwa/</td>
                 <td>-</td>
+                <td>-</td>
                 <td class="Low">Low</td>
                 <td>Set Secure flag on cookies.<br>Use HTTPS for all communications.<br>Limit cookie scope and exposure.</td>
             </tr>
             
             <tr>
                 <td>Insecure Cookie</td>
+                <td>http://localhost/dvwa/</td>
                 <td>-</td>
                 <td>-</td>
                 <td class="Low">Low</td>
@@ -211,21 +226,42 @@
                 <td>Insecure Cookie</td>
                 <td>http://localhost/dvwa/</td>
                 <td>-</td>
+                <td>-</td>
+                <td class="Medium">Medium</td>
+                <td>Set SameSite=Strict or Lax.<br>Implement CSRF protection tokens.<br>Restrict cross-site cookie usage.</td>
+            </tr>
+            
+            <tr>
+                <td>Insecure Cookie</td>
+                <td>http://localhost/dvwa/</td>
+                <td>-</td>
+                <td>-</td>
                 <td class="Low">Low</td>
                 <td>Set Secure flag on cookies.<br>Use HTTPS for all communications.<br>Limit cookie scope and exposure.</td>
             </tr>
             
             <tr>
                 <td>Insecure Cookie</td>
+                <td>http://localhost/dvwa/</td>
                 <td>-</td>
                 <td>-</td>
                 <td class="Low">Low</td>
                 <td>Set HttpOnly flag on cookies.<br>Prevent access via JavaScript.<br>Use secure cookie attributes.</td>
+            </tr>
+            
+            <tr>
+                <td>Insecure Cookie</td>
+                <td>http://localhost/dvwa/</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="Medium">Medium</td>
+                <td>Set SameSite=Strict or Lax.<br>Implement CSRF protection tokens.<br>Restrict cross-site cookie usage.</td>
             </tr>
             
             <tr>
                 <td>Session Fixation</td>
                 <td>http://localhost/dvwa/login.php</td>
+                <td>-</td>
                 <td>-</td>
                 <td class="Medium">Medium</td>
                 <td>Regenerate session ID after login.<br>Invalidate old session identifiers.<br>Use secure session handling mechanisms.</td>

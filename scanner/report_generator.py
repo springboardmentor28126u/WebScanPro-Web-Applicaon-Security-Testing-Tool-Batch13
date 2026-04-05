@@ -137,6 +137,7 @@ def generate_html_report(input_file, output_file="report.html"):
             <th>Type</th>
             <th>URL</th>
             <th>Parameter</th>
+            <th>Payload / Evidence</th>
             <th>Severity</th>
             <th>Mitigation</th>
         </tr>
@@ -146,13 +147,26 @@ def generate_html_report(input_file, output_file="report.html"):
         for v in data[category]:
 
             severity = v.get("severity", get_severity(v["type"]))
-            mitigation = "<br>".join(v.get("remediation", {}).values())
+
+            # 🔥 NEW: Extract payload or evidence
+            payload = "-"
+            if "payload" in v:
+                payload = v["payload"]
+            elif "true_payload" in v:
+                payload = f"TRUE: {v['true_payload']}<br>FALSE: {v['false_payload']}"
+            elif "length_difference" in v:
+                payload = f"Length diff: {v['length_difference']}"
+
+            # 🔥 NEW: Clean mitigation
+            mitigation_data = v.get("remediation", {})
+            mitigation = "<br>".join(mitigation_data.values()) if mitigation_data else "-"
 
             html += f"""
             <tr>
                 <td>{v.get("type")}</td>
                 <td>{v.get("url", "-")}</td>
                 <td>{v.get("parameter", "-")}</td>
+                <td>{payload}</td>
                 <td class="{severity}">{severity}</td>
                 <td>{mitigation}</td>
             </tr>
