@@ -254,7 +254,7 @@
             "type": "Session Fixation",
             "url": "http://localhost/dvwa/login.php",
             "issue": "Session ID did not change after login",
-            "evidence": "Before: {'security': 'low', 'PHPSESSID': '7kkj78rvb4fmcmi8tl188djf71'} | After: {'security': 'low', 'PHPSESSID': '7kkj78rvb4fmcmi8tl188djf71'}",
+            "evidence": "Before: {'security': 'low', 'PHPSESSID': 'mvr4ogooi65g5ld03hblms903n'} | After: {'security': 'low', 'PHPSESSID': 'mvr4ogooi65g5ld03hblms903n'}",
             "severity": "Medium",
             "remediation": {
                 "session_regen": "Regenerate session ID after login.",
@@ -263,5 +263,24 @@
             }
         }
     ],
-    "access_control": []
+    "access_control": [
+        {
+            "type": "IDOR",
+            "url": "http://localhost/dvwa/vulnerabilities/sqli/?id=1",
+            "parameter": "id",
+            "tested_value": "1",
+            "original_length": 4592,
+            "modified_length": 4592,
+            "difference": 0,
+            "evidence": "Accessed data using id=1",
+            "severity": "High",
+            "remediation": {
+                "primary_fix": "Validate user authorization before returning object data.",
+                "rbac": "Implement Role-Based Access Control (RBAC).",
+                "abac": "Use Attribute-Based Access Control (ABAC).",
+                "direct_reference": "Avoid exposing direct object identifiers.",
+                "server_validation": "Verify ownership of objects server-side."
+            }
+        }
+    ]
 }

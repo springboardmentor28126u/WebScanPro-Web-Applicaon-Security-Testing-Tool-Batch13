@@ -1,276 +1,224 @@
 
     <html>
     <head>
-        <title>WebScanPro Report</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f5f7fa;
-                margin: 0;
-                padding: 0;
-            }
-
-            .container {
-                width: 90%;
-                margin: auto;
-                padding: 20px;
-            }
-
-            h1 {
-                text-align: center;
-                color: #2c3e50;
-            }
-
-            .card {
-                background: white;
-                padding: 20px;
-                margin-top: 20px;
-                border-radius: 10px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            }
-
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-
-            th, td {
-                padding: 12px;
-                border-bottom: 1px solid #ddd;
-                text-align: left;
-            }
-
-            th {
-                background-color: #2c3e50;
-                color: white;
-            }
-
-            .High {
-                color: #e74c3c;
-                font-weight: bold;
-            }
-
-            .Medium {
-                color: #f39c12;
-                font-weight: bold;
-            }
-
-            .Low {
-                color: #27ae60;
-                font-weight: bold;
-            }
-
-            .summary {
-                display: flex;
-                gap: 20px;
-                flex-wrap: wrap;
-            }
-
-            .box {
-                flex: 1;
-                min-width: 150px;
-                background: #3498db;
-                color: white;
-                padding: 15px;
-                border-radius: 8px;
-                text-align: center;
-            }
-        </style>
+    <style>
+    body { background:#0d0d1a;color:white;font-family:Segoe UI;padding:30px; }
+    .card { background:#12122a;padding:20px;margin:20px 0;border-radius:10px; }
+    .high {color:red} .medium{color:orange} .low{color:green}
+    </style>
     </head>
 
     <body>
-    <div class="container">
 
-    <h1>WebScanPro Security Report</h1>
-    <p><b>Date:</b> 2026-04-05 13:34:48.638257</p>
-    <div class='card'><h2>Summary</h2><div class='summary'><div class='box'>SQLI<br><b>2</b></div><div class='box'>XSS<br><b>3</b></div><div class='box'>AUTHENTICATION<br><b>14</b></div><div class='box'>ACCESS_CONTROL<br><b>0</b></div><div class='box'>TOTAL<br><b>19</b></div></div></div>
-    <div class='card'>
-    <h2>Detailed Findings</h2>
-    <table>
-        <tr>
-            <th>Type</th>
-            <th>URL</th>
-            <th>Parameter</th>
-            <th>Payload / Evidence</th>
-            <th>Severity</th>
-            <th>Mitigation</th>
-        </tr>
-    
-            <tr>
-                <td>Error-Based SQLi</td>
-                <td>http://localhost/dvwa/vulnerabilities/brute/</td>
-                <td>username</td>
-                <td>'</td>
-                <td class="High">High</td>
-                <td>Use parameterized queries (prepared statements).<br>Avoid concatenating raw user input into SQL queries.<br>Validate and sanitize all user inputs.<br>Apply least-privilege access to database users.<br>Disable detailed SQL error messages in production.</td>
-            </tr>
-            
-            <tr>
-                <td>Error-Based SQLi</td>
-                <td>http://localhost/dvwa/vulnerabilities/sqli/</td>
-                <td>id</td>
-                <td>'</td>
-                <td class="High">High</td>
-                <td>Use parameterized queries (prepared statements).<br>Avoid concatenating raw user input into SQL queries.<br>Validate and sanitize all user inputs.<br>Apply least-privilege access to database users.<br>Disable detailed SQL error messages in production.</td>
-            </tr>
-            
-            <tr>
-                <td>Reflected XSS</td>
-                <td>http://localhost/dvwa/vulnerabilities/xss_r/</td>
-                <td>name</td>
-                <td><script>alert(1337)</script></td>
-                <td class="High">High</td>
-                <td>Escape user input before rendering in HTML.<br>Enable template auto-escaping.<br>Implement strict Content Security Policy.<br>Apply strict input validation.<br>Avoid using innerHTML with user input.</td>
-            </tr>
-            
-            <tr>
-                <td>Reflected XSS</td>
-                <td>http://localhost/dvwa/vulnerabilities/xss_s/</td>
-                <td>txtName</td>
-                <td><script>alert(1337)</script></td>
-                <td class="High">High</td>
-                <td>Escape user input before rendering in HTML.<br>Enable template auto-escaping.<br>Implement strict Content Security Policy.<br>Apply strict input validation.<br>Avoid using innerHTML with user input.</td>
-            </tr>
-            
-            <tr>
-                <td>Reflected XSS</td>
-                <td>http://localhost/dvwa/vulnerabilities/csp/</td>
-                <td>include</td>
-                <td><script>alert(1337)</script></td>
-                <td class="High">High</td>
-                <td>Escape user input before rendering in HTML.<br>Enable template auto-escaping.<br>Implement strict Content Security Policy.<br>Apply strict input validation.<br>Avoid using innerHTML with user input.</td>
-            </tr>
-            
-            <tr>
-                <td>Weak Credentials</td>
-                <td>http://localhost/dvwa/login.php</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="Medium">Medium</td>
-                <td>Enforce strong password policies.<br>Enable multi-factor authentication.<br>Disable default credentials.<br>Store passwords securely using hashing.</td>
-            </tr>
-            
-            <tr>
-                <td>Weak Credentials</td>
-                <td>http://localhost/dvwa/login.php</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="Medium">Medium</td>
-                <td>Enforce strong password policies.<br>Enable multi-factor authentication.<br>Disable default credentials.<br>Store passwords securely using hashing.</td>
-            </tr>
-            
-            <tr>
-                <td>Weak Credentials</td>
-                <td>http://localhost/dvwa/login.php</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="Medium">Medium</td>
-                <td>Enforce strong password policies.<br>Enable multi-factor authentication.<br>Disable default credentials.<br>Store passwords securely using hashing.</td>
-            </tr>
-            
-            <tr>
-                <td>Brute Force Success</td>
-                <td>http://localhost/dvwa/login.php</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="High">High</td>
-                <td>Implement rate limiting.<br>Lock account after failed attempts.<br>Use CAPTCHA after multiple failures.<br>Monitor login attempts and alert suspicious activity.</td>
-            </tr>
-            
-            <tr>
-                <td>Brute Force Success</td>
-                <td>http://localhost/dvwa/login.php</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="High">High</td>
-                <td>Implement rate limiting.<br>Lock account after failed attempts.<br>Use CAPTCHA after multiple failures.<br>Monitor login attempts and alert suspicious activity.</td>
-            </tr>
-            
-            <tr>
-                <td>Brute Force Success</td>
-                <td>http://localhost/dvwa/login.php</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="High">High</td>
-                <td>Implement rate limiting.<br>Lock account after failed attempts.<br>Use CAPTCHA after multiple failures.<br>Monitor login attempts and alert suspicious activity.</td>
-            </tr>
-            
-            <tr>
-                <td>Brute Force Success</td>
-                <td>http://localhost/dvwa/login.php</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="High">High</td>
-                <td>Implement rate limiting.<br>Lock account after failed attempts.<br>Use CAPTCHA after multiple failures.<br>Monitor login attempts and alert suspicious activity.</td>
-            </tr>
-            
-            <tr>
-                <td>Insecure Cookie</td>
-                <td>http://localhost/dvwa/</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="Low">Low</td>
-                <td>Set Secure flag on cookies.<br>Use HTTPS for all communications.<br>Limit cookie scope and exposure.</td>
-            </tr>
-            
-            <tr>
-                <td>Insecure Cookie</td>
-                <td>http://localhost/dvwa/</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="Low">Low</td>
-                <td>Set HttpOnly flag on cookies.<br>Prevent access via JavaScript.<br>Use secure cookie attributes.</td>
-            </tr>
-            
-            <tr>
-                <td>Insecure Cookie</td>
-                <td>http://localhost/dvwa/</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="Medium">Medium</td>
-                <td>Set SameSite=Strict or Lax.<br>Implement CSRF protection tokens.<br>Restrict cross-site cookie usage.</td>
-            </tr>
-            
-            <tr>
-                <td>Insecure Cookie</td>
-                <td>http://localhost/dvwa/</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="Low">Low</td>
-                <td>Set Secure flag on cookies.<br>Use HTTPS for all communications.<br>Limit cookie scope and exposure.</td>
-            </tr>
-            
-            <tr>
-                <td>Insecure Cookie</td>
-                <td>http://localhost/dvwa/</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="Low">Low</td>
-                <td>Set HttpOnly flag on cookies.<br>Prevent access via JavaScript.<br>Use secure cookie attributes.</td>
-            </tr>
-            
-            <tr>
-                <td>Insecure Cookie</td>
-                <td>http://localhost/dvwa/</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="Medium">Medium</td>
-                <td>Set SameSite=Strict or Lax.<br>Implement CSRF protection tokens.<br>Restrict cross-site cookie usage.</td>
-            </tr>
-            
-            <tr>
-                <td>Session Fixation</td>
-                <td>http://localhost/dvwa/login.php</td>
-                <td>-</td>
-                <td>-</td>
-                <td class="Medium">Medium</td>
-                <td>Regenerate session ID after login.<br>Invalidate old session identifiers.<br>Use secure session handling mechanisms.</td>
-            </tr>
-            
-    </table>
+    <h1 style="text-align:center;">🔐 Security Report</h1>
+
+    <div class="card">
+    Total: 20 | High: 8 | Medium: 6 | Low: 6
     </div>
 
+    <div class="card" style="text-align:center;">
+        <h2>Visual Analysis</h2>
+        <img src="data:image/png;base64,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wABhvjCNzR/rdBnAbiEAeti5555rB7RLLrlkp49ddtll9seszwmW0047TV988YVcKSlPyuW6nCYqi+NyXOgZQzKGKCU6hXYjJBAAPa6goEBPPvmkGhsbdzzW1NSkxx9/XIWFhUH9WjExMcrMzJRrDTze6QrQw5rDo/V27Qr6jh4xroDpX4QOAqDH7bfffnYIfO6553Y8Zr1vhb9hw74eEevo6NCf/vQnFRcX20FuyJAheuaZZzo912uvvaa+ffvaHz/kkEO0atWqTh//9hSwNbp44okndvqcK664QuPHf31EgvX+xIkT7cdTUlKUlZWl++67T/X19TrvvPOUkJCgPn366PXXX+96MwZ2rgXe917xCNW3NThdBgwxoWCC0yUAu40AaIDzzz9fDz300I77Dz74oB2uvskKf48++qjuueceffrpp/rVr36ls846S7NmzbI/Xl5erpNPPlnHHXecFi1apAsvvFCTJ08OSn2PPPKI0tPTNXfuXDsMXnrppTrllFM0ZswYLVy4UEcccYTOPvtsNTR08Rd5ajHTwIYpS0hyugQYYlD6IBUlFTldBrDbCIAGsILcu+++q9WrV9u32bNn2499pbm5WTfffLMdDI888kj17t3bHr2zPufee++1P+fuu+9WSUmJbrvtNvXr109nnnlm0NYPWqON1157rUpLS/Wb3/xG0dHRdiC86KKL7Meuv/56bdmyRR9//HHXv9g+JwWjZISAVn+E3qpb6XQZMMRxJcc5XQKwR8L37NMRijIyMnTsscfaU7SBQMB+3wpYX1m2bJk9unb44Yd3+nctLS07pomXLFmi/ffvfLjp6NGjg1Lf4MGDd7wfFhamtLQ0DRr09fV7rWlhy8aNG7v+xfb9sVT2eynQ0fXngqvNLRqu2ta1TpcBA0T4I3RMsXXSABA6CIAGTQNffvnl9vv/+te/On2srq7Ofvvqq68qLy+v08eioqL2+mv6/X47cH5Ta+vOV2OIiOh8aKq1O/mbj1n3v1qn2GVJ+VLJBGlZWdefC642LTlN2koARPezjn5JimK5AUILAdAQRx11lD2iZ4Upa5r3mwYOHGgHvTVr1mjcuO/exTZgwAC99NJLnR57//33f3DkcfHixZ0es9YPfjvw9bj9fkYA9Lh2X5hm1K9xugwYgulfhCLWABrCmlq1pnE/++wz+/1vsnbaXnXVVfbG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" width="300">
+        <img src="data:image/png;base64,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ABxDAAQAAHAMARAAAMAxBEAAAADHEAABAAAcQwAEAABwDAEQAADAMQRAAAAAx/CbQJJBmf5LJDA4JDkO5ZTI4U38PQQAAJxEBRAAAMAxBEAAAADHEAABAAAcQwAEAABwDAEQAADAMQRAAAAAxxAAAQAAHEMABAAAcAwBEAAAwDEEQAAAAMcQAAEAABxDAAQAAHAMARAAAMAxNz0A1qpVSyIiIm72aWTAgAFy99133/TzAAAApHbJEgA7dOggAQEBV2wHDhyQefPmyeDBgyU56bHnz58f67levXrJ8uXLk/U8AAAAaVFQch2oYcOGMm3atFjP5cyZU9KlSye3QpYsWWwDAABA4gJHjhwZ64lChQrJ0KFDpWPHjpI1a1YpUKCATJo06SqHEQkODpY8efLE2jT8xZwC3rNnj4SEhMisWbN875szZ45kypRJdu3aZY83btwo9evXl9tvv13CwsKkZs2asnnz5ljjUw899JBVAr2P404BX758WQYNGiR33HGHjU1fW7x4se/1yMhIe79WKGvXrm3jKl++vKxbt+6qnxUAACA1C3zllVdk+vTpsZ7UUFipUiX54Ycf5JlnnpGnn35a9u7de8MnK1GihLz55pt2zMOHD8vPP/8sXbt2lddff11KlSpl+5w6dUrat28va9askfXr10vRokWlcePG9rw3ICqtNh49etT3OK7Ro0fb59Dzbdu2TRo0aCDNmjWT/fv3x9qvb9++Nn28ZcsWKVasmLRp00YuXrx4w58VAAAgpQrs1q2bjBgxItaTGrg0pBUpUkReeuklq8atWLEi0QMtWrTINw2rW8uWLePdT497//33yxNPPGFrBytXrizPPfec7/U6derYaxoWS5YsadXHs2fPyqpVq3zTyipbtmxWZfQ+jkuDn469devWUrx4cQuZWgV86623Yu2n4a9JkyYW/gYOHCg//fSTrV2Mz7lz5yQ6OjrWBgAAkNoEVa9e3ULRpUuXfOv1ypUr59tBp0k1aB07dizRA+k06ttvv+17nDlz5gT3fffddy1wBQYGys6dO+0cXr///rv069dPVq5caefUcWkA1IphUmkw+/XXX0U/W0z6eOvWrbGei/lZ8+bNa3/qeTWAxjVs2DALiQAAAGmuCSR9+vSxHmtA0zV1idHApxXDpNAQdubMGQuAOo3rDV5Kp39PnDhhU7gFCxa09XvV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" width="300">
     </div>
-    </body>
-    </html>
     
+        <div class="card">
+        <b>VULN-001 — Error-Based SQLi</b><br>
+        Severity: Low | CVSS: 9.0<br>
+        Endpoint: http://localhost/dvwa/vulnerabilities/brute/<br>
+        Parameter: username<br>
+        Payload: '<br>
+        Evidence: Length Difference: 4091<br>
+        Mitigation:<br>Use parameterized queries (prepared statements).<br>Avoid concatenating raw user input into SQL queries.<br>Validate and sanitize all user inputs.<br>Apply least-privilege access to database users.<br>Disable detailed SQL error messages in production.
+        </div>
+        
+        <div class="card">
+        <b>VULN-002 — Error-Based SQLi</b><br>
+        Severity: Low | CVSS: 9.0<br>
+        Endpoint: http://localhost/dvwa/vulnerabilities/sqli/<br>
+        Parameter: id<br>
+        Payload: '<br>
+        Evidence: Length Difference: 4041<br>
+        Mitigation:<br>Use parameterized queries (prepared statements).<br>Avoid concatenating raw user input into SQL queries.<br>Validate and sanitize all user inputs.<br>Apply least-privilege access to database users.<br>Disable detailed SQL error messages in production.
+        </div>
+        
+        <div class="card">
+        <b>VULN-003 — Reflected XSS</b><br>
+        Severity: High | CVSS: 7.5<br>
+        Endpoint: http://localhost/dvwa/vulnerabilities/xss_r/<br>
+        Parameter: name<br>
+        Payload: <script>alert(1337)</script><br>
+        Evidence: Validated via automated testing<br>
+        Mitigation:<br>Escape user input before rendering in HTML.<br>Enable template auto-escaping.<br>Implement strict Content Security Policy.<br>Apply strict input validation.<br>Avoid using innerHTML with user input.
+        </div>
+        
+        <div class="card">
+        <b>VULN-004 — Reflected XSS</b><br>
+        Severity: High | CVSS: 7.5<br>
+        Endpoint: http://localhost/dvwa/vulnerabilities/xss_s/<br>
+        Parameter: txtName<br>
+        Payload: <script>alert(1337)</script><br>
+        Evidence: Validated via automated testing<br>
+        Mitigation:<br>Escape user input before rendering in HTML.<br>Enable template auto-escaping.<br>Implement strict Content Security Policy.<br>Apply strict input validation.<br>Avoid using innerHTML with user input.
+        </div>
+        
+        <div class="card">
+        <b>VULN-005 — Reflected XSS</b><br>
+        Severity: High | CVSS: 7.5<br>
+        Endpoint: http://localhost/dvwa/vulnerabilities/csp/<br>
+        Parameter: include<br>
+        Payload: <script>alert(1337)</script><br>
+        Evidence: Validated via automated testing<br>
+        Mitigation:<br>Escape user input before rendering in HTML.<br>Enable template auto-escaping.<br>Implement strict Content Security Policy.<br>Apply strict input validation.<br>Avoid using innerHTML with user input.
+        </div>
+        
+        <div class="card">
+        <b>VULN-006 — Weak Credentials</b><br>
+        Severity: Medium | CVSS: 5.0<br>
+        Endpoint: http://localhost/dvwa/login.php<br>
+        Parameter: credentials<br>
+        Payload: admin / admin<br>
+        Evidence: Login successful with default credentials<br>
+        Mitigation:<br>Enforce strong password policies.<br>Enable multi-factor authentication.<br>Disable default credentials.<br>Store passwords securely using hashing.
+        </div>
+        
+        <div class="card">
+        <b>VULN-007 — Weak Credentials</b><br>
+        Severity: Medium | CVSS: 5.0<br>
+        Endpoint: http://localhost/dvwa/login.php<br>
+        Parameter: credentials<br>
+        Payload: admin / password<br>
+        Evidence: Login successful with default credentials<br>
+        Mitigation:<br>Enforce strong password policies.<br>Enable multi-factor authentication.<br>Disable default credentials.<br>Store passwords securely using hashing.
+        </div>
+        
+        <div class="card">
+        <b>VULN-008 — Weak Credentials</b><br>
+        Severity: Medium | CVSS: 5.0<br>
+        Endpoint: http://localhost/dvwa/login.php<br>
+        Parameter: credentials<br>
+        Payload: test / test<br>
+        Evidence: Login successful with default credentials<br>
+        Mitigation:<br>Enforce strong password policies.<br>Enable multi-factor authentication.<br>Disable default credentials.<br>Store passwords securely using hashing.
+        </div>
+        
+        <div class="card">
+        <b>VULN-009 — Brute Force Success</b><br>
+        Severity: High | CVSS: 8.0<br>
+        Endpoint: http://localhost/dvwa/login.php<br>
+        Parameter: N/A<br>
+        Payload: N/A<br>
+        Evidence: Login succeeded without rate limiting<br>
+        Mitigation:<br>Implement rate limiting.<br>Lock account after failed attempts.<br>Use CAPTCHA after multiple failures.<br>Monitor login attempts and alert suspicious activity.
+        </div>
+        
+        <div class="card">
+        <b>VULN-010 — Brute Force Success</b><br>
+        Severity: High | CVSS: 8.0<br>
+        Endpoint: http://localhost/dvwa/login.php<br>
+        Parameter: N/A<br>
+        Payload: N/A<br>
+        Evidence: Login succeeded without rate limiting<br>
+        Mitigation:<br>Implement rate limiting.<br>Lock account after failed attempts.<br>Use CAPTCHA after multiple failures.<br>Monitor login attempts and alert suspicious activity.
+        </div>
+        
+        <div class="card">
+        <b>VULN-011 — Brute Force Success</b><br>
+        Severity: High | CVSS: 8.0<br>
+        Endpoint: http://localhost/dvwa/login.php<br>
+        Parameter: N/A<br>
+        Payload: N/A<br>
+        Evidence: Login succeeded without rate limiting<br>
+        Mitigation:<br>Implement rate limiting.<br>Lock account after failed attempts.<br>Use CAPTCHA after multiple failures.<br>Monitor login attempts and alert suspicious activity.
+        </div>
+        
+        <div class="card">
+        <b>VULN-012 — Brute Force Success</b><br>
+        Severity: High | CVSS: 8.0<br>
+        Endpoint: http://localhost/dvwa/login.php<br>
+        Parameter: N/A<br>
+        Payload: N/A<br>
+        Evidence: Login succeeded without rate limiting<br>
+        Mitigation:<br>Implement rate limiting.<br>Lock account after failed attempts.<br>Use CAPTCHA after multiple failures.<br>Monitor login attempts and alert suspicious activity.
+        </div>
+        
+        <div class="card">
+        <b>VULN-013 — Insecure Cookie</b><br>
+        Severity: Low | CVSS: 5.5<br>
+        Endpoint: http://localhost/dvwa/<br>
+        Parameter: security<br>
+        Payload: Missing Secure flag<br>
+        Evidence: Cookie 'security' sent over HTTP<br>
+        Mitigation:<br>Set Secure flag on cookies.<br>Use HTTPS for all communications.<br>Limit cookie scope and exposure.
+        </div>
+        
+        <div class="card">
+        <b>VULN-014 — Insecure Cookie</b><br>
+        Severity: Low | CVSS: 5.5<br>
+        Endpoint: http://localhost/dvwa/<br>
+        Parameter: security<br>
+        Payload: Missing HttpOnly flag<br>
+        Evidence: Cookie 'security' accessible via JavaScript<br>
+        Mitigation:<br>Set HttpOnly flag on cookies.<br>Prevent access via JavaScript.<br>Use secure cookie attributes.
+        </div>
+        
+        <div class="card">
+        <b>VULN-015 — Insecure Cookie</b><br>
+        Severity: Medium | CVSS: 5.5<br>
+        Endpoint: http://localhost/dvwa/<br>
+        Parameter: security<br>
+        Payload: Missing SameSite attribute<br>
+        Evidence: Cookie 'security' vulnerable to CSRF<br>
+        Mitigation:<br>Set SameSite=Strict or Lax.<br>Implement CSRF protection tokens.<br>Restrict cross-site cookie usage.
+        </div>
+        
+        <div class="card">
+        <b>VULN-016 — Insecure Cookie</b><br>
+        Severity: Low | CVSS: 5.5<br>
+        Endpoint: http://localhost/dvwa/<br>
+        Parameter: PHPSESSID<br>
+        Payload: Missing Secure flag<br>
+        Evidence: Cookie 'PHPSESSID' sent over HTTP<br>
+        Mitigation:<br>Set Secure flag on cookies.<br>Use HTTPS for all communications.<br>Limit cookie scope and exposure.
+        </div>
+        
+        <div class="card">
+        <b>VULN-017 — Insecure Cookie</b><br>
+        Severity: Low | CVSS: 5.5<br>
+        Endpoint: http://localhost/dvwa/<br>
+        Parameter: PHPSESSID<br>
+        Payload: Missing HttpOnly flag<br>
+        Evidence: Cookie 'PHPSESSID' accessible via JavaScript<br>
+        Mitigation:<br>Set HttpOnly flag on cookies.<br>Prevent access via JavaScript.<br>Use secure cookie attributes.
+        </div>
+        
+        <div class="card">
+        <b>VULN-018 — Insecure Cookie</b><br>
+        Severity: Medium | CVSS: 5.5<br>
+        Endpoint: http://localhost/dvwa/<br>
+        Parameter: PHPSESSID<br>
+        Payload: Missing SameSite attribute<br>
+        Evidence: Cookie 'PHPSESSID' vulnerable to CSRF<br>
+        Mitigation:<br>Set SameSite=Strict or Lax.<br>Implement CSRF protection tokens.<br>Restrict cross-site cookie usage.
+        </div>
+        
+        <div class="card">
+        <b>VULN-019 — Session Fixation</b><br>
+        Severity: Medium | CVSS: 6.5<br>
+        Endpoint: http://localhost/dvwa/login.php<br>
+        Parameter: session/cookie<br>
+        Payload: Session ID did not change after login<br>
+        Evidence: Before: {'security': 'low', 'PHPSESSID': 'mvr4ogooi65g5ld03hblms903n'} | After: {'security': 'low', 'PHPSESSID': 'mvr4ogooi65g5ld03hblms903n'}<br>
+        Mitigation:<br>Regenerate session ID after login.<br>Invalidate old session identifiers.<br>Use secure session handling mechanisms.
+        </div>
+        
+        <div class="card">
+        <b>VULN-020 — IDOR</b><br>
+        Severity: High | CVSS: 7.0<br>
+        Endpoint: http://localhost/dvwa/vulnerabilities/sqli/?id=1<br>
+        Parameter: id<br>
+        Payload: N/A<br>
+        Evidence: Accessed data using id=1<br>
+        Mitigation:<br>Validate user authorization before returning object data.<br>Implement Role-Based Access Control (RBAC).<br>Use Attribute-Based Access Control (ABAC).<br>Avoid exposing direct object identifiers.<br>Verify ownership of objects server-side.
+        </div>
+        </body></html>

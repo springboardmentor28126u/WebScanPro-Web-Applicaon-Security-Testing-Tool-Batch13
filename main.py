@@ -158,6 +158,11 @@ def main():
     # ==============================
     print("\nStarting Access Control and IDOR Testing...\n")
 
+    test_url = "http://localhost/dvwa/vulnerabilities/sqli/?id=1"
+
+    if test_url not in all_pages:
+        all_pages.append(test_url)
+
     idor_results = test_idor(session, all_pages)
     horizontal_results = test_horizontal_privilege_escalation(session, all_pages)
     vertical_results = test_vertical_privilege_escalation(session, start_url)

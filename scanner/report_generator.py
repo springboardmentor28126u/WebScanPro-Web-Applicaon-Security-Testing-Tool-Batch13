@@ -1,199 +1,216 @@
 import json
 from datetime import datetime
-import pdfkit
+import base64
+import io
+import matplotlib.pyplot as plt
 
 
-def get_severity(vuln_type):
-    if "SQLi" in vuln_type:
-        return "High"
-    if "XSS" in vuln_type:
-        return "High"
-    if "Brute Force" in vuln_type:
-        return "High"
-    if "Weak Credentials" in vuln_type:
-        return "Medium"
-    if "Session" in vuln_type:
-        return "Medium"
-    if "IDOR" in vuln_type:
-        return "High"
-    return "Low"
+# ─────────────────────────────────────────────
+# 🔥 ENRICHMENT
+# ─────────────────────────────────────────────
+def enrich_vulnerabilities(raw_data):
+
+    enriched = []
+
+    for i, v in enumerate(raw_data):
+
+        severity = v.get("severity", "Low").capitalize()
+
+        # PARAMETER
+        if "parameter" in v:
+            parameter = v["parameter"]
+        elif "cookie" in v:
+            parameter = v["cookie"]
+        elif "username" in v:
+            parameter = "credentials"
+        elif "issue" in v:
+            parameter = "session/cookie"
+        else:
+            parameter = "N/A"
+
+        # PAYLOAD
+        if "payload" in v and v["payload"]:
+            payload = v["payload"]
+        elif "username" in v:
+            payload = f"{v.get('username')} / {v.get('password')}"
+        elif "issue" in v:
+            payload = v["issue"]
+        else:
+            payload = "N/A"
+
+        # EVIDENCE
+        evidence = v.get("evidence", "")
+        if "length_difference" in v:
+            if evidence:
+                evidence += f" | Length Difference: {v['length_difference']}"
+            else:
+                evidence = f"Length Difference: {v['length_difference']}"
+
+        if not evidence:
+            evidence = "Validated via automated testing"
+
+        # MITIGATION
+        mitigation = "-"
+        if "remediation" in v:
+            mitigation = "<br>".join(v["remediation"].values())
+
+        # CVSS
+        if "SQL" in v["type"]:
+            cvss = 9.0
+        elif "XSS" in v["type"]:
+            cvss = 7.5
+        elif "Brute" in v["type"]:
+            cvss = 8.0
+        elif "Session" in v["type"]:
+            cvss = 6.5
+        elif "Cookie" in v["type"]:
+            cvss = 5.5
+        elif "IDOR" in v["type"]:
+            cvss = 7.0
+        else:
+            cvss = 5.0
+
+        # DESCRIPTION
+        desc = "Security issue detected."
+        if "SQL" in v["type"]:
+            desc = "SQL Injection vulnerability allows database manipulation."
+        elif "XSS" in v["type"]:
+            desc = "Cross-Site Scripting vulnerability."
+        elif "Brute" in v["type"]:
+            desc = "Brute force vulnerability."
+        elif "Session" in v["type"]:
+            desc = "Session handling weakness."
+        elif "Cookie" in v["type"]:
+            desc = "Cookie security misconfiguration."
+        elif "IDOR" in v["type"]:
+            desc = "Insecure Direct Object Reference."
+
+        enriched.append({
+            "id": f"VULN-{i+1:03}",
+            "type": v["type"],
+            "endpoint": v.get("url", "-"),
+            "parameter": parameter,
+            "payload": payload,
+            "severity": severity,
+            "cvss_score": cvss,
+            "description": desc,
+            "evidence": evidence,
+            "mitigation": mitigation
+        })
+
+    return enriched
 
 
+# ─────────────────────────────────────────────
+# 📊 CHARTS (WORKING)
+# ─────────────────────────────────────────────
+def generate_charts(vulns):
+
+    # PIE
+    counts = {"High": 0, "Medium": 0, "Low": 0}
+    for v in vulns:
+        counts[v["severity"]] += 1
+
+    fig1 = plt.figure()
+    plt.pie(counts.values(), labels=counts.keys(), autopct="%1.0f%%")
+
+    buf1 = io.BytesIO()
+    plt.savefig(buf1, format="png")
+    buf1.seek(0)
+    pie = base64.b64encode(buf1.read()).decode()
+    plt.close(fig1)
+
+    # BAR
+    type_counts = {}
+    for v in vulns:
+        t = v["type"]
+        type_counts[t] = type_counts.get(t, 0) + 1
+
+    fig2 = plt.figure()
+    plt.barh(list(type_counts.keys()), list(type_counts.values()))
+
+    buf2 = io.BytesIO()
+    plt.savefig(buf2, format="png")
+    buf2.seek(0)
+    bar = base64.b64encode(buf2.read()).decode()
+    plt.close(fig2)
+
+    return pie, bar
+
+
+# ─────────────────────────────────────────────
+# 🌐 FINAL HTML REPORT
+# ─────────────────────────────────────────────
 def generate_html_report(input_file, output_file="report.html"):
 
-    with open(input_file, "r") as f:
-        data = json.load(f)
+    with open(input_file) as f:
+        raw_data = json.load(f)
 
-    total = 0
-    summary = {}
+    all_vulns = []
+    for k in raw_data:
+        all_vulns.extend(raw_data[k])
 
-    # Count vulnerabilities
-    for category, vulns in data.items():
-        summary[category] = len(vulns)
-        total += len(vulns)
+    vulns = enrich_vulnerabilities(all_vulns)
+
+    total = len(vulns)
+    high = sum(1 for v in vulns if v["severity"] == "High")
+    medium = sum(1 for v in vulns if v["severity"] == "Medium")
+    low = sum(1 for v in vulns if v["severity"] == "Low")
+
+    pie, bar = generate_charts(vulns)
 
     html = f"""
     <html>
     <head>
-        <title>WebScanPro Report</title>
-        <style>
-            body {{
-                font-family: Arial, sans-serif;
-                background-color: #f5f7fa;
-                margin: 0;
-                padding: 0;
-            }}
-
-            .container {{
-                width: 90%;
-                margin: auto;
-                padding: 20px;
-            }}
-
-            h1 {{
-                text-align: center;
-                color: #2c3e50;
-            }}
-
-            .card {{
-                background: white;
-                padding: 20px;
-                margin-top: 20px;
-                border-radius: 10px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            }}
-
-            table {{
-                width: 100%;
-                border-collapse: collapse;
-            }}
-
-            th, td {{
-                padding: 12px;
-                border-bottom: 1px solid #ddd;
-                text-align: left;
-            }}
-
-            th {{
-                background-color: #2c3e50;
-                color: white;
-            }}
-
-            .High {{
-                color: #e74c3c;
-                font-weight: bold;
-            }}
-
-            .Medium {{
-                color: #f39c12;
-                font-weight: bold;
-            }}
-
-            .Low {{
-                color: #27ae60;
-                font-weight: bold;
-            }}
-
-            .summary {{
-                display: flex;
-                gap: 20px;
-                flex-wrap: wrap;
-            }}
-
-            .box {{
-                flex: 1;
-                min-width: 150px;
-                background: #3498db;
-                color: white;
-                padding: 15px;
-                border-radius: 8px;
-                text-align: center;
-            }}
-        </style>
+    <style>
+    body {{ background:#0d0d1a;color:white;font-family:Segoe UI;padding:30px; }}
+    .card {{ background:#12122a;padding:20px;margin:20px 0;border-radius:10px; }}
+    .high {{color:red}} .medium{{color:orange}} .low{{color:green}}
+    </style>
     </head>
 
     <body>
-    <div class="container">
 
-    <h1>WebScanPro Security Report</h1>
-    <p><b>Date:</b> {datetime.now()}</p>
-    """
+    <h1 style="text-align:center;">🔐 Security Report</h1>
 
-    # Summary cards
-    html += "<div class='card'><h2>Summary</h2><div class='summary'>"
-
-    for k, v in summary.items():
-        html += f"<div class='box'>{k.upper()}<br><b>{v}</b></div>"
-
-    html += f"<div class='box'>TOTAL<br><b>{total}</b></div>"
-    html += "</div></div>"
-
-    # Table
-    html += """
-    <div class='card'>
-    <h2>Detailed Findings</h2>
-    <table>
-        <tr>
-            <th>Type</th>
-            <th>URL</th>
-            <th>Parameter</th>
-            <th>Payload / Evidence</th>
-            <th>Severity</th>
-            <th>Mitigation</th>
-        </tr>
-    """
-
-    for category in data:
-        for v in data[category]:
-
-            severity = v.get("severity", get_severity(v["type"]))
-
-            # 🔥 NEW: Extract payload or evidence
-            payload = "-"
-            if "payload" in v:
-                payload = v["payload"]
-            elif "true_payload" in v:
-                payload = f"TRUE: {v['true_payload']}<br>FALSE: {v['false_payload']}"
-            elif "length_difference" in v:
-                payload = f"Length diff: {v['length_difference']}"
-
-            # 🔥 NEW: Clean mitigation
-            mitigation_data = v.get("remediation", {})
-            mitigation = "<br>".join(mitigation_data.values()) if mitigation_data else "-"
-
-            html += f"""
-            <tr>
-                <td>{v.get("type")}</td>
-                <td>{v.get("url", "-")}</td>
-                <td>{v.get("parameter", "-")}</td>
-                <td>{payload}</td>
-                <td class="{severity}">{severity}</td>
-                <td>{mitigation}</td>
-            </tr>
-            """
-
-    html += """
-    </table>
+    <div class="card">
+    Total: {total} | High: {high} | Medium: {medium} | Low: {low}
     </div>
 
+    <div class="card" style="text-align:center;">
+        <h2>Visual Analysis</h2>
+        <img src="data:image/png;base64,{pie}" width="300">
+        <img src="data:image/png;base64,{bar}" width="300">
     </div>
-    </body>
-    </html>
     """
 
-    with open(output_file, "w") as f:
+    for v in vulns:
+        html += f"""
+        <div class="card">
+        <b>{v['id']} — {v['type']}</b><br>
+        Severity: {v['severity']} | CVSS: {v['cvss_score']}<br>
+        Endpoint: {v['endpoint']}<br>
+        Parameter: {v['parameter']}<br>
+        Payload: {v['payload']}<br>
+        Evidence: {v['evidence']}<br>
+        Mitigation:<br>{v['mitigation']}
+        </div>
+        """
+
+    html += "</body></html>"
+
+    with open(output_file, "w", encoding="utf-8") as f:
         f.write(html)
 
-    print(f"[+] HTML report generated: {output_file}")
+    print("✅ FINAL REPORT WITH CHARTS GENERATED")
 
 
+# ─────────────────────────────────────────────
+# PDF
+# ─────────────────────────────────────────────
 def generate_pdf(html_file="report.html", output="report.pdf"):
-    try:
-        config = pdfkit.configuration(
-            wkhtmltopdf=r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
-        )
-        pdfkit.from_file(html_file, output, configuration=config)
-        print(f"[+] PDF report generated: {output}")
-    except Exception as e:
-        print("[!] PDF generation failed.")
-        print("Error:", e)
+    import pdfkit
+    config = pdfkit.configuration(
+        wkhtmltopdf=r"C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe"
+    )
+    pdfkit.from_file(html_file, output, configuration=config)

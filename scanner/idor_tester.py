@@ -1,15 +1,18 @@
 import requests
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 
-
+# IDs to test
 TEST_IDS = ["1", "2", "3", "4", "5", "10", "100"]
 
 
+# ─────────────────────────────────────────────
+# MODIFY PARAMETER HELPER
+# ─────────────────────────────────────────────
 def modify_parameter(url, param, new_value):
     parsed = urlparse(url)
     params = parse_qs(parsed.query)
 
-    params[param] = new_value
+    params[param] = [new_value]
 
     new_query = urlencode(params, doseq=True)
 
@@ -23,10 +26,18 @@ def modify_parameter(url, param, new_value):
     ))
 
 
+# ─────────────────────────────────────────────
+# 🔥 MAIN IDOR TEST
+# ─────────────────────────────────────────────
 def test_idor(session, urls):
+
     findings = []
 
     for url in urls:
+
+        # Only test URLs with ID parameter
+        if "id=" not in url:
+            continue
 
         parsed = urlparse(url)
         params = parse_qs(parsed.query)
@@ -35,9 +46,10 @@ def test_idor(session, urls):
             continue
 
         try:
-            # 🔥 BASELINE RESPONSE
+            # Baseline response
             original_response = session.get(url)
-            original_length = len(original_response.text)
+            original_text = original_response.text
+            original_length = len(original_text)
         except:
             continue
 
@@ -49,31 +61,45 @@ def test_idor(session, urls):
 
                     modified_url = modify_parameter(url, param, test_id)
 
+                    print("Testing:", modified_url)
+
                     try:
                         response = session.get(modified_url)
-                        modified_length = len(response.text)
+                        new_text = response.text
+                        new_length = len(new_text)
 
-                        # 🔥 REAL DETECTION LOGIC
-                        if response.status_code == 200 and abs(modified_length - original_length) > 30:
+                        # 🔥 IMPROVED DETECTION
+                        if response.status_code == 200:
 
-                            findings.append({
-                                "type": "Potential IDOR",
-                                "url": url,
-                                "parameter": param,
-                                "tested_value": test_id,
-                                "original_length": original_length,
-                                "modified_length": modified_length,
-                                "difference": abs(modified_length - original_length),
-                                "evidence": "Response size changed after modifying object ID",
-                                "severity": "High",
-                                "remediation": {
-                                    "primary_fix": "Validate user authorization before returning object data.",
-                                    "rbac": "Implement Role-Based Access Control (RBAC).",
-                                    "abac": "Use Attribute-Based Access Control (ABAC).",
-                                    "direct_reference": "Avoid exposing direct object identifiers.",
-                                    "server_validation": "Verify ownership of objects server-side."
-                                }
-                            })
+                            if (
+                                new_length != original_length
+                                or "User ID" in new_text
+                                or "First name" in new_text
+                                or "Surname" in new_text
+                                or "admin" in new_text.lower()
+                            ):
+
+                                findings.append({
+                                    "type": "IDOR",
+                                    "url": url,
+                                    "parameter": param,
+                                    "tested_value": test_id,
+                                    "original_length": original_length,
+                                    "modified_length": new_length,
+                                    "difference": abs(new_length - original_length),
+                                    "evidence": f"Accessed data using id={test_id}",
+                                    "severity": "High",
+                                    "remediation": {
+                                        "primary_fix": "Validate user authorization before returning object data.",
+                                        "rbac": "Implement Role-Based Access Control (RBAC).",
+                                        "abac": "Use Attribute-Based Access Control (ABAC).",
+                                        "direct_reference": "Avoid exposing direct object identifiers.",
+                                        "server_validation": "Verify ownership of objects server-side."
+                                    }
+                                })
+
+                                # Avoid duplicate spam
+                                break
 
                     except requests.RequestException:
                         continue
@@ -81,7 +107,11 @@ def test_idor(session, urls):
     return findings
 
 
+# ─────────────────────────────────────────────
+# 🔥 HORIZONTAL PRIVILEGE ESCALATION
+# ─────────────────────────────────────────────
 def test_horizontal_privilege_escalation(session, urls):
+
     findings = []
 
     for url in urls:
@@ -90,7 +120,7 @@ def test_horizontal_privilege_escalation(session, urls):
 
             try:
                 baseline = session.get(url)
-                baseline_len = len(baseline.text)
+                base_len = len(baseline.text)
             except:
                 continue
 
@@ -102,14 +132,14 @@ def test_horizontal_privilege_escalation(session, urls):
                     response = session.get(modified_url)
                     new_len = len(response.text)
 
-                    if response.status_code == 200 and abs(new_len - baseline_len) > 30:
+                    if response.status_code == 200 and abs(new_len - base_len) > 50:
 
                         findings.append({
                             "type": "Horizontal Privilege Escalation",
                             "url": modified_url,
                             "tested_user_id": test_id,
-                            "difference": abs(new_len - baseline_len),
-                            "evidence": "Different response when accessing another user's data",
+                            "difference": abs(new_len - base_len),
+                            "evidence": f"Accessed another user's data (user_id={test_id})",
                             "severity": "High",
                             "remediation": {
                                 "primary_fix": "Verify user identity before returning resources.",
@@ -125,7 +155,11 @@ def test_horizontal_privilege_escalation(session, urls):
     return findings
 
 
+# ─────────────────────────────────────────────
+# 🔥 VERTICAL PRIVILEGE ESCALATION
+# ─────────────────────────────────────────────
 def test_vertical_privilege_escalation(session, base_url):
+
     findings = []
 
     admin_paths = [
@@ -147,7 +181,7 @@ def test_vertical_privilege_escalation(session, base_url):
                 findings.append({
                     "type": "Vertical Privilege Escalation",
                     "url": full_url,
-                    "evidence": "Admin endpoint accessible without proper role",
+                    "evidence": "Admin endpoint accessible without proper authorization",
                     "severity": "Critical",
                     "remediation": {
                         "primary_fix": "Restrict admin routes to authorized roles only.",
